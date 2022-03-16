@@ -29,7 +29,7 @@ Maintenant que vous avez toutes les versions, nous pouvons commencer à initalis
     * SOURCE / URL -> https://github.com/roxasenjoy/4PROJ.git
     * DESTINATION -> Sélectionner un dossier vide où sera votre développement
     * NOM -> 4PROJ
-    * LOCAL FOLDER -> [RACINE]
+    * LOCAL FOLDER -> [ RACINE ]
     * Cloner
 
 
