@@ -11,20 +11,32 @@ Projet de fin de 4eme année : Refaire campus booster
 
 ### Pré-requis
 
-    * PHP 7.2.5
-    * Composer
-    * Symfony CLI
+    * PHP 8.0.10
+    * Composer 2.2.7
+    * Symfony CLI 5.4.2
     * Docker
     * docker-compose
+    * yarn 1.22.17
+    * npm 7.24.1
     
+### Mise en place du projet
 
-Vous pouvez vérifier les pré-requis (sauf Docker et docker-compose) avec la commande suivante (de la CLI Symfony) : 
-```bash
-symfony check:requirements
-```
+Maintenant que vous avez toutes les versions, nous pouvons commencer à initaliser le projet.
+
+Effectuer les commandes suivantes : 
+
+    * git clone https://github.com/roxasenjoy/4PROJ.git
+    * composer install
+    * composer require symfony/webpack-encore-bundle
+    * yarn run build
 
 ### Lancer l'environnement de développement
 ```bash
 docker-compose up -d
 symfony serve -d
 ```
+
+
+#### TIPS
+
+Afin d'éviter de devoir faire `yarn run build`, vous avez la possibilité de faire `yarn run watch` afin que votre enregistrement fonctionne comme-ci on faisait la commande `yarn run build`
