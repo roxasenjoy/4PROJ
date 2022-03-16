@@ -40,6 +40,7 @@ Le projet est maintenant récupéré ! Il nous reste plus qu'à installer tous l
 
     * composer install
     * composer require symfony/webpack-encore-bundle
+    * yarn add --dev @symfony/webpack-encore
     * yarn run build
 
 ### Lancer l'environnement de développement
