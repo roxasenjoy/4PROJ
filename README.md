@@ -24,6 +24,7 @@ Projet de fin de 4eme année : Refaire campus booster
 ### Récupération du projet
 
 Maintenant que vous avez toutes les versions, nous pouvons commencer à initaliser le projet.
+
     * Lancer sourcetree
     * Cliquer sur Clone
     * SOURCE / URL -> https://github.com/roxasenjoy/4PROJ.git
@@ -36,6 +37,7 @@ Maintenant que vous avez toutes les versions, nous pouvons commencer à initalis
 ### Initialiser le projet
 
 Le projet est maintenant récupéré ! Il nous reste plus qu'à installer tous les éléments de ce projet afin qu'il soit fonctionnel à 100%
+
     * composer install
     * composer require symfony/webpack-encore-bundle
     * yarn run build
