@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,19 +18,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\JoinColumn(nullable: false)]
     private $email;
 
-    #[ORM\Column(type: 'json')]
-    private $roles = [];
-
     #[ORM\Column(type: 'string')]
+    #[ORM\JoinColumn(nullable: false)]
     private $password;
 
     #[ORM\Column(type: 'string', length: 45)]
+    #[ORM\JoinColumn(nullable: false)]
     private $firstName;
 
     #[ORM\Column(type: 'string', length: 65)]
+    #[ORM\JoinColumn(nullable: false)]
     private $lastName;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Defense::class)]
+    private $defenses;
+
+    #[ORM\OneToOne(mappedBy: 'users', targetEntity: Campus::class, cascade: ['persist', 'remove'])]
+    private $campus;
+
+    // TODO - A VERIFIER CAR FAIT A LA MAIN 
+    #[ORM\OneToOne(mappedBy: 'users', targetEntity: Role::class, cascade: ['persist', 'remove'])]
+    private $role;
+
+    #[ORM\OneToOne(mappedBy: 'user_id', targetEntity: UserComptability::class, cascade: ['persist', 'remove'])]
+    private $userComptability;
+
+    #[ORM\OneToOne(mappedBy: 'user_id', targetEntity: UserGrade::class, cascade: ['persist', 'remove'])]
+    private $userGrade;
+
+    #[ORM\OneToOne(mappedBy: 'user_id', targetEntity: Intervenant::class, cascade: ['persist', 'remove'])]
+    private $intervenant;
+
+    #[ORM\OneToOne(mappedBy: 'user_id', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]
+    private $userExtended;
+
+    public function __construct()
+    {
+        $this->defenses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,25 +93,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): string
     {
         return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**
@@ -139,6 +150,163 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Defense>
+     */
+    public function getDefenses(): Collection
+    {
+        return $this->defenses;
+    }
+
+    public function addDefense(Defense $defense): self
+    {
+        if (!$this->defenses->contains($defense)) {
+            $this->defenses[] = $defense;
+            $defense->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDefense(Defense $defense): self
+    {
+        if ($this->defenses->removeElement($defense)) {
+            // set the owning side to null (unless already changed)
+            if ($defense->getUserId() === $this) {
+                $defense->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($campus === null && $this->campus !== null) {
+            $this->campus->setUsers(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($campus !== null && $campus->getUsers() !== $this) {
+            $campus->setUsers($this);
+        }
+
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getRoles(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRoles(?Role $role): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($role === null && $this->role !== null) {
+            $this->role->setUsers(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($role !== null && $role->getUsers() !== $this) {
+            $role->setUsers($this);
+        }
+
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getUserComptability(): ?UserComptability
+    {
+        return $this->userComptability;
+    }
+
+    public function setUserComptability(?UserComptability $userComptability): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($userComptability === null && $this->userComptability !== null) {
+            $this->userComptability->setUserId(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($userComptability !== null && $userComptability->getUserId() !== $this) {
+            $userComptability->setUserId($this);
+        }
+
+        $this->userComptability = $userComptability;
+
+        return $this;
+    }
+
+    public function getUserGrade(): ?UserGrade
+    {
+        return $this->userGrade;
+    }
+
+    public function setUserGrade(?UserGrade $userGrade): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($userGrade === null && $this->userGrade !== null) {
+            $this->userGrade->setUserId(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($userGrade !== null && $userGrade->getUserId() !== $this) {
+            $userGrade->setUserId($this);
+        }
+
+        $this->userGrade = $userGrade;
+
+        return $this;
+    }
+
+    public function getIntervenant(): ?Intervenant
+    {
+        return $this->intervenant;
+    }
+
+    public function setIntervenant(?Intervenant $intervenant): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($intervenant === null && $this->intervenant !== null) {
+            $this->intervenant->setUserId(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($intervenant !== null && $intervenant->getUserId() !== $this) {
+            $intervenant->setUserId($this);
+        }
+
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
+    public function getUserExtended(): ?UserExtended
+    {
+        return $this->userExtended;
+    }
+
+    public function setUserExtended(UserExtended $userExtended): self
+    {
+        // set the owning side of the relation if necessary
+        if ($userExtended->getUserId() !== $this) {
+            $userExtended->setUserId($this);
+        }
+
+        $this->userExtended = $userExtended;
 
         return $this;
     }
