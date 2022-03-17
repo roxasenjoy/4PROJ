@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\IntervenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IntervenantRepository::class)]
@@ -15,62 +13,39 @@ class Intervenant
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\OneToOne(inversedBy: 'intervenant', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: user::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    private $user;
 
-    #[ORM\OneToMany(mappedBy: 'intervenant', targetEntity: subject::class)]
+    #[ORM\ManyToOne(targetEntity: subject::class, inversedBy: 'intervenants')]
     #[ORM\JoinColumn(nullable: false)]
-    private $subject_id;
-
-    public function __construct()
-    {
-        $this->subject_id = new ArrayCollection();
-    }
+    private $subject;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?user
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(user $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, subject>
-     */
-    public function getSubjectId(): Collection
+    public function getSubject(): ?subject
     {
-        return $this->subject_id;
+        return $this->subject;
     }
 
-    public function addSubjectId(subject $subjectId): self
+    public function setSubject(?subject $subject): self
     {
-        if (!$this->subject_id->contains($subjectId)) {
-            $this->subject_id[] = $subjectId;
-            $subjectId->setIntervenant($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubjectId(subject $subjectId): self
-    {
-        if ($this->subject_id->removeElement($subjectId)) {
-            // set the owning side to null (unless already changed)
-            if ($subjectId->getIntervenant() === $this) {
-                $subjectId->setIntervenant(null);
-            }
-        }
+        $this->subject = $subject;
 
         return $this;
     }

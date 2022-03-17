@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SubjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
@@ -33,11 +35,13 @@ class Subject
     #[ORM\JoinColumn(nullable: false)]
     private $date_end;
 
-    #[ORM\OneToOne(mappedBy: 'subject_id', targetEntity: UserGrade::class, cascade: ['persist', 'remove'])]
-    private $userGrade;
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Intervenant::class)]
+    private $intervenants;
 
-    #[ORM\ManyToOne(targetEntity: Intervenant::class, inversedBy: 'subject_id')]
-    private $intervenant;
+    public function __construct()
+    {
+        $this->intervenants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,37 +108,35 @@ class Subject
         return $this;
     }
 
-    public function getUserGrade(): ?UserGrade
+    /**
+     * @return Collection<int, Intervenant>
+     */
+    public function getIntervenants(): Collection
     {
-        return $this->userGrade;
+        return $this->intervenants;
     }
 
-    public function setUserGrade(?UserGrade $userGrade): self
+    public function addIntervenant(Intervenant $intervenant): self
     {
-        // unset the owning side of the relation if necessary
-        if ($userGrade === null && $this->userGrade !== null) {
-            $this->userGrade->setSubjectId(null);
+        if (!$this->intervenants->contains($intervenant)) {
+            $this->intervenants[] = $intervenant;
+            $intervenant->setSubject($this);
         }
-
-        // set the owning side of the relation if necessary
-        if ($userGrade !== null && $userGrade->getSubjectId() !== $this) {
-            $userGrade->setSubjectId($this);
-        }
-
-        $this->userGrade = $userGrade;
 
         return $this;
     }
 
-    public function getIntervenant(): ?Intervenant
+    public function removeIntervenant(Intervenant $intervenant): self
     {
-        return $this->intervenant;
-    }
-
-    public function setIntervenant(?Intervenant $intervenant): self
-    {
-        $this->intervenant = $intervenant;
+        if ($this->intervenants->removeElement($intervenant)) {
+            // set the owning side to null (unless already changed)
+            if ($intervenant->getSubject() === $this) {
+                $intervenant->setSubject(null);
+            }
+        }
 
         return $this;
     }
+
+
 }

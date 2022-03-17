@@ -52,27 +52,53 @@ class UserExtended
     #[ORM\JoinColumn(nullable: false)]
     private $isHired;
 
-    #[ORM\OneToOne(inversedBy: 'userExtended', targetEntity: company::class, cascade: ['persist', 'remove'])]
-    private $companyHired;
-
-    #[ORM\OneToOne(inversedBy: 'userExtended', targetEntity: speciality::class, cascade: ['persist', 'remove'])]
-    private $speciality_id;
-
-    #[ORM\OneToOne(inversedBy: 'userExtended', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: user::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    private $user;
 
-    #[ORM\OneToOne(inversedBy: 'userExtendedActualLevel', targetEntity: studyLevel::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: company::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $company;
+
+    #[ORM\OneToOne(targetEntity: studyLevel::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $previousLevel;
+
+    #[ORM\OneToOne(targetEntity: studyLevel::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private $actualLevel;
 
-    #[ORM\OneToOne(inversedBy: 'userExtendedPreviousLevel', targetEntity: studyLevel::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: speciality::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $previousLevel;
+    private $speciality;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(user $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCompany(): ?company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
     }
 
     public function getBirthday(): ?\DateTimeInterface
@@ -195,38 +221,16 @@ class UserExtended
         return $this;
     }
 
-    public function getCompanyHired(): ?company
+
+
+    public function getPreviousLevel(): ?studyLevel
     {
-        return $this->companyHired;
+        return $this->previousLevel;
     }
 
-    public function setCompanyHired(?company $companyHired): self
+    public function setPreviousLevel(studyLevel $previousLevel): self
     {
-        $this->companyHired = $companyHired;
-
-        return $this;
-    }
-
-    public function getSpecialityId(): ?speciality
-    {
-        return $this->speciality_id;
-    }
-
-    public function setSpecialityId(?speciality $speciality_id): self
-    {
-        $this->speciality_id = $speciality_id;
-
-        return $this;
-    }
-
-    public function getUserId(): ?User
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(User $user_id): self
-    {
-        $this->user_id = $user_id;
+        $this->previousLevel = $previousLevel;
 
         return $this;
     }
@@ -243,15 +247,16 @@ class UserExtended
         return $this;
     }
 
-    public function getPreviousLevel(): ?studyLevel
+    public function getSpeciality(): ?speciality
     {
-        return $this->previousLevel;
+        return $this->speciality;
     }
 
-    public function setPreviousLevel(studyLevel $previousLevel): self
+    public function setSpeciality(speciality $speciality): self
     {
-        $this->previousLevel = $previousLevel;
+        $this->speciality = $speciality;
 
         return $this;
     }
+
 }

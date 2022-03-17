@@ -26,12 +26,25 @@ class UserComptability
     #[ORM\Column(type: 'boolean')]
     private $relance;
 
-    #[ORM\OneToOne(inversedBy: 'userComptability', targetEntity: User::class, cascade: ['persist', 'remove'])]
-    private $user_id;
+    #[ORM\OneToOne(targetEntity: user::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(user $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getType(): ?string
@@ -82,15 +95,5 @@ class UserComptability
         return $this;
     }
 
-    public function getUserId(): ?User
-    {
-        return $this->user_id;
-    }
 
-    public function setUserId(?User $user_id): self
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
 }

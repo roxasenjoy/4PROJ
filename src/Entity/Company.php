@@ -17,12 +17,6 @@ class Company
     #[ORM\JoinColumn(nullable: false)]
     private $name;
 
-    #[ORM\OneToOne(mappedBy: 'company_id', targetEntity: Partnership::class, cascade: ['persist', 'remove'])]
-    private $partnership;
-
-    #[ORM\OneToOne(mappedBy: 'companyHired', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]
-    private $userExtended;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -40,42 +34,4 @@ class Company
         return $this;
     }
 
-    public function getPartnership(): ?Partnership
-    {
-        return $this->partnership;
-    }
-
-    public function setPartnership(Partnership $partnership): self
-    {
-        // set the owning side of the relation if necessary
-        if ($partnership->getCompanyId() !== $this) {
-            $partnership->setCompanyId($this);
-        }
-
-        $this->partnership = $partnership;
-
-        return $this;
-    }
-
-    public function getUserExtended(): ?UserExtended
-    {
-        return $this->userExtended;
-    }
-
-    public function setUserExtended(?UserExtended $userExtended): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($userExtended === null && $this->userExtended !== null) {
-            $this->userExtended->setCompanyHired(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($userExtended !== null && $userExtended->getCompanyHired() !== $this) {
-            $userExtended->setCompanyHired($this);
-        }
-
-        $this->userExtended = $userExtended;
-
-        return $this;
-    }
 }

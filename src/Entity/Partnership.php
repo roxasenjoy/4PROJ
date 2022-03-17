@@ -21,9 +21,10 @@ class Partnership
     #[ORM\JoinColumn(nullable: false)]
     private $dateEnd;
 
-    #[ORM\OneToOne(inversedBy: 'partnership', targetEntity: company::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: company::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $company_id;
+    private $company;
+
 
     public function getId(): ?int
     {
@@ -54,15 +55,16 @@ class Partnership
         return $this;
     }
 
-    public function getCompanyId(): ?company
+    public function getCompany(): ?company
     {
-        return $this->company_id;
+        return $this->company;
     }
 
-    public function setCompanyId(company $company_id): self
+    public function setCompany(company $company): self
     {
-        $this->company_id = $company_id;
+        $this->company = $company;
 
         return $this;
     }
+
 }

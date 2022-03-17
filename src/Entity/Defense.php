@@ -21,13 +21,29 @@ class Defense
     #[ORM\JoinColumn(nullable: false)]
     private $dateEnd;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'defenses')]
+    #[ORM\Column(type: 'boolean')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    private $status;
 
+    #[ORM\OneToOne(targetEntity: user::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+    
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(user $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getDateBegin(): ?\DateTimeInterface
@@ -54,14 +70,16 @@ class Defense
         return $this;
     }
 
-    public function getUserId(): ?User
+    
+
+    public function getStatus(): ?bool
     {
-        return $this->user_id;
+        return $this->status;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setStatus(bool $status): self
     {
-        $this->user_id = $user_id;
+        $this->status = $status;
 
         return $this;
     }

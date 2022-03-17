@@ -17,11 +17,8 @@ class StudyLevel
     #[ORM\JoinColumn(nullable: false)]
     private $name;
 
-    #[ORM\OneToOne(mappedBy: 'actualLevel', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]
-    private $userExtendedActualLevel;
-
-    #[ORM\OneToOne(mappedBy: 'previousLevel', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]
-    private $userExtendedPreviousLevel;
+    #[ORM\Column(type: 'integer')]
+    private $rank;
 
     public function getId(): ?int
     {
@@ -40,36 +37,14 @@ class StudyLevel
         return $this;
     }
 
-    public function getUserExtendedActualLevel(): ?UserExtended
+    public function getRank(): ?int
     {
-        return $this->userExtendedActualLevel;
+        return $this->rank;
     }
 
-    public function setUserExtendedActualLevel(UserExtended $userExtendedActualLevel): self
+    public function setRank(int $rank): self
     {
-        // set the owning side of the relation if necessary
-        if ($userExtendedActualLevel->getActualLevel() !== $this) {
-            $userExtendedActualLevel->setActualLevel($this);
-        }
-
-        $this->userExtendedActualLevel = $userExtendedActualLevel;
-
-        return $this;
-    }
-
-    public function getUserExtendedPreviousLevel(): ?UserExtended
-    {
-        return $this->userExtendedPreviousLevel;
-    }
-
-    public function setUserExtendedPreviousLevel(UserExtended $userExtendedPreviousLevel): self
-    {
-        // set the owning side of the relation if necessary
-        if ($userExtendedPreviousLevel->getPreviousLevel() !== $this) {
-            $userExtendedPreviousLevel->setPreviousLevel($this);
-        }
-
-        $this->userExtendedPreviousLevel = $userExtendedPreviousLevel;
+        $this->rank = $rank;
 
         return $this;
     }

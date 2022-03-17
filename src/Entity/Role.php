@@ -21,11 +21,6 @@ class Role
     #[ORM\JoinColumn(nullable: false)]
     private $permission;
 
-    // TODO - A VERIFIER CAR FAIT A LA MAIN 
-    #[ORM\OneToOne(inversedBy: 'campus', targetEntity: User::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private $users;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -51,26 +46,6 @@ class Role
     public function setPermission(int $permission): self
     {
         $this->permission = $permission;
-
-        return $this;
-    }
-
-    // TODO - A VERIFIER CAR FAIT A LA MAIN 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    // TODO - A VERIFIER CAR FAIT A LA MAIN 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    // TODO - A VERIFIER CAR FAIT A LA MAIN 
-    public function setUsers(?User $users): self
-    {
-        $this->users = $users;
 
         return $this;
     }

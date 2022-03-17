@@ -17,10 +17,6 @@ class Campus
     #[ORM\JoinColumn(nullable: false)]
     private $name;
 
-    #[ORM\OneToOne(inversedBy: 'campus', targetEntity: User::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private $users;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -38,20 +34,4 @@ class Campus
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    public function setUsers(?User $users): self
-    {
-        $this->users = $users;
-
-        return $this;
-    }
 }

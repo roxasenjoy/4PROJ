@@ -19,13 +19,15 @@ class UserGrade
 
     #[ORM\Column(type: 'boolean')]
     #[ORM\JoinColumn(nullable: false)]
-    private $status;
+    private $isValidated;
 
-    #[ORM\OneToOne(inversedBy: 'userGrade', targetEntity: User::class, cascade: ['persist', 'remove'])]
-    private $user_id;
+    #[ORM\OneToOne(targetEntity: subject::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $subject;
 
-    #[ORM\OneToOne(inversedBy: 'userGrade', targetEntity: subject::class, cascade: ['persist', 'remove'])]
-    private $subject_id;
+    #[ORM\OneToOne(targetEntity: user::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
     public function getId(): ?int
     {
@@ -44,39 +46,41 @@ class UserGrade
         return $this;
     }
 
-    public function getStatus(): ?bool
+    public function getIsValidated(): ?bool
     {
-        return $this->status;
+        return $this->isValidated;
     }
 
-    public function setStatus(bool $status): self
+    public function setIsValidated(bool $isValidated): self
     {
-        $this->status = $status;
+        $this->isValidated = $isValidated;
 
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getSubject(): ?subject
     {
-        return $this->user_id;
+        return $this->subject;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setSubject(subject $subject): self
     {
-        $this->user_id = $user_id;
+        $this->subject = $subject;
 
         return $this;
     }
 
-    public function getSubjectId(): ?subject
+    public function getUser(): ?user
     {
-        return $this->subject_id;
+        return $this->user;
     }
 
-    public function setSubjectId(?subject $subject_id): self
+    public function setUser(user $user): self
     {
-        $this->subject_id = $subject_id;
+        $this->user = $user;
 
         return $this;
     }
+
+
 }
