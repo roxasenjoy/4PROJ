@@ -4,8 +4,6 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/docker-compose.yml
-/dockerfile
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
