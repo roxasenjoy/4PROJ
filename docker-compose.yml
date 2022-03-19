@@ -14,18 +14,18 @@ services:
     depends_on:
       - database
  
-  #Base de données
-  database:
-    container_name: database
-    image: "mysql:5.7"
-    restart: 'always'
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: database
-    ports:
-      - 3306:3306
-    expose:
-      - 3306
+  # #Base de données
+  # database:
+  #   container_name: database
+  #   image: "mysql:5.7"
+  #   restart: 'always'
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: database
+  #   ports:
+  #     - 3306:3306
+  #   expose:
+  #     - 3306
 
   ###> symfony/mailer ###
   mailer:
