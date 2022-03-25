@@ -16,6 +16,20 @@
     <body>
         <h1> test </h1>
 
+        {% if user %}
+
+            <h1>Vous êtes connectés.</h1>
+
+            Bienvenue {{ user.firstName }} {{ user.lastName }} !!
+            <br><br>
+            Votre adresse email : {{ user.email }}
+            <br><br>
+            Votre campus sera : {{ user.campus.name }}
+            <br><br>
+            Votre role est : {{ user.role.name }}
+
+        {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

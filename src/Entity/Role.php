@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RoleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
@@ -14,12 +16,11 @@ class Role
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[ORM\JoinColumn(nullable: false)]
     private $name;
 
-    #[ORM\Column(type: 'integer')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $permission;
+    #[ORM\OneToMany(mappedBy: 'role', targetEntity: User::class, orphanRemoval: true)]
+    private $users;
+
 
     public function getId(): ?int
     {
@@ -38,15 +39,35 @@ class Role
         return $this;
     }
 
-    public function getPermission(): ?int
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
     {
-        return $this->permission;
+        return $this->users;
     }
 
-    public function setPermission(int $permission): self
+    public function addUser(User $user): self
     {
-        $this->permission = $permission;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setRole($this);
+        }
 
         return $this;
     }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getRole() === $this) {
+                $user->setRole(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }
