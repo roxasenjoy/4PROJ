@@ -1,0 +1,39 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("/assets/fonts/Montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat-light";
+    src: url("/assets/fonts/Montserrat/Montserrat-Light.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat-bold";
+    src: url("/assets/fonts/Montserrat/Montserrat-Bold.ttf");
+}
+
+/** Couleurs **/
+$blue: #053869;
+$darkBlue: #04284a;
+$lightBlue: #bcd1e7;
+$dark: #020202;
+$white: #ffffff;
+$grey: #f9f9fa;
+
+// A définir
+$unknown: #eaedf4;
+
+/** Polices d'écritures **/
+$msNormal: "Montserrat", sans-serif;
+$msLight: "Montserrat-light", sans-serif;
+$msBold: "Montserrat-bold", sans-serif;
+
+
+/** Taille du texte **/
+
+
+/** Différents éléments qui sont toujours pareil **/
+.transition{
+    transition: all 0.5s;
+}

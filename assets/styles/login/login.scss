@@ -1,0 +1,159 @@
+@import "../variables.scss";
+
+.background-login{
+    height: 100vh;
+    font-family: $msNormal;
+   
+
+    .container-login{
+        height: 100%;
+        background-image: url('../../images/login/background.jpg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        background-size: cover;
+
+        .content-login{
+            position:absolute;
+            top: 0; 
+            bottom: 0; 
+            left: 0; 
+            right: 0;
+            margin: auto;
+            background: $white;
+            width: 90vw; 
+            height: 90vh;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            color: $blue;
+
+            .left-login{
+                flex: 0.40;
+                padding: 40px;
+
+                img{
+                    margin-bottom: 30px;
+                    width: 100%;
+                }
+
+                h3{
+                    font-size: 1.5em;
+                    margin-bottom: 15px;
+                }
+
+                #title-login{
+                    opacity: 0.5;
+                    margin-bottom: 10px;
+                    font-size: 1em;
+                }
+
+                .input-login{
+                    width: 90%;
+                    margin-bottom: 10px;
+
+                    input{
+                        width: 100%;
+                        border: $unknown solid 1.5px;
+                        border-radius: 4px;
+                        padding: 10px;
+                        background-color: $white !important;
+                        background-image: initial !important;
+                        color: $blue;
+
+                        &::placeholder{
+                            color: $blue;
+                            opacity: 0.5;
+                        }
+
+                    }
+
+                }
+
+                .rememberMe{
+                    display: flex;
+                    align-items: center;
+                    margin-top: 20px;
+                    margin-bottom: 5px;
+
+                    input{
+                        width: 15px;
+                        height: 15px;
+                        margin-right: 10px;
+                    }
+                }
+                
+
+                #security-message-login{
+                    opacity: 0.5;
+                    padding-left: 25px;
+                    font-size: 1em;
+                    font-family: $msLight;
+                    line-height: 20px;
+                }
+
+                /* Boutons */
+                .action-login{
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    margin-top: 25px;
+                    justify-content: center;
+                    align-items: center;
+
+                    button{
+                        background-color: $blue;
+                        padding: 10px 15px;
+                        font-size: 1em;
+                        border: none;
+                        color: $white;
+                        cursor: pointer;
+                        margin-right: 20px;
+
+                        &:hover{
+                            background-color: $darkBlue;
+                        }
+                        
+                    }
+
+                    a{
+                        text-decoration: initial;
+                        color: $blue;
+                        margin-left: 20px;
+                        position: relative;
+
+                        &::after{
+                            content: '';
+                            position: absolute;
+                            width: 0px;
+                            height: 1.5px;
+                            left: 50%;
+                            bottom: -2px;
+                            background-color: $blue;
+                            transition: all ease-in-out .2s;
+                        }
+
+                        &:hover::after{
+                            width: 100%;
+                            left: 0;
+                        }
+
+                        
+
+                    }
+
+                }
+
+            }// Fin left-login
+
+            .right-login{
+                flex: 1;
+                background-color: $blue;
+                padding: 10px;
+            }
+        
+
+        }
+    }
+}
+

@@ -6,7 +6,16 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
+
+
+//Login
+import './styles/login/login.scss';
+
+// All
+import './styles/app.scss';
+
+// Variables
+import './styles/variables.scss';
 
 // start the Stimulus application
 import './bootstrap';
