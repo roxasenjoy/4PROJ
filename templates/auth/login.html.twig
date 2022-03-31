@@ -2,7 +2,21 @@
 
 {% block title %}Campus Booster - Connexion{% endblock %}
 
+{% block header %} {% endblock %}
+
 {% block body %}
+
+        {% if error %}
+            <div class="flash">
+                <div class="flash-icon">
+                    <i class="icon fa-solid fa-exclamation"></i>
+                </div>
+                <p class="flash-body">
+                    Votre adresse email ou votre mot de passe est invalide.
+                </p>
+            </div>
+        {% endif %}
+
 
     <main class="background-login">
         <div class="container-login">
@@ -10,24 +24,40 @@
 
                 <!-- Section pour le login -->
                 <section class="left-login">
-                    <img src="{{ asset('build/images/logo-blue-supinfo.png') }}" alt="Logo supinfo bleu">
+                    <div id="container-logo">
+                        <img src="{{ asset('images/login/logo-blue.png') }}" alt="Logo supinfo bleu">
+                    </div>
+
                     <h3>Heureux de vous revoir ! </h3>
 
                     <p id="title-login">Veuillez vous identifier</p>
 
                     <form method="post">
-                        {% if error %}
-                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                        {% endif %}
-
                             <!-- Email de l'utlisateur -->
                             <div class="input-login">
-                                <input  type="email" placeholder="Adresse email Booster" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+                                <input
+                                    class="{{ error ? 'error-border' : '' }}"
+                                    type="email"
+                                    placeholder="Adresse email Booster"
+                                    value="{{ last_username }}"
+                                    name="email"
+                                    id="inputEmail"
+                                    autocomplete="email"
+                                    required autofocus
+                                >
                             </div>
                         
                             <!-- Mot de passe -->
                             <div class="input-login">
-                                <input  type="password" placeholder="Mot de passe" name="password" id="inputPassword" autocomplete="current-password" required>
+                                <input
+                                    class="{{ error ? 'error-border' : '' }}"
+                                    type="password"
+                                    placeholder="Mot de passe"
+                                    name="password"
+                                    id="inputPassword"
+                                    autocomplete="current-password"
+                                    required
+                                >
                             </div>
                             
 
@@ -42,11 +72,13 @@
                             </div>
 
                             <p id="security-message-login">Pour des raisons de sécurité, nous vous déconseillons d'activer cette option sur un ordinateur public.</p>
-                    
+
+
+
 
                         <div class="action-login">
                             <button class="transition" type="submit">Se connecter</button>
-                            <a href="" >Mot de passe oublié ? </a>
+                            <a href="" class="animationClickableText">Mot de passe oublié ? </a>
                         </div>
                         
                     </form>
@@ -56,7 +88,6 @@
 
                 <!-- Section pour afficher ce qu'on souhaite -->
                 <section class="right-login">
-                    <img src="assets\images\login\logo-white-supinfo.png" alt="Logo supinfo blanc">
                 </section>
 
 

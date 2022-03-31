@@ -14,12 +14,16 @@
 }
 
 /** Couleurs **/
+
 $blue: #053869;
 $darkBlue: #04284a;
 $lightBlue: #bcd1e7;
-$dark: #020202;
+$black: #020202;
 $white: #ffffff;
-$grey: #f9f9fa;
+$grey: #f3f4f8;
+$greyLight: #e6e7eb;
+$greyDark: #c9ccd3;
+$red: #D2433F;
 
 // A définir
 $unknown: #eaedf4;
@@ -29,11 +33,19 @@ $msNormal: "Montserrat", sans-serif;
 $msLight: "Montserrat-light", sans-serif;
 $msBold: "Montserrat-bold", sans-serif;
 
+/** Taille d'écran **/
+
+$computer: 1920px;
+$laptop: 1024px;
+$smartphone: 700px;
 
 /** Taille du texte **/
-
 
 /** Différents éléments qui sont toujours pareil **/
 .transition{
     transition: all 0.5s;
 }
+
+
+
+

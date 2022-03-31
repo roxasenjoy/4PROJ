@@ -7,3 +7,45 @@
     padding: 0;
 }
 
+body{
+    background-color: $grey;
+}
+
+
+/**
+    Animation en dessous des barres cliquables
+**/
+
+.animationClickableText{
+    position: relative;
+    text-decoration: initial;
+    color: $blue;
+
+    &:hover{
+        cursor: pointer;
+    }
+
+    &::after{
+        content: '';
+        position: absolute;
+        width: 0px;
+        height: 1.5px;
+        left: 50%;
+        bottom: -2px;
+        background-color: $blue;
+        transition: all ease-in-out .2s;
+    }
+
+    &:hover::after{
+        width: 100%;
+        left: 0;
+    }
+}
+/*********************************/
+
+
+
+
+
+
+

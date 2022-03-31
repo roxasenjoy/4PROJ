@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Campus Booster{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
@@ -12,22 +12,129 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <script src="https://kit.fontawesome.com/128f69e9e2.js"></script>
     </head>
     <body>
-        {% if app.user %}
 
-            <h1>Vous êtes connectés.</h1>
 
-            Bienvenue {{ user.firstName }} {{ user.lastName }} !!
-            <br><br>
-            Votre adresse email : {{ user.email }}
-            <br><br>
-            Votre campus sera : {{ user.campus.name }}
-            <br><br>
-            Votre role est : {{ user.role.name }}
+        <!-- Header qui se trouvera sur tout le site -->
+        {% block header %}
 
-        {% endif %}
+            <input type="checkbox" id="menu" name="menu" class="transition">
+            <label for="menu" class="dropdown">
+              <span class=" transition hamburger">
+                  <span class="icon-bar top-bar"></span>
+                  <span class="icon-bar middle-bar"></span>
+                  <span class="icon-bar bottom-bar"></span>
+              </span>
 
+            </label>
+
+            <div class="transition header" id="header">
+
+                <div class="logo-nav">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <p id="fullName">{{ user.firstName }} {{ user.lastName }}</p>
+                    <p id="role-student">- {{  user.role.name }} - </p>
+                </div>
+
+                <div class="section-element">
+                    <ul>
+                        <a href="{{ path('app_homepage') }}">
+                            <li>
+                                <i class="fa-solid fa-house"></i>
+                                <span class="animationClickableText">Tableau de bord</span>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+                <!--
+                    Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire
+                -->
+                <div class="section-title"> Académique </div>
+
+                <div class="section-element">
+                    <ul>
+                        <a href="">
+                            <li>
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span class="animationClickableText"> Cursus & Notes </span>
+                            </li>
+                        </a>
+
+                        <a href="">
+                            <li>
+                                <i class="fa-solid fa-book-open"></i>
+                                <span class="animationClickableText"> Cours </span>
+                            </li>
+                        </a>
+                        <a href="">
+                            <li>
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                                <span class="animationClickableText"> Intervenants </span>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+
+                <!--
+                    Côté administratif - Gestion des documents (Alternante, stage) et de la comptabilité de l'étudiant
+                -->
+                <div class="section-title"> Administratif </div>
+
+                <div class="section-element">
+                    <ul>
+                        <a href="">
+                            <li>
+                                <i class="fa-solid fa-sack-dollar"></i>
+                                <span class="animationClickableText">Comptabilité</span>
+                            </li>
+                        </a>
+
+                        <a href="">
+                            <li>
+                                <i class="fa-solid fa-gear"></i>
+                                <span class="animationClickableText">Paramètres</span>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+
+                <!--
+                    Côté administratif - Gestion des documents (Alternante, stage) et de la comptabilité de l'étudiant
+                -->
+                <div class="section-title"> A PROPOS </div>
+
+                <div class="section-element">
+                    <ul>
+                        <a href="">
+
+                            <li>
+                                <i class="fa-solid fa-gavel"></i>
+                                <span class="animationClickableText">Mentions légales</span>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+
+                <div class="section-element disconnect">
+                    <ul>
+                        <a href="{{ path('app_logout') }}">
+                            <li>
+                                <i class="fa-solid fa-door-open"></i>
+                                <span class="animationClickableText">Déconnexion</span>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+
+
+        {% endblock %}
+
+        <!-- Le body qui va changer en fonction des pages -->
         {% block body %}{% endblock %}
+
     </body>
 </html>

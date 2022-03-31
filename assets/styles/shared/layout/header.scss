@@ -1,0 +1,183 @@
+@import "../../variables.scss";
+
+input[type="checkbox"][name^="menu"] {
+    display: none;
+}
+
+.dropdown{
+    display: none;
+}
+
+.header{
+    background: $white;
+    width: 300px;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    border-right: #e6e7eb 1.5px solid;
+    font-family: $msNormal;
+    flex-direction: column;
+    pointer-events: auto;
+    display: flex;
+    max-height: 100%;
+
+    .logo-nav{
+        background-image: linear-gradient(to bottom, #04284a, #03305a, #02396b, #04417c, #094a8e);
+        font-family: $msNormal !important;
+        padding: 20px 0;
+        text-align: center;
+        border-bottom: $greyDark 1px solid;
+        color: $white;
+        margin-bottom: 10px;
+
+        i{
+          font-size: 3em;
+          color: white;
+          margin-bottom: 15px;
+        }
+
+        #fullName{
+          font-size: 1.5em;
+          font-weight: 500;
+          letter-spacing: -1px;
+          text-transform: capitalize;
+          margin-bottom: 20px;
+        }
+
+        #role-student{
+          font-size: 0.8em;
+          font-style: italic;
+          font-weight: 5900;
+        }
+    }
+
+    /* Création du menu de navigation */
+    .section-title{
+        display: flex;
+        color: $greyDark;
+        font-size: 12px;
+        text-transform: uppercase;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+
+        /* Trait autour des sections */
+        &:before,
+        &:after{
+          content: '';
+          border-bottom: 1px $greyDark solid;
+          margin: auto 0.5em;
+          display:inline;
+          width: 25px;
+        }
+        &:before{margin-right:0.5em;}
+        &:after{margin-left:0.5em;}
+        /*****************************/
+    }
+
+    .section-element{
+        color: $blue;
+        font-size: 1.5em;
+
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: 25px;
+
+            a{
+                text-decoration: none;
+                color: $blue;
+
+                li{
+                    list-style-type: none;
+                    width: 100%;
+
+                    i{
+                        margin-right: 10px;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .section-element ul li,
+    .section-title{
+        margin: 15px 0;
+    }
+
+    .disconnect{
+        display: block;
+        flex: 0 0 auto;
+        margin-top: auto;
+    }
+}
+
+// La taille maximal du design est de 1024px et la taille minimum est celle du téléphone : 700px
+@media (max-width: $laptop){
+
+    // On réduit le menu de navitation pour qu'il soit lisible sur mobile
+    .header {
+        left: -300px;
+    }
+
+    .dropdown{
+        display: initial;
+    }
+
+    .hamburger {
+        align-self: flex-end;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: $blue;
+        padding: 10px 20px;
+        border-radius: 8px;
+
+    }
+
+    label {
+        cursor: pointer;
+    }
+
+    input[type=checkbox] + label .icon-bar {
+        display: block;
+        width: 40px;
+        height: 5px;
+        background-color: $white;
+        margin: 8px 0;
+        transition: all 0.5s;
+        border-radius: 2px;
+    }
+
+    input[type=checkbox] + label .middle-bar {
+        left: 0;
+        opacity: 1;
+    }
+
+    input[type=checkbox]:checked + label .top-bar {
+        transform: rotateX(45deg) rotateY(-45deg) translateY(19px);
+    }
+    input[type=checkbox]:checked + label .middle-bar {
+        left: 20px;
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    input[type=checkbox]:checked + label .bottom-bar {
+        transform: rotateX(45deg) rotateY(45deg) translateY(-19px);
+    }
+
+    input[type="checkbox"][name^="menu"] {
+        display: none;
+    }
+
+    input[type=checkbox]:checked + label .hamburger {
+        left: 320px;
+    }
+
+    input[type="checkbox"][name^="menu"]:checked ~ .header{
+        width: 300px;
+        left: 0;
+    }
+
+}
