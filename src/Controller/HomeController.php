@@ -3,15 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\StudyLevel;
-use App\Entity\Subject;
-use App\Entity\SubjectDate;
 use App\Entity\User;
 use App\Entity\UserExtended;
-use App\Entity\UserGrade;
-use App\Entity\UserSubject;
 use App\Service\AuthService;
+use App\Service\GlobalService;
 use App\Service\UserService;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,35 +23,44 @@ class HomeController extends AbstractController
     public function __construct(
         EntityManagerInterface $em,
         AuthService $authService,
-        UserService $userService
+        UserService $userService,
+        GlobalService $globalService
     )
     {
         $this->em = $em;
         $this->authService = $authService;
         $this->userService = $userService;
+        $this->globalService = $globalService;
     }
 
-    #[Route('/', name: 'app_homepage')]
+    #[Route('/', name: 'app_dashboard')]
     public function index(): Response
     {
 
-        // Si un utilisateur n'est pas connecté on le ramène vers la login page
-        if ( !$this->authService->isAuthenticatedUser() ) {
-            return $this->redirectToRoute('app_login');
-        }
-
         $user = $this->authService->isAuthenticatedUser();
 
+//        $test = new UserExtended();
+//
+//        $test->setUser($this->em->getRepository(User::class)->find(34))
+//            ->setActualLevel($this->em->getRepository(StudyLevel::class)->find(3))
+//            ->setPreviousLevel($this->em->getRepository(StudyLevel::class)->find(2))
+//            ->setBirthday($this->globalService->getTodayDate())
+//            ->setAddress('Je suis une adresse')
+//            ->setGender(0)
+//            ->setRegion('REGION')
+//            ->setYearEntry('2020')
+//            ->setYearExit('2025')
+//            ->setNbAbscence(0)
+//            ->setIsStudent(true)
+//            ->setIsHired(true)
+//            ->setHasProContract(false);
+//
+//        $this->em->persist($test);
+//        $this->em->flush();
+
         return $this->render('dashboard/dashboard.html.twig', [
-            'user' => $user, // Utilisateur
-            'userGrades' => $this->getNotes($user), // Dernières évaluations
+            'userGrades' => $this->globalService->getNotes($user), // Dernières évaluations
             'agenda' => $this->userService->getAgenda($user) // Agenda
         ]);
     }
-
-    public function getNotes($user){
-        return $this->em->getRepository(UserGrade::class)->getGradesByUser($user->getId());
-    }
-
-
 }

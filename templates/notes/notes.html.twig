@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campus Booster - Notes{% endblock %}
+
+{% block body %}
+
+    <div class="notes-container">
+        <section class="shadow">
+            <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Cursus & Notes </h3>
+            <hr>
+
+            <div class="notes-table">
+
+                {% if notes %}
+
+                    {% for note in notes %}
+
+
+
+                        <div class="notesContent">
+                            <div class="note-child leftEcts ">
+                                {% if note.note >= 10 %}
+                                    <p class="credit-ects success">{{ note.points}} ECTS</p>
+                                {% elseif note.note < 10 and note.note >= 0 %}
+                                    <p class="credit-ects failed">{{ note.points}} ECTS</p>
+                                {% else %}
+                                    <p class="credit-ects">{{ note.points}} ECTS</p>
+                                {% endif %}
+
+
+                            </div>
+
+                            <div class="center-note">
+                                <div class="note-child center">
+                                    <p class="title"> {{ note.fullName}}  </p>
+                                </div>
+
+                                <div class="note-child right">
+                                    <p class="note"> {{ note.note}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-information"> Aucune note n'est disponible pour le moment</p>
+                {% endif %}
+
+
+
+            </div>
+        </section>
+    </div>
+
+{% endblock %}

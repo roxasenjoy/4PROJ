@@ -99,7 +99,7 @@
 
                     {% else %}
 
-                        <p>Aucun cours n'est programmé pour le moment</p>
+                        <p class="no-information">Aucun cours n'est programmé pour le moment</p>
 
                     {% endif %}
 
@@ -110,7 +110,7 @@
                 -->
 
                 <section class="notes-container shadow transition">
-                    <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Dernières évaluations </h3>
+                    <h3 class="title-dashboard"><i class="fa-solid fa-medal"></i> Dernières évaluations </h3>
                     <hr>
                     <!-- Boucle for sur toutes les notes de l'utilisateur (ou les 5 dernières) -->
 
@@ -124,7 +124,7 @@
                         {% endfor %}
                     {% else %}
 
-                        <p>Aucune note n'est disponible pour le moment</p>
+                        <p class="no-information">Aucune note n'est disponible pour le moment</p>
 
                     {% endif %}
 

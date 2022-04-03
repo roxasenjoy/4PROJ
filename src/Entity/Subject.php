@@ -32,6 +32,10 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class)]
     private $subjectDates;
 
+    #[ORM\ManyToOne(targetEntity: StudyLevel::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $level;
+
     public function __construct()
     {
         $this->userGrades = new ArrayCollection();
@@ -135,6 +139,18 @@ class Subject
                 $subjectDate->setSubject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLevel(): ?studyLevel
+    {
+        return $this->level;
+    }
+
+    public function setLevel(?studyLevel $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

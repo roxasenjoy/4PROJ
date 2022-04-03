@@ -54,7 +54,7 @@ class UserGradeRepository extends ServiceEntityRepository
     public function getGradesByUser($userId){
 
         $qb = $this->createQueryBuilder('ug')
-            ->select('ug.grade', 'ug.status', 'subject.name')
+            ->select('subject.id as subjectId', 'ug.grade', 'ug.status', 'subject.name')
             ->join('ug.subject', 'subject')
             ->where('ug.user = :user')
             ->setParameter(':user', $userId)
@@ -63,7 +63,6 @@ class UserGradeRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
 
     }
-
 
     // /**
     //  * @return UserGrade[] Returns an array of UserGrade objects

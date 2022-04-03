@@ -37,13 +37,13 @@
 
                 <div class="logo-nav">
                     <i class="fa-solid fa-circle-user"></i>
-                    <p id="fullName">{{ user.firstName }} {{ user.lastName }}</p>
-                    <p id="role-student">- {{  user.role.name }} - </p>
+                    <p id="fullName">{{ app.user.firstName }} {{ app.user.lastName }}</p>
+                    <p id="role-student">- {{  app.user.role.name }} - </p>
                 </div>
 
                 <div class="section-element">
                     <ul>
-                        <a href="{{ path('app_homepage') }}">
+                        <a href="{{ path('app_dashboard') }}">
                             <li>
                                 <i class="fa-solid fa-house"></i>
                                 <span class="animationClickableText">Tableau de bord</span>
@@ -58,7 +58,7 @@
 
                 <div class="section-element">
                     <ul>
-                        <a href="">
+                        <a href="{{ path('app_notes') }}">
                             <li>
                                 <i class="fa-solid fa-graduation-cap"></i>
                                 <span class="animationClickableText"> Cursus & Notes </span>

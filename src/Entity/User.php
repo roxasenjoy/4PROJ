@@ -44,13 +44,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserGrade::class, fetch: 'EAGER')]
     private $userGrades;
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]
+    private $userExtended;
+
     public function __construct()
     {
         $this->userGrades = new ArrayCollection();
     }
-
-
-
 
     public function getId(): ?int
     {
@@ -217,6 +217,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userGrade->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUserExtended(): ?UserExtended
+    {
+        return $this->userExtended;
+    }
+
+    public function setUserExtended(UserExtended $userExtended): self
+    {
+        // set the owning side of the relation if necessary
+        if ($userExtended->getUser() !== $this) {
+            $userExtended->setUser($this);
+        }
+
+        $this->userExtended = $userExtended;
 
         return $this;
     }

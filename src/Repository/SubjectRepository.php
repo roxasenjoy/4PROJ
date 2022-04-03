@@ -45,6 +45,27 @@ class SubjectRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Obtenir tous les cours de l'étudiant + ceux qui sont validés.
+     * @param $user
+     * @return float|int|mixed|string
+     */
+    public function getAllLessonsByLevel($user){
+
+        if($user){
+            $qb = $this->createQueryBuilder('subject')
+                ->select('subject.id', 'subject.fullName','subject.points')
+                ->join('subject.level', 'level')
+                ->where('level.year = :userActualLevel')
+                ->setParameter(':userActualLevel', $user->getUserExtended()->getActualLevel());
+            return $qb->getQuery()->getResult();
+        } else {
+            return false;
+        }
+
+
+    }
+
     // /**
     //  * @return Subject[] Returns an array of Subject objects
     //  */

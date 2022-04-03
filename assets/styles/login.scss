@@ -1,4 +1,4 @@
-@import "../variables.scss";
+@import "variables";
 
 .background-login{
     height: 100vh;
@@ -7,7 +7,7 @@
 
     .container-login{
         height: 100%;
-        background-image: url('../../../public/images/login/background.jpg');
+        background-image: url('../../public/images/login/background.jpg');
         background-repeat: no-repeat;
         background-position: center center;
         background-attachment: fixed;

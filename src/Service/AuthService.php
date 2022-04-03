@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
 
 class AuthService
@@ -10,12 +12,14 @@ class AuthService
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em, Security $security)
+    public function __construct(
+        EntityManagerInterface $em,
+        Security $security,
+        RouterInterface $router)
     {
         $this->em = $em;
-        // Avoid calling getUser() in the constructor: auth may not
-        // be complete yet. Instead, store the entire Security object.
         $this->security = $security;
+        $this->router = $router;
 
     }
 
@@ -34,6 +38,7 @@ class AuthService
 
         return false;
     }
+
 
 
 }
