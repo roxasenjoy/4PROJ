@@ -17,6 +17,9 @@ import './styles/login/login.scss';
 import './styles/shared/layout/footer.scss';
 import './styles/shared/layout/header.scss';
 
+// Liste des pages
+import './styles/dashboard/dashboard.scss';
+
 // Toutes les librairies
 import './styles/libraries/hint.css'
 
@@ -28,3 +31,6 @@ import './styles/error.scss';
 
 // start the Stimulus application
 import './bootstrap';
+import './javascript/echarts.min';
+import './javascript/graphics/dashboard';
+

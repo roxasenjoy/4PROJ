@@ -24,6 +24,7 @@ $grey: #f3f4f8;
 $greyLight: #e6e7eb;
 $greyDark: #c9ccd3;
 $red: #D2433F;
+$green: #0ca94f;
 
 // A définir
 $unknown: #eaedf4;
@@ -44,6 +45,10 @@ $smartphone: 700px;
 /** Différents éléments qui sont toujours pareil **/
 .transition{
     transition: all 0.5s;
+}
+
+.shadow{
+    box-shadow: 0 3px 8px #0000003d;
 }
 
 

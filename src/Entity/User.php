@@ -41,12 +41,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private $role;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserGrade::class, fetch: 'EAGER')]
+    private $userGrades;
+
+    public function __construct()
+    {
+        $this->userGrades = new ArrayCollection();
+    }
+
 
 
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -57,6 +89,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
 
         return $this;
     }
@@ -133,17 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCampus(): ?Campus
-    {
-        return $this->campus;
-    }
 
-    public function setCampus(?Campus $campus): self
-    {
-        $this->campus = $campus;
-
-        return $this;
-    }
 
     public function getRole(): ?role
     {
@@ -157,26 +191,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFirstName(): ?string
+    /**
+     * @return Collection<int, UserGrade>
+     */
+    public function getUserGrades(): Collection
     {
-        return $this->firstName;
+        return $this->userGrades;
     }
 
-    public function setFirstName(string $firstName): self
+    public function addUserGrade(UserGrade $userGrade): self
     {
-        $this->firstName = $firstName;
+        if (!$this->userGrades->contains($userGrade)) {
+            $this->userGrades[] = $userGrade;
+            $userGrade->setUser($this);
+        }
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function removeUserGrade(UserGrade $userGrade): self
     {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
+        if ($this->userGrades->removeElement($userGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($userGrade->getUser() === $this) {
+                $userGrade->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -21,15 +21,15 @@ class AuthService
 
     /**
      * Vérification de l'état de l'utilisateur. Est ce qu'il est connecté ?
-     *
-     * @return bool
+     * Si oui, on return les informations de l'utilisateur
+     * Si non, on return false car il n'est pas connecté
      */
-    public function isAuthenticatedUser(): bool
+    public function isAuthenticatedUser()
     {
         $user = $this->security->getUser();
 
         if($user){
-            return true;
+            return $user;
         }
 
         return false;

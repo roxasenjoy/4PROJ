@@ -13,17 +13,19 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
 
+
+
         <script src="https://kit.fontawesome.com/128f69e9e2.js"></script>
     </head>
-    <body>
+    <body class="transition">
 
 
         <!-- Header qui se trouvera sur tout le site -->
         {% block header %}
 
             <input type="checkbox" id="menu" name="menu" class="transition">
-            <label for="menu" class="dropdown">
-              <span class=" transition hamburger">
+            <label for="menu" class="dropdown transition">
+              <span class="transition hamburger">
                   <span class="icon-bar top-bar"></span>
                   <span class="icon-bar middle-bar"></span>
                   <span class="icon-bar bottom-bar"></span>
@@ -94,8 +96,8 @@
 
                         <a href="">
                             <li>
-                                <i class="fa-solid fa-gear"></i>
-                                <span class="animationClickableText">Paramètres</span>
+                                <i class="fa-solid fa-building"></i>
+                                <span class="animationClickableText">Offres entreprises</span>
                             </li>
                         </a>
                     </ul>
@@ -108,6 +110,14 @@
 
                 <div class="section-element">
                     <ul>
+
+                        <a href="">
+                            <li>
+                                <i class="fa-solid fa-gear"></i>
+                                <span class="animationClickableText">Paramètres</span>
+                            </li>
+                        </a>
+
                         <a href="">
 
                             <li>
@@ -134,7 +144,9 @@
         {% endblock %}
 
         <!-- Le body qui va changer en fonction des pages -->
-        {% block body %}{% endblock %}
+        <class class="body">
+            {% block body %}{% endblock %}
+        </class>
 
     </body>
 </html>

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Campus Booster - Dashboard {% endblock %}
+
+{% block body %}
+
+    <div class="section-dashboard">
+
+        <div class="left-section">
+            <!--
+                Dashboard - Affichage du nombre de crédits TOTAUX, du nombres de stages et des finances
+            -->
+
+            <section class="elementGlobal-container shadow transition">
+
+                <h3 class="title-dashboard"><i class="fa-solid fa-house"></i> Dashboard </h3>
+                <hr>
+                <div class="elementGlobal-content">
+                    <div class="element" id="globalECTS">
+                        <span> 128 </span>
+                        <p>ECTS </p>
+                    </div>
+                    <div class="element" id="globalOpportunities">
+                        <span> 1423 </span>
+                        <p>Offres entreprises </p>
+                    </div>
+                    <div class="element" id="globalFinance">
+                        <span> -5000 </span>
+                        <p>Comptabilité </p>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="listLesson-container shadow transition" >
+                <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Master of Science </h3>
+                <hr>
+
+                <div class="listLesson-parent">
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+                    <div class="listLesson-content shadow transition">
+                        <div class="imgBackground"></div>
+                        <p class="title">4BOSS</p>
+                    </div>
+                </div>
+
+
+            </section>
+
+        </div>
+
+        <div class="right-section">
+            <div class="fixed">
+                <!--
+               Affiche les dernières notes de l'étudiant
+            -->
+                <section class="lessons-container shadow transition">
+                    <h3 class="title-dashboard"><i class="fa-solid fa-clock"></i> Agenda </h3>
+                    <hr>
+
+                    {% if agenda %}
+
+                        {% for date in agenda %}
+                            <div class="lesson-content">
+                                <p class="date"> <span> {{ date.date }}</span> {{ date.name }}</p>
+                                <p class="time"> {{ date.date_begin }} - {{ date.date_end }}</p>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p>Aucun cours n'est programmé pour le moment</p>
+
+                    {% endif %}
+
+                </section>
+
+                <!--
+                    Affiche les dernières notes de l'étudiant
+                -->
+
+                <section class="notes-container shadow transition">
+                    <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Dernières évaluations </h3>
+                    <hr>
+                    <!-- Boucle for sur toutes les notes de l'utilisateur (ou les 5 dernières) -->
+
+                    {% if userGrades %}
+                        {% for grade in userGrades %}
+                            <div class="note-content">
+                                <i class=" {{ grade.status == true ? 'fa-solid fa-circle-check check' : 'fa-solid fa-circle-check failed' }}"></i>
+                                <p class="nameLesson check {{ grade.status == true ? 'nameLesson check' : 'nameLesson failed' }}"> {{ grade.name }} </p>
+                                <p class="noteStudent check {{ grade.status == true ? 'noteStudent check' :'noteStudent failed' }}"> {{ grade.grade }} / 20</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+
+                        <p>Aucune note n'est disponible pour le moment</p>
+
+                    {% endif %}
+
+                </section>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

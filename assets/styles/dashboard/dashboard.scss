@@ -1,0 +1,306 @@
+@import "../variables.scss";
+
+
+.section-dashboard{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-family: $msNormal;
+    padding: 25px;
+    color: $blue;
+
+    .title-dashboard{
+        color: $blue;
+        font-size: 1.5em;
+        font-family: $msBold;
+    }
+
+    .elementGlobal-container,
+    .listLesson-container,
+    .lessons-container,
+    .notes-container{
+        background: $white;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 25px;
+
+        hr{
+            margin-top: 5px;
+            width: 50px;
+            background-color: $blue;
+            border: solid 2px $blue;
+            margin-bottom: 15px;
+        }
+
+    }
+
+
+    .left-section{
+
+        flex: 3;
+
+        .listLesson-container{
+            .listLesson-parent{
+                text-align: center;
+
+                .listLesson-content{
+                    height: 250px;
+                    width: 225px;
+                    margin: 15px;
+                    display: inline-block;
+                    border-radius: 8px;
+                    overflow: hidden;
+
+                    .title{
+                        font-size: 1em;
+                        color: $blue;
+                        font-family: $msBold;
+                        padding: 10px;
+                    }
+
+                    .imgBackground{
+                        background-image: url("http://via.placeholder.com/1920x1080");
+                        background-size: cover;
+                        height: 150px;
+                        text-align: center;
+                        content:"";
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                    }
+                }
+            }
+        }
+
+        .ects-container-container{
+            height: 500px;
+            position: relative;
+
+
+            #etcsSuccess{
+                display: flex;
+
+
+                div{
+                    width: 50% !important;
+                }
+
+                canvas{
+                    left: 20% !important;
+                    width: initial !important;
+                }
+            }
+
+            .ects-content{
+
+                .levelOfStudent{
+                    position: absolute;
+                    top: 35%;
+                    left: 15%;
+                    text-align: center;
+
+                    .classTitle{
+                        font-size: 1.5em;
+                        width: 300px;
+                        color: #01b2c6;
+                        font-family: $msBold;
+                    }
+
+                    .NumberECTS{
+                        font-size: 3em;
+                        font-family: $msBold;
+                        font-style: italic;
+                        letter-spacing: 3px;
+                        margin-top: 60px;
+                    }
+
+                }
+
+                .legend{
+
+                    text-align: right;
+
+                    #ectsLegendSuccess,
+                    #ectsLegendFailed{
+                        font-size: 1em;
+                        color: $blue;
+                    }
+
+                    .success{
+                        color: $green;
+                    }
+
+                    .failed{
+                        color: $red;
+                    }
+                }
+
+            }
+        }
+
+        .elementGlobal-container{
+            .elementGlobal-content{
+                display: flex;
+                align-content: center;
+                justify-content: center;
+                flex-direction: row;
+
+                .element{
+                    margin: 10px 30px;
+                    flex: 1;
+                    border: initial;
+                    color: white;
+                    padding: 40px 0;
+                    font-size: 1.5em;
+                    font-style: italic;
+                    text-align: center;
+                    font-family: $msNormal;
+                    border-radius: 8px;
+
+                    span{
+                        margin-bottom: 10px;
+                        font-family: $msBold;
+                        font-size: 1.7em;
+                    }
+                }
+
+                #globalECTS{ background-color: #9a00c0}
+                #globalOpportunities{ background-color: #aa87e5}
+                #globalFinance{ background-color: #01b2c6}
+            }
+
+        }
+
+    }
+
+    .right-section{
+        flex: 1;
+
+        .fixed{position: fixed}
+
+        /**
+            Prochain cours de l'élève
+        **/
+        .lessons-container{
+            .lesson-content{
+                display: flex;
+                align-items: center;
+                font-size: 1.25em;
+                margin-bottom: 10px;
+                padding: 5px 0;
+                border-bottom: solid 1.5px $greyDark;
+
+                p{flex-grow: 2;}
+                .time{text-align: right;}
+
+                span{
+                    background-color: $blue;
+                    padding: 5px 10px;
+                    margin-right: 2px;
+                    color: white;
+                    border: $blue 1px solid
+                }
+
+            }
+
+
+        }
+
+
+
+        /**
+            Dernières évaluations
+        **/
+        .notes-container{
+            .note-content{
+                display: flex;
+                align-items: center;
+                font-size: 1.25em;
+                margin-bottom: 10px;
+                padding: 5px 0;
+                border-bottom: 1px solid $greyLight;
+
+                i{margin-right: 10px;}
+                .check{color: $green;}
+                .failed{color:$red}
+
+                p{flex-grow: 2;}
+                .noteStudent{
+                    text-align: right;
+                    font-family: $msBold;
+
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1500px){
+
+    .section-dashboard{
+        flex-direction: column-reverse;
+    }
+
+    .right-section{
+        .fixed{
+            position: initial !important;
+        }
+    }
+
+    .elementGlobal-container{
+        .elementGlobal-content {
+            flex-direction: column !important;
+        }
+    }
+
+
+
+}
+
+
+@media (max-width: $laptop){
+
+    .elementGlobal-container{
+        .elementGlobal-content{
+            .element{
+                margin: 10px 0 !important;
+            }
+        }
+    }
+
+    .section-dashboard{
+        flex-direction: column-reverse;
+        padding: 0 !important;
+    }
+
+    .right-section{
+
+        margin-top: 85px;
+
+        .fixed{
+            position: initial !important;
+        }
+    }
+
+    .listLesson-container{
+        .listLesson-parent{
+            .listLesson-content{
+                width: 40% !important;
+                margin: 15px auto;
+            }
+        }
+    }
+
+}
+
+@media (max-width: $smartphone){
+
+    .listLesson-container{
+        .listLesson-parent{
+            .listLesson-content{
+                width: 95% !important;
+                margin: 15px auto;
+            }
+        }
+    }
+}

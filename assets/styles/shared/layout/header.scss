@@ -14,6 +14,7 @@ input[type="checkbox"][name^="menu"] {
     position: fixed;
     height: 100vh;
     left: 0;
+    z-index: 999;
     border-right: #e6e7eb 1.5px solid;
     font-family: $msNormal;
     flex-direction: column;
@@ -126,6 +127,7 @@ input[type="checkbox"][name^="menu"] {
     }
 
     .hamburger {
+        position: fixed;
         align-self: flex-end;
         position: absolute;
         top: 20px;
