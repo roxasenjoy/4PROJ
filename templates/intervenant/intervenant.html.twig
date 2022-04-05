@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campud Booster - Intervenants{% endblock %}
+
+{% block body %}
+
+    <div class="intervenant-container transition">
+        <section class="shadow">
+            <h3 class="title-dashboard"><i class="fa-solid fa-chalkboard-user"></i> Liste des intervenants </h3>
+            <hr>
+
+
+            <div class="intervenantsTable">
+
+                <div class="section left">
+                    <p class="lessonName"> 4KKKK </p>
+                </div>
+
+                <div class="section center">
+                    <p> Je suis le nom de l'intervenant </p>
+                </div>
+
+                <!-- Page settings - A activer que si notre rôle est admin -->
+
+                {% if app.user.role.id == 12  %} <!-- Différent d'un rôle étudiant -->
+
+                    <div class="section right">
+                        <p class="edit"><i class="fa-solid fa-pen-to-square"></i></p>
+                        <p class="delete"><i class="fa-solid fa-trash-can"></i></p>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+    </div>
+
+{% endblock %}

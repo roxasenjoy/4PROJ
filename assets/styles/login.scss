@@ -142,16 +142,64 @@
         .container-login{
             .content-login{
                 flex-direction: column;
-                height: 60vh;
+                height: initial;
+                background: initial;
 
                 .left-login{
+
+                    align-items: center;
+                    margin: auto;
+                    background: $white;
+
                     #container-logo{
                         margin: auto;
                         text-align: center;
                         img{
-                            width: 350px;
+                            width: 550px;
                         }
                     }
+
+                    h3{
+                        font-size: 3em;
+                    }
+
+                    #title-login{
+                        font-size: 2.5em;
+                    }
+
+                    input{
+                        font-size: 3em;
+
+                    }
+
+                    .rememberMe{
+                        font-size: 2.5em;
+                        input{
+                            width: 40px;
+                            height: 40px;
+                        }
+                    }
+
+                    #security-message-login{
+                        font-size: 2.5em;
+                        line-height: initial;
+                    }
+
+                    /* Boutons */
+                    .action-login{
+
+                        button,a{
+
+                            font-size: 3em;
+                            font-family: $msNormal;
+                            padding: 20px;
+
+                            &:hover{
+                                background-color: $darkBlue;
+                            }
+
+                        }
+                    } // Fin action-login
                 }
 
                 .right-login{

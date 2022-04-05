@@ -12,7 +12,7 @@ input[type="checkbox"][name^="menu"] {
     background: $white;
     width: 300px;
     position: fixed;
-    height: 100vh;
+    height: 100%;
     left: 0;
     z-index: 999;
     border-right: #e6e7eb 1.5px solid;
@@ -21,6 +21,7 @@ input[type="checkbox"][name^="menu"] {
     pointer-events: auto;
     display: flex;
     max-height: 100%;
+    overflow: auto;
 
     .logo-nav{
         background-image: linear-gradient(to bottom, #04284a, #03305a, #02396b, #04417c, #094a8e);
@@ -129,7 +130,6 @@ input[type="checkbox"][name^="menu"] {
     .hamburger {
         position: fixed;
         align-self: flex-end;
-        position: absolute;
         top: 20px;
         left: 20px;
         background: $blue;

@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Campus Booster{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
@@ -71,7 +72,7 @@
                                 <span class="animationClickableText"> Cours </span>
                             </li>
                         </a>
-                        <a href="">
+                        <a href="{{ path('app_intervenant') }}">
                             <li>
                                 <i class="fa-solid fa-chalkboard-user"></i>
                                 <span class="animationClickableText"> Intervenants </span>

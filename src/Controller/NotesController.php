@@ -37,11 +37,6 @@ class NotesController extends AbstractController
         $allLessons = $this->em->getRepository(Subject::class)->getAllLessonsByLevel($user);
         $grades = $this->em->getRepository(UserGrade::class)->getGradesByUser($user->getId());
 
-
-
-
-
-
         /**
          * On combine les deux array qu'on vient de récuperer pour ne former plus qu'un
          */
@@ -63,8 +58,6 @@ class NotesController extends AbstractController
             }
             $combined[] = $comb;
         }
-
-        dump($combined);
 
         return $this->render('notes/notes.html.twig', [
             'notes' => $combined

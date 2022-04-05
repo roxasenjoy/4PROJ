@@ -1,0 +1,105 @@
+@import "variables";
+
+.intervenant-container {
+    border-radius: 5px;
+    padding: 25px;
+    margin-top: 0;
+
+    section {
+        background: $white;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    hr {
+        margin-top: 5px;
+        width: 50px;
+        background-color: $blue;
+        border: solid 2px $blue;
+        margin-bottom: 15px;
+    }
+
+    .title-dashboard {
+        color: $blue;
+        font-size: 1.5em;
+        font-family: $msBold;
+    }
+
+    .intervenantsTable{
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        font-family: $msNormal;
+        border-bottom: 0.5px solid #c9ccd3;
+        padding-bottom: 15px;
+
+
+        .left{
+            flex-basis: 10%;
+            text-align: center;
+
+            .lessonName{
+                background: $blue;
+                padding: 10px;
+                color: white;
+                font-size: 0.75em;
+                text-align: center;
+                border-radius: 4px;
+                display: inline-block;
+                font-family: $msBold;
+            }
+        }
+
+        .center{
+            text-align: left;
+            flex-basis: 70%;
+            color:$blue;
+            font-size: 1.5em;
+
+            p{
+                text-transform: capitalize;
+            }
+
+        }
+
+        .right{
+            text-align: right;
+            flex-basis: 20%;
+            display: flex;
+            justify-content: right;
+            font-size: 1em;
+            color:$blue;
+            align-items: center;
+
+            p{
+                margin: 0 15px;
+
+                &.edit{
+                    color: $white;
+                    background: $yellow;
+                    padding: 10px 25px;
+                    border-radius: 4px;
+                }
+
+                &.delete{
+                    color: $white;
+                    background: $red;
+                    padding: 10px 25px;
+                    border-radius: 4px;
+                }
+            }
+        }
+
+    }
+
+}
+
+@media (max-width: $laptop){
+    .intervenant-container {
+        section {
+            margin-top: 85px;
+        }
+    }
+}
