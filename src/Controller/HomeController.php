@@ -42,7 +42,7 @@ class HomeController extends AbstractController
 
 //        $test = new UserExtended();
 //
-//        $test->setUser($this->em->getRepository(User::class)->find(34))
+//        $test->setUser($this->em->getRepository(User::class)->find(37))
 //            ->setActualLevel($this->em->getRepository(StudyLevel::class)->find(3))
 //            ->setPreviousLevel($this->em->getRepository(StudyLevel::class)->find(2))
 //            ->setBirthday($this->globalService->getTodayDate())

@@ -45,6 +45,22 @@ class IntervenantRepository extends ServiceEntityRepository
         }
     }
 
+    public function getIntervenants($user){
+        return $this->createQueryBuilder('intervenant')
+            ->select('user.id', 'user.firstName', 'user.lastName', 'subject.name', 'sl.year as actualYear')
+            ->join('intervenant.user', 'user')
+            ->join('intervenant.subject', 'subject')
+            ->join('user.userExtended', 'ux')
+            ->join('user.campus', 'campus')
+            ->join('ux.actualLevel', 'sl')
+            ->where('campus.id = 31')
+            ->andWhere('sl.year = :userActualLevel')
+            ->setParameter(':userActualLevel', $user->getUserExtended()->getActualLevel()->getYear())
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Intervenant[] Returns an array of Intervenant objects
     //  */

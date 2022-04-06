@@ -26,7 +26,6 @@
     }
 
     .intervenantsTable{
-
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -34,6 +33,7 @@
         font-family: $msNormal;
         border-bottom: 0.5px solid #c9ccd3;
         padding-bottom: 15px;
+        margin-top: 15px;
 
 
         .left{
@@ -54,7 +54,7 @@
 
         .center{
             text-align: left;
-            flex-basis: 70%;
+            flex-basis: 60%;
             color:$blue;
             font-size: 1.5em;
 
@@ -66,7 +66,7 @@
 
         .right{
             text-align: right;
-            flex-basis: 20%;
+            flex-basis: 30%;
             display: flex;
             justify-content: right;
             font-size: 1em;
@@ -101,5 +101,26 @@
         section {
             margin-top: 85px;
         }
+
+        .intervenantsTable {
+            .left {
+                flex-basis: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        .center{
+            flex-basis: 100% !important;
+            text-align: center !important;
+            margin-bottom: 10px;
+        }
+
+        .right {
+            text-align: center !important;
+            margin: auto !important;
+            margin-top: 10px;
+            flex-basis: initial !important;
+        }
     }
+
 }

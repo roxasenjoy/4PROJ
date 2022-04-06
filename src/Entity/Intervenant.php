@@ -13,25 +13,25 @@ class Intervenant
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: user::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Subject::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $Subject;
+    private $subject;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
@@ -40,12 +40,12 @@ class Intervenant
 
     public function getSubject(): ?Subject
     {
-        return $this->Subject;
+        return $this->subject;
     }
 
-    public function setSubject(?Subject $Subject): self
+    public function setSubject(?Subject $subject): self
     {
-        $this->Subject = $Subject;
+        $this->subject = $subject;
 
         return $this;
     }
