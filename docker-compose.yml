@@ -11,8 +11,6 @@ services:
       - '9000:9000'
     volumes:
       - .:/var/www
-    depends_on:
-      - database
  
   # #Base de données
   # database:

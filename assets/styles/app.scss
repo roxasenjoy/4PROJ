@@ -62,15 +62,106 @@ body{
         left: 0;
     }
 }
-/*********************************/
+
+/**
+    Design pour toutes les sections
+    - Container
+    - Icone + Titre
+    - Barre en dessous du titre
+ */
+.sectionContainer{
+    border-radius: 5px;
+    padding: 25px;
+    margin-top: 0;
+
+    section {
+        background: $white;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    hr {
+        margin-top: 5px;
+        width: 50px;
+        background-color: $blue;
+        border: solid 2px $blue;
+        margin-bottom: 15px;
+    }
+
+    .titleSection {
+        color: $blue;
+        font-size: 1.5em;
+        font-family: $msBold;
+    }
+}
+
+/**
+    Fil d'arianne
+    Afficher / en fonction du nombre d'élément présent dans le fil d'arianne.
+
+    Tous les éléments possèdent la class : .element
+ */
+
+.breadcrumbs{
+    display: flex;
+    list-style-type:none;
+
+    border-radius: 5px;
+    margin-bottom: 25px;
+    padding: 5px;
+    color: $blue;
+    margin-top: 0;
+    font-family: $msLight;
+
+    .current{ /* Il doit se trouver sur la balise LI */
+        font-family: $msBold;
+    }
+
+    li{
+
+        font-family: $msLight;
+
+        a{
+            border-bottom: none;
+            color: $blue;
+            font-family: $msLight;
+            text-decoration: none !important;
+        }
+
+        a::after{
+            content:"/";
+            margin-right: 10px;
+            margin-left: 10px;
+            color: $greyDark;
+            font-family: $msLight;
+        }
+    }
+}
+
 
 
 @media (max-width: $laptop){
 
     body{
         margin-left: 0 !important;
+
+        .breadcrumbs{
+            margin-top: 85px;
+        }
+
     }
 }
+
+
+@media (max-width: $smartphone){
+    .breadcrumbs{
+
+        li{
+            font-size: 0.80em;
+        }
+    }
+}
+
 
 
 

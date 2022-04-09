@@ -136,6 +136,13 @@
     }
 }
 
+.resetPasswordSend{
+    color: $blue;
+    font-family: $msNormal;
+    font-size: 1.5em;
+}
+
+
 // La taille maximal du design est de 1024px et la taille minimum est celle du téléphone : 700px
 @media (max-width: $laptop){
     .background-login{

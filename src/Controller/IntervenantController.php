@@ -21,29 +21,16 @@ class IntervenantController extends AbstractController
 
     public function __construct(
         EntityManagerInterface $em,
-        AuthService $authService,
-        UserService $userService,
-        GlobalService $globalService
+        AuthService $authService
     )
     {
         $this->em = $em;
         $this->authService = $authService;
-        $this->userService = $userService;
-        $this->globalService = $globalService;
     }
 
     #[Route('/intervenant', name: 'app_intervenant')]
     public function getIntervenants(): Response
     {
-
-
-//        $teacher = new Intervenant();
-//        $teacher->setUser($this->em->getRepository(User::class)->find(37))
-//            ->setSubject($this->em->getRepository(Subject::class)->find(1));
-//
-//        $this->em->persist($teacher);
-//        $this->em->flush();
-
         $user = $this->authService->isAuthenticatedUser();
 
         $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenants($user);

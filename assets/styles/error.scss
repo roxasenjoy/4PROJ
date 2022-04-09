@@ -18,3 +18,9 @@
 .error-border{
   border: $red solid 1.5px !important;
 }
+
+.text-error{
+  color: $red;
+  font-size: 1em;
+  margin-bottom: 15px;
+}

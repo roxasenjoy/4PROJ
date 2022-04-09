@@ -1,0 +1,99 @@
+@import "variables";
+
+table {
+    border: 1px solid $greyDark;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+    font-family: $msNormal;
+    color: $blue;
+
+    caption {
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
+    }
+
+    tr {
+        background-color: $white;
+        border: 1px solid $greyDark;
+        padding: .35em;
+        font-size: 1.25em;
+
+        &:nth-child(2n+1){
+            background-color: $grey;
+        }
+    }
+
+    th,td {
+        padding: .625em;
+    }
+
+    th {
+        font-size: .85em;
+        text-transform: uppercase;
+        font-family: $msBold;
+        text-align: left;
+    }
+
+}
+
+.totalCompta{
+    font-family: $msBold;
+}
+
+@media screen and (max-width: $smartphone) {
+    table {
+        border: 0;
+
+        caption {
+            font-size: 1.3em;
+        }
+
+        thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            margin-bottom: .625em;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            font-size: .8em;
+            text-align: right;
+
+            &::before {
+                /*
+                * aria-label has no advantage, it won't be read inside a table
+                content: attr(aria-label);
+                */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            &:last-child {
+                border-bottom: 0;
+            }
+
+        }
+    }
+}
+
+
+
+
+

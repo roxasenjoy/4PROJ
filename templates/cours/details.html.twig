@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campud Booster - {{  cours.name }}{% endblock %}
+
+{% block body %}
+
+    <div class=" sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="element">
+                        <a href="{{ path('app_cours') }}" class="transition">
+                            <span class="animationClickableText">Cours</span>
+                        </a>
+                    </li>
+
+                    <li class="element  current"> {{ cours.name }} </li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+        <section class="listLesson-container shadow transition">
+
+            <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> {{ cours.fullName }}   </h3>
+            <hr>
+
+
+            <p class="no-information">Les détails de ce cours ne sont pas disponibles.</p>
+
+
+        </section>
+    </div>
+
+{% endblock %}

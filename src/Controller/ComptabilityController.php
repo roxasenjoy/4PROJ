@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Role;
-use App\Entity\StudyLevel;
-use App\Entity\User;
-use App\Entity\UserExtended;
+use App\Entity\UserComptability;
 use App\Service\AuthService;
 use App\Service\GlobalService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,10 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-class HomeController extends AbstractController
+class ComptabilityController extends AbstractController
 {
-
     private AuthService $authService;
     private EntityManagerInterface $em;
 
@@ -25,23 +20,30 @@ class HomeController extends AbstractController
         AuthService $authService,
         GlobalService $globalService
     )
+
     {
         $this->em = $em;
         $this->authService = $authService;
         $this->globalService = $globalService;
     }
 
-    #[Route('/', name: 'app_dashboard')]
+    #[Route('/user/comptability', name: 'app_user_comptability')]
     public function index(): Response
     {
-
         $user = $this->authService->isAuthenticatedUser();
 
-        return $this->render('dashboard/dashboard.html.twig', [
-            'userGrades'    => $this->globalService->getNotes($user), // Dernières évaluations
-            'agenda'        => $this->globalService->getAgenda($user), // Agenda
-            'cours'         => $this->globalService->getCours($user),
-            'comptability'  => $this->globalService->getUserTotalComptability($user->getId())
+        // Récupération de la comptabilité de l'étudiant
+        $comptability = $this->em->getRepository(UserComptability::class)->getComptabilityPerUser($user->getId());
+
+        $total = $this->globalService->getUserTotalComptability($user->getId());
+
+        if(!$total){
+            $total = 0;
+        }
+
+        return $this->render('comptability/index.html.twig', [
+            'comptability'  => $comptability,
+            'total'         => $total
         ]);
     }
 }
