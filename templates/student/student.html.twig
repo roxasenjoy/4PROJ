@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campus Booster - Liste des étudiants {% endblock %}
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Gestion des étudiants</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+
+        <main class="container-two-rows">
+            <section class="left-section shadow">
+                <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Gestion des étudiants </h3>
+                <hr>
+
+                <p class="no-information"> Aucune promotion n'est sélectionnée.</p>
+
+                <!----------------------------------
+                        Contenu de la page
+                ----------------------------------->
+            </section>
+
+            <div class="right-section ">
+                <div class="fixed">
+                    <section class="shadow">
+                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
+                        <hr>
+
+                        <div class="containerClass">
+                            <a href="" class="shadow transition"> A.Sc.1 </a>
+                            <a href="" class="shadow transition"> A.Sc.2 </a>
+                            <a href="" class="shadow transition"> B.Sc </a>
+                            <a href="" class="shadow transition"> M.Sc.1 </a>
+                            <a href="" class="shadow transition"> M.Sc.2 </a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+{% endblock %}

@@ -13,10 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-class HomeController extends AbstractController
+class DashboardController extends AbstractController
 {
-
     private AuthService $authService;
     private EntityManagerInterface $em;
 
@@ -40,8 +38,9 @@ class HomeController extends AbstractController
         return $this->render('dashboard/dashboard.html.twig', [
             'userGrades'    => $this->globalService->getNotes($user), // Dernières évaluations
             'agenda'        => $this->globalService->getAgenda($user), // Agenda
-            'cours'         => $this->globalService->getCours($user),
-            'comptability'  => $this->globalService->getUserTotalComptability($user->getId())
+            'cours'         => $this->globalService->getCours($user), // Cours
+            'comptability'  => $this->globalService->getUserTotalComptability($user->getId()), // La comptabilité de l'étudiant
+            'ectsTotal'     => $this->globalService->getAllEcts($user) // Total des crédits ECTS de l'étudiants
         ]);
     }
 }

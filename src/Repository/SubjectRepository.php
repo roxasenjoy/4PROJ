@@ -52,7 +52,7 @@ class SubjectRepository extends ServiceEntityRepository
      */
     public function getAllLessonsByLevel($user){
 
-        if($user){
+        if($user->getUserExtended()){
             $qb = $this->createQueryBuilder('subject')
                 ->select('subject.id','subject.name',  'subject.fullName','subject.points')
                 ->join('subject.level', 'level')

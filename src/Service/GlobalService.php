@@ -87,4 +87,34 @@ class GlobalService
     }
 
 
+    /**
+     * Obtenir le nombre total de crédits ECTS de l'étudiant.
+     * Si aucune valeur de base : Un étudiant gagnera 60 crédits par année validés
+     * @param $userId
+     * @return float|int
+     */
+    public function getAllEcts($user){
+
+        $totalECTS = 0;
+
+        // Obtenir le niveau actuel de l'étudiant
+        if($user->getUserExtended()){
+            $actualYear = $user->getUserExtended()->getActualLevel()->getYear();
+            $hasPreviousYear = $user->getUserExtended()->getPreviousLevel()->getYear();
+
+            // Si l'étudiant ne possède pas de previous_level_id, on multiplie son année actuel -1 par 60
+            if($hasPreviousYear === null){
+                $totalECTS = (($actualYear -1) * 60);
+            }
+        }
+
+
+
+
+        // Ajouter les crédits actuel de l'année en cours
+        return $totalECTS + intval($this->em->getRepository(UserGrade::class)->getTotalEctsPerUser($user->getId())[0]['1']);
+
+    }
+
+
 }

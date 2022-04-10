@@ -48,7 +48,6 @@ class UserExtended
     private $actualLevel;
 
     #[ORM\ManyToOne(targetEntity: StudyLevel::class, fetch: 'EAGER')]
-    #[ORM\JoinColumn(nullable: false)]
     private $previousLevel;
 
     #[ORM\OneToOne(inversedBy: 'userExtended', targetEntity: User::class, cascade: ['persist', 'remove'])]

@@ -39,101 +39,206 @@
 
                 <div class="transition header" id="header">
 
+
+
+                    {% if app.user.role.id == 12 %}
+                    <div class="logo-nav student">
+                    {% elseif app.user.role.id == 13 %}
                     <div class="logo-nav">
+                    {% elseif app.user.role.id == 14 %}
+                    <div class="logo-nav teacher">
+                    {% elseif app.user.role.id == 15 %}
+                    <div class="logo-nav pedago">
+                    {% elseif app.user.role.id == 16 %}
+                    <div class="logo-nav admin">
+                    {% endif %}
+
+
                         <i class="fa-solid fa-circle-user"></i>
                         <p id="fullName">{{ app.user.firstName }} {{ app.user.lastName }}</p>
-                        <p id="role-student">- {{  app.user.role.name }} - </p>
+                        <p id="role-student">- {{ app.user.role.name }} - </p>
                     </div>
 
-                    <div class="section-element">
-                        <ul>
-                            <a href="{{ path('app_dashboard') }}">
-                                <li>
-                                    <i class="fa-solid fa-house"></i>
-                                    <span class="animationClickableText">Tableau de bord</span>
-                                </li>
-                            </a>
-                        </ul>
-                    </div>
-                    <!--
-                        Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire
-                    -->
-                    <div class="section-title"> Académique </div>
 
-                    <div class="section-element">
-                        <ul>
-                            <a href="{{ path('app_notes') }}">
-                                <li>
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                    <span class="animationClickableText"> Cursus & Notes </span>
-                                </li>
-                            </a>
+                    <!---------------------------------------------------------
+                                        ROLE PEDAGOGIQUE
+                    ----------------------------------------------------------->
+                    {% if app.user.roles|join(', ') == 'ROLE_PEDAGO' %}
 
-                            <a href="{{ path('app_cours') }}">
-                                <li>
-                                    <i class="fa-solid fa-book-open"></i>
-                                    <span class="animationClickableText"> Cours </span>
-                                </li>
-                            </a>
-                            <a href="{{ path('app_intervenant') }}">
-                                <li>
-                                    <i class="fa-solid fa-chalkboard-user"></i>
-                                    <span class="animationClickableText"> Intervenants </span>
-                                </li>
-                            </a>
-                        </ul>
-                    </div>
+                        <!--
+                            Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire
+                        -->
+                        <div class="section-title"> Gestion du campus </div>
 
-                    <!--
-                        Côté administratif - Gestion des documents (Alternante, stage) et de la comptabilité de l'étudiant
-                    -->
-                    <div class="section-title"> Administratif </div>
+                        <div class="section-element">
+                            <ul>
+                                <a href="{{ path('app_student') }}">
+                                    <li>
+                                        <i class="fa-solid fa-graduation-cap"></i>
+                                        <span class="animationClickableText"> Étudiants </span>
+                                    </li>
+                                </a>
 
-                    <div class="section-element">
-                        <ul>
-                            <a href="{{ path('app_user_comptability') }}">
-                                <li>
-                                    <i class="fa-solid fa-sack-dollar"></i>
-                                    <span class="animationClickableText">Comptabilité</span>
-                                </li>
-                            </a>
+                                <a href="">
+                                    <li>
+                                        <i class="fa-solid fa-book-open"></i>
+                                        <span class="animationClickableText"> Cours </span>
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li>
+                                        <i class="fa-solid fa-chalkboard-user"></i>
+                                        <span class="animationClickableText"> Intervenants </span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
 
-                            <a href="">
-                                <li>
-                                    <i class="fa-solid fa-building"></i>
-                                    <span class="animationClickableText">Offres entreprises</span>
-                                </li>
-                            </a>
-                        </ul>
-                    </div>
+                        <!--
+                            Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire
+                        -->
+                        <div class="section-title"> Administratif </div>
 
-                    <!--
-                        Côté administratif - Gestion des documents (Alternante, stage) et de la comptabilité de l'étudiant
-                    -->
-                    <div class="section-title"> A PROPOS </div>
+                        <div class="section-element">
+                            <ul>
+                                <a href="">
+                                    <li>
+                                        <i class="fa-solid fa-building"></i>
+                                        <span class="animationClickableText"> Entreprises </span>
+                                    </li>
+                                </a>
 
-                    <div class="section-element">
-                        <ul>
+                                <a href="">
+                                    <li>
+                                        <i class="fa-solid fa-pencil"></i>
+                                        <span class="animationClickableText">Offres entreprises </span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
 
-                            <a href="{{ path('app_settings') }}">
-                                <li>
-                                    <i class="fa-solid fa-gear"></i>
-                                    <span class="animationClickableText">Paramètres</span>
-                                </li>
-                            </a>
-                        </ul>
-                    </div>
+                        <div class="section-title"> A PROPOS </div>
 
-                    <div class="section-element disconnect">
-                        <ul>
-                            <a href="{{ path('app_logout') }}">
-                                <li>
-                                    <i class="fa-solid fa-door-open"></i>
-                                    <span class="animationClickableText">Déconnexion</span>
-                                </li>
-                            </a>
-                        </ul>
-                    </div>
+                        <div class="section-element">
+                            <ul>
+                                <a href="{{ path('app_settings') }}">
+                                    <li>
+                                        <i class="fa-solid fa-gear"></i>
+                                        <span class="animationClickableText">Paramètres</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <div class="section-element disconnect">
+                            <ul>
+                                <a href="{{ path('app_logout') }}">
+                                    <li>
+                                        <i class="fa-solid fa-door-open"></i>
+                                        <span class="animationClickableText">Déconnexion</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+
+                    {% endif %}
+
+
+                    <!---------------------------------------------------------
+                                       ROLE ETUDIANT
+                    ----------------------------------------------------------->
+                    {% if app.user.roles|join(', ') == 'ROLE_USER' %}
+
+                        <div class="section-element">
+                            <ul>
+                                <a href="{{ path('app_dashboard') }}">
+                                    <li>
+                                        <i class="fa-solid fa-house"></i>
+                                        <span class="animationClickableText">Tableau de bord</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+                        <!--
+                            Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire
+                        -->
+                        <div class="section-title"> Académique </div>
+
+                        <div class="section-element">
+                            <ul>
+                                <a href="{{ path('app_notes') }}">
+                                    <li>
+                                        <i class="fa-solid fa-graduation-cap"></i>
+                                        <span class="animationClickableText"> Cursus & Notes </span>
+                                    </li>
+                                </a>
+
+                                <a href="{{ path('app_cours') }}">
+                                    <li>
+                                        <i class="fa-solid fa-book-open"></i>
+                                        <span class="animationClickableText"> Cours </span>
+                                    </li>
+                                </a>
+                                <a href="{{ path('app_intervenant') }}">
+                                    <li>
+                                        <i class="fa-solid fa-chalkboard-user"></i>
+                                        <span class="animationClickableText"> Intervenants </span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <!--
+                            Gestion des documents (Alternante, stage) et de la comptabilité de l'étudiant
+                        -->
+                        <div class="section-title"> Administratif </div>
+
+                        <div class="section-element">
+                            <ul>
+                                <a href="{{ path('app_user_comptability') }}">
+                                    <li>
+                                        <i class="fa-solid fa-sack-dollar"></i>
+                                        <span class="animationClickableText">Comptabilité</span>
+                                    </li>
+                                </a>
+
+                                <a href="">
+                                    <li>
+                                        <i class="fa-solid fa-pencil"></i>
+                                        <span class="animationClickableText">Offres entreprises</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+
+
+                        <div class="section-title"> A PROPOS </div>
+
+                        <div class="section-element">
+                            <ul>
+
+                                <a href="{{ path('app_settings') }}">
+                                    <li>
+                                        <i class="fa-solid fa-gear"></i>
+                                        <span class="animationClickableText">Paramètres</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <div class="section-element disconnect">
+                            <ul>
+                                <a href="{{ path('app_logout') }}">
+                                    <li>
+                                        <i class="fa-solid fa-door-open"></i>
+                                        <span class="animationClickableText">Déconnexion</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+
+                    {% endif %}
+
                 </div>
 
             {% endif %}

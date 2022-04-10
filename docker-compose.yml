@@ -24,8 +24,3 @@ services:
   #     - 3306:3306
   #   expose:
   #     - 3306
-
-  ###> symfony/mailer ###
-  mailer:
-    image: schickling/mailcatcher
-    ports: [1025, 1080]

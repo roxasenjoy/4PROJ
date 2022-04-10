@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -153,6 +154,7 @@ class ResetPasswordController extends AbstractController
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
+
         // Do not reveal whether a user account was found or not.
         if (!$user) {
             return $this->redirectToRoute('app_check_email');
@@ -174,7 +176,15 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email');
         }
 
-        $email = (new TemplatedEmail())
+        $phpmailer = new PHPMailer();
+        $phpmailer->isSMTP();
+        $phpmailer->Host = 'smtp.mailtrap.io';
+        $phpmailer->SMTPAuth = true;
+        $phpmailer->Port = 2525;
+        $phpmailer->Username = 'b50d1d85de94e8';
+        $phpmailer->Password = '088ea694f2f489';
+
+        $email = (new Email())
             ->from(new Address('andrew.mahe14@gmail.com', 'Reset Email'))
             ->to($user->getEmail())
             ->subject('Your password reset request')

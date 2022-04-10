@@ -41,9 +41,17 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+
+        #L'utilisateur n'a pas de compte
         - { path: ^/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: ROLE_USER }
+
+        #L'utilisateur est connecté est possede un rôle
+        - { path: ^/, role: [ROLE_USER, ROLE_PEDAGO] }
+
+
+        # ÉQUIPE PEDAGOQIQUE
+        - { path: ^/pedagogique, role: ROLE_PEDAGO }
 
 when@test:
     security:

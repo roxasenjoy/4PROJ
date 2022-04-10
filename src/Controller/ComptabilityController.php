@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
+use App\Entity\Subject;
+use App\Entity\SubjectDate;
+use App\Entity\User;
 use App\Entity\UserComptability;
 use App\Service\AuthService;
 use App\Service\GlobalService;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +46,7 @@ class ComptabilityController extends AbstractController
             $total = 0;
         }
 
-        return $this->render('comptability/index.html.twig', [
+        return $this->render('comptability/student.html.twig', [
             'comptability'  => $comptability,
             'total'         => $total
         ]);

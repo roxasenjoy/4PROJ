@@ -23,6 +23,10 @@
 
                         <p id="title-login">Veuillez vous identifier</p>
 
+                        {% if error %}
+                            <p class="text-error"> Vos identifiants ne sont pas valides.</p>
+                        {% endif %}
+
                         <form method="post">
                                 <!-- Email de l'utlisateur -->
                                 <div class="input-login">
