@@ -11,8 +11,6 @@ services:
       - '9000:9000'
     volumes:
       - .:/var/www
-    depends_on:
-      - database
  
   # #Base de données
   # database:
@@ -27,7 +25,3 @@ services:
   #   expose:
   #     - 3306
 
-  ###> symfony/mailer ###
-  mailer:
-    image: schickling/mailcatcher
-    ports: [1025, 1080]
