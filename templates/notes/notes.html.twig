@@ -4,9 +4,24 @@
 
 {% block body %}
 
-    <div class="notes-container transition">
+    <div class="notes-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Cursus & Notes</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
         <section class="shadow">
-            <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Cursus & Notes </h3>
+            <h3 class="titleSection"><i class="fa-solid fa-graduation-cap"></i> Cursus & Notes </h3>
             <hr>
 
             <div class="notes-table">

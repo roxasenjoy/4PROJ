@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = ['ROLE_USER'];
+    private $roles = array();
 
     #[ORM\Column(type: 'string')]
     private $password;
@@ -129,8 +129,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+
+//        // guarantee every user at least has ROLE_USER
+//        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }

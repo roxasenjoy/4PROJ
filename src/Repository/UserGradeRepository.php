@@ -64,6 +64,17 @@ class UserGradeRepository extends ServiceEntityRepository
 
     }
 
+    public function getTotalEctsPerUser($userId){
+        $qb = $this->createQueryBuilder('ug')
+            ->select('SUM(subject.points)')
+            ->join('ug.subject', 'subject')
+            ->where('ug.user = :user')
+            ->andWhere('ug.grade >= 10')
+            ->setParameter(':user', $userId);
+
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return UserGrade[] Returns an array of UserGrade objects
     //  */

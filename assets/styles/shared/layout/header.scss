@@ -23,8 +23,24 @@ input[type="checkbox"][name^="menu"] {
     max-height: 100%;
     overflow: auto;
 
-    .logo-nav{
+    .logo-nav.student{
         background-image: linear-gradient(to bottom, #04284a, #03305a, #02396b, #04417c, #094a8e);
+    }
+
+    .logo-nav.pedago{
+        background-image: linear-gradient(to bottom, #07652f, #087537, #09863f, #0a9747, #0ca94f);
+    }
+
+    .logo-nav.teacher{
+        background-image: linear-gradient(to bottom, #593d08, #78530b, #99690e, #bc8111, #e09914);
+    }
+
+    .logo-nav.admin{
+        background-image: linear-gradient(to bottom, #64201d, #7e2825, #99312e, #b53a36, #d2433f);
+    }
+
+    .logo-nav{
+
         font-family: $msNormal !important;
         padding: 20px 0;
         text-align: center;
@@ -89,6 +105,8 @@ input[type="checkbox"][name^="menu"] {
             a{
                 text-decoration: none;
                 color: $blue;
+                width: 100%;
+
 
                 li{
                     list-style-type: none;

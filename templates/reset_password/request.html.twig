@@ -1,0 +1,26 @@
+{% extends 'auth/login.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block content_body %}
+
+    <h3>Réinitialiser votre mot de passe </h3>
+
+    {% if error  %}
+        <p class="text-error">Votre email n'est pas valide.</p>
+    {% endif %}
+
+    {{ form_start(requestForm) }}
+        <div class="input-login">
+            {{ form_widget(requestForm.email) }}
+        </div>
+
+        <div>
+            <p id="security-message-login">Si votre email est présente, vous allez recevoir un mail de reinitialisation de mot de passe.</p>
+        </div>
+
+        <div class="action-login">
+            <button class="transition" type="submit">Reinitialiser votre mot de passe</button>
+        </div>
+    {{ form_end(requestForm) }}
+{% endblock %}

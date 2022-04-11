@@ -17,15 +17,15 @@
                 <hr>
                 <div class="elementGlobal-content">
                     <div class="element" id="globalECTS">
-                        <span> 128 </span>
+                        <span> {{ ectsTotal }} </span>
                         <p>ECTS </p>
                     </div>
                     <div class="element" id="globalOpportunities">
-                        <span> 1423 </span>
+                        <span> XXXX </span>
                         <p>Offres entreprises </p>
                     </div>
                     <div class="element" id="globalFinance">
-                        <span> -5000 </span>
+                        <span> {{ comptability }} </span>
                         <p>Comptabilité </p>
                     </div>
                 </div>
@@ -37,46 +37,26 @@
                 <hr>
 
                 <div class="listLesson-parent">
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
 
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
+                    {% if cours %}
+                        {% for cours in cours %}
+                            <a href="{{ path('app_cours_details', {id: cours.id}) }}">
+                                <div class="listLesson-content shadow transition">
+                                    <div class="imgBackground"></div>
+                                    <p class="title"> {{ cours.name }} </p>
+                                    <p>{{ cours.points }} ECTS</p>
+                                </div>
+                            </a>
 
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
+                        {% endfor %}
 
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
-                    <div class="listLesson-content shadow transition">
-                        <div class="imgBackground"></div>
-                        <p class="title">4BOSS</p>
-                    </div>
+                    {% else  %}
+
+                        <p class="no-information">Aucun cours n'est disponible pour le moment.</p>
+
+                    {% endif %}
                 </div>
-
-
             </section>
-
         </div>
 
         <div class="right-section">

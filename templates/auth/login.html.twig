@@ -16,61 +16,69 @@
                         <img src="{{ asset('images/login/logo-blue.png') }}" alt="Logo supinfo bleu">
                     </div>
 
-                    <h3>Heureux de vous revoir ! </h3>
 
-                    <p id="title-login">Veuillez vous identifier</p>
+                    {% block content_body %}
 
-                    <form method="post">
-                            <!-- Email de l'utlisateur -->
-                            <div class="input-login">
-                                <input
-                                    class="{{ error ? 'error-border' : '' }}"
-                                    type="email"
-                                    placeholder="Adresse email Booster"
-                                    value="{{ last_username }}"
-                                    name="email"
-                                    id="inputEmail"
-                                    autocomplete="email"
-                                    required autofocus
-                                >
+                        <h3>Heureux de vous revoir ! </h3>
+
+                        <p id="title-login">Veuillez vous identifier</p>
+
+                        {% if error %}
+                            <p class="text-error"> Vos identifiants ne sont pas valides.</p>
+                        {% endif %}
+
+                        <form method="post">
+                                <!-- Email de l'utlisateur -->
+                                <div class="input-login">
+                                    <input
+                                        class="{{ error ? 'error-border' : '' }}"
+                                        type="email"
+                                        placeholder="Adresse email Booster"
+                                        value="{{ last_username }}"
+                                        name="email"
+                                        id="inputEmail"
+                                        autocomplete="email"
+                                        required autofocus
+                                    >
+                                </div>
+
+                                <!-- Mot de passe -->
+                                <div class="input-login">
+                                    <input
+                                        class="{{ error ? 'error-border' : '' }}"
+                                        type="password"
+                                        placeholder="Mot de passe"
+                                        name="password"
+                                        id="inputPassword"
+                                        autocomplete="current-password"
+                                        required
+                                    >
+                                </div>
+
+
+                                <!-- Token de l'utlisateur quand il va se connecter -->
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                                <!-- Se souvenir de moi -->
+                                <div class="rememberMe">
+
+                                    <input type="checkbox" name="_remember_me">
+                                     <label for="_remember_me">Se souvenir de moi</label>
+                                </div>
+
+                                <p id="security-message-login">Pour des raisons de sécurité, nous vous déconseillons d'activer cette option sur un ordinateur public.</p>
+
+
+
+
+                            <div class="action-login">
+                                <button class="transition" type="submit">Se connecter</button>
+                                <a href="{{ path('app_forgot_password_request') }}" class="animationClickableText">Mot de passe oublié ? </a>
                             </div>
-                        
-                            <!-- Mot de passe -->
-                            <div class="input-login">
-                                <input
-                                    class="{{ error ? 'error-border' : '' }}"
-                                    type="password"
-                                    placeholder="Mot de passe"
-                                    name="password"
-                                    id="inputPassword"
-                                    autocomplete="current-password"
-                                    required
-                                >
-                            </div>
-                            
 
-                            <!-- Token de l'utlisateur quand il va se connecter -->
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        </form>
 
-                            <!-- Se souvenir de moi -->
-                            <div class="rememberMe">
-                               
-                                <input type="checkbox" name="_remember_me"> 
-                                 <label for="_remember_me">Se souvenir de moi</label>
-                            </div>
-
-                            <p id="security-message-login">Pour des raisons de sécurité, nous vous déconseillons d'activer cette option sur un ordinateur public.</p>
-
-
-
-
-                        <div class="action-login">
-                            <button class="transition" type="submit">Se connecter</button>
-                            <a href="" class="animationClickableText">Mot de passe oublié ? </a>
-                        </div>
-                        
-                    </form>
-
+                    {% endblock %}
 
                 </section>
 

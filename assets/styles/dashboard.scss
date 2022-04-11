@@ -45,7 +45,7 @@
                 text-align: center;
 
                 .listLesson-content{
-                    height: 250px;
+                    height: 200px;
                     width: 225px;
                     margin: 15px;
                     display: inline-block;
@@ -62,13 +62,14 @@
                     .imgBackground{
                         background-image: url("http://via.placeholder.com/1920x1080");
                         background-size: cover;
-                        height: 150px;
+                        height: 125px;
                         text-align: center;
                         content:"";
                         background-position: center center;
                         background-repeat: no-repeat;
                     }
                 }
+
             }
         }
 
@@ -286,7 +287,7 @@
         .listLesson-parent{
             .listLesson-content{
                 width: 40% !important;
-                margin: 15px auto;
+                margin: 15px auto !important;
             }
         }
     }
@@ -302,10 +303,5 @@
                 margin: 15px auto;
             }
         }
-    }
-
-    .lessons-container,
-    .notes-container{
-        font-size: 1.5em !important;
     }
 }

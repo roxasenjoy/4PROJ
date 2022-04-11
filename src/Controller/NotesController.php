@@ -34,33 +34,40 @@ class NotesController extends AbstractController
     {
 
         $user = $this->authService->isAuthenticatedUser();
+
         $allLessons = $this->em->getRepository(Subject::class)->getAllLessonsByLevel($user);
         $grades = $this->em->getRepository(UserGrade::class)->getGradesByUser($user->getId());
 
-        /**
-         * On combine les deux array qu'on vient de récuperer pour ne former plus qu'un
-         */
         $combined = array();
-        foreach ($allLessons as $lesson) {
-            $comb = array(
-                'id' => $lesson['id'],
-                'fullName' => $lesson['fullName'],
-                'points' => $lesson['points'],
-                'note' => '--',
-                'status' => null);
 
-            foreach ($grades as $grade) {
-                if ($grade['subjectId'] == $lesson['id']) {
-                    $comb['note'] = $grade['grade'];
-                    $comb['status'] = $grade['status'];
-                    break;
+        if($allLessons && $grades){
+            /**
+             * On combine les deux array qu'on vient de récuperer pour ne former plus qu'un
+             */
+
+            foreach ($allLessons as $lesson) {
+                $comb = array(
+                    'id' => $lesson['id'],
+                    'fullName' => $lesson['fullName'],
+                    'points' => $lesson['points'],
+                    'note' => '--',
+                    'status' => null);
+
+                foreach ($grades as $grade) {
+                    if ($grade['subjectId'] == $lesson['id']) {
+                        $comb['note'] = $grade['grade'];
+                        $comb['status'] = $grade['status'];
+                        break;
+                    }
                 }
+                $combined[] = $comb;
             }
-            $combined[] = $comb;
         }
 
         return $this->render('notes/notes.html.twig', [
             'notes' => $combined
         ]);
+
+
     }
 }

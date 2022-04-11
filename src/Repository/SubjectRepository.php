@@ -52,9 +52,9 @@ class SubjectRepository extends ServiceEntityRepository
      */
     public function getAllLessonsByLevel($user){
 
-        if($user){
+        if($user->getUserExtended()){
             $qb = $this->createQueryBuilder('subject')
-                ->select('subject.id', 'subject.fullName','subject.points')
+                ->select('subject.id','subject.name',  'subject.fullName','subject.points')
                 ->join('subject.level', 'level')
                 ->where('level.year = :userActualLevel')
                 ->setParameter(':userActualLevel', $user->getUserExtended()->getActualLevel());
@@ -62,9 +62,8 @@ class SubjectRepository extends ServiceEntityRepository
         } else {
             return false;
         }
-
-
     }
+
 
     // /**
     //  * @return Subject[] Returns an array of Subject objects

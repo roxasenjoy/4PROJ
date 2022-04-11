@@ -35,8 +35,10 @@ class AuthController extends AbstractController
                 )
             );
 
-            $user->setRole($entityManager->getRepository(Role::class)->find(12));
-            $user->setCampus($entityManager->getRepository(Campus::class)->find(31));
+            // A rendre dynamique
+            $user->setRole($entityManager->getRepository(Role::class)->find(15));
+            $user->setCampus($entityManager->getRepository(Campus::class)->find(32));
+            $user->setRoles(array('ROLE_PEDAGO'));
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -56,6 +58,7 @@ class AuthController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+
          if ($this->getUser()) {
              return $this->redirectToRoute('app_dashboard');
          }

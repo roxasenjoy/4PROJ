@@ -21,6 +21,10 @@ import './styles/shared/layout/header.scss';
 import './styles/dashboard.scss';
 import './styles/notes.scss';
 import './styles/intervenant.scss';
+import './styles/settings.scss';
+import './styles/cours.scss';
+import './styles/comptability.scss';
+import './styles/student.scss';
 
 // Toutes les librairies
 import './styles/libraries/hint.css'

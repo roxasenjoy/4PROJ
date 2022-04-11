@@ -4,33 +4,56 @@
 
 {% block body %}
 
-    <div class="intervenant-container transition">
+    <div class="intervenant-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Intervenants</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
         <section class="shadow">
-            <h3 class="title-dashboard"><i class="fa-solid fa-chalkboard-user"></i> Liste des intervenants </h3>
+            <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
             <hr>
 
 
-            <div class="intervenantsTable">
+            {% if intervenants %}
+                {% for intervenant in intervenants %}
 
-                <div class="section left">
-                    <p class="lessonName"> 4KKKK </p>
-                </div>
+                    <div class="intervenantsTable">
 
-                <div class="section center">
-                    <p> Je suis le nom de l'intervenant </p>
-                </div>
+                        <div class="section left">
+                            <p class="lessonName"> {{intervenant.name}} </p>
+                        </div>
 
-                <!-- Page settings - A activer que si notre rôle est admin -->
+                        <div class="section center">
+                            <p> {{intervenant.firstName}} {{ intervenant.lastName}} </p>
+                        </div>
 
-                {% if app.user.role.id == 12  %} <!-- Différent d'un rôle étudiant -->
 
-                    <div class="section right">
-                        <p class="edit"><i class="fa-solid fa-pen-to-square"></i></p>
-                        <p class="delete"><i class="fa-solid fa-trash-can"></i></p>
+                        <!-- Page settings - A activer que si notre rôle est admin -->
+
+                        {% if app.user.role.id == 14  %} <!-- Différent d'un rôle étudiant -->
+                            <div class="section right">
+                                <p class="edit"><i class="fa-solid fa-pen-to-square"></i></p>
+                                <p class="delete"><i class="fa-solid fa-trash-can"></i></p>
+                            </div>
+                        {% endif %}
+
                     </div>
-                {% endif %}
+                {% endfor %}
 
-            </div>
+            {% else %}
+                <p class="no-information"> Aucun intervenant n'est disponible pour le moment</p>
+            {% endif %}
 
         </section>
     </div>

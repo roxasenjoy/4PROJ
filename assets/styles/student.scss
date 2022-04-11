@@ -1,0 +1,80 @@
+@import "variables";
+
+
+.container-two-rows{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .right-section {
+        flex: 1;
+
+
+        .fixed {
+            position: fixed;
+
+            section{
+                margin: 25px;
+                margin-left: 0px;
+
+                .containerClass{
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    a{
+                        flex-grow:1;
+                        margin: 10px;
+                        padding: 10px;
+                        border-radius: 8px;
+                        background-color: white;
+                        text-align: center;
+                        font-size: 1.25em;
+                        text-decoration: none;
+                        color: $blue;
+                        font-family: $msBold;
+
+                        &:hover{
+
+                            background-color: $blue;
+                            color: $white;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
+    .left-section{
+        flex: 3;
+        margin: 25px;
+    }
+
+}
+
+
+
+
+// La taille maximal du design est de 1024px et la taille minimum est celle du téléphone : 700px
+@media (max-width: $laptop){
+    .container-two-rows{
+        flex-direction: column-reverse;
+
+        .right-section,
+        section{
+            margin: initial !important;
+        }
+
+        .right-section{
+            margin-bottom: 25px !important;
+        }
+
+    }
+}
+
+@media (max-width: $smartphone){
+
+}
+

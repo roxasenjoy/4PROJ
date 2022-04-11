@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campus Booster - Paramètres{% endblock %}
+
+{% block body %}
+
+    <div class="sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Paramètres</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+        <section class="shadow">
+            <h3 class="titleSection"><i class="fa-solid fa-gear"></i> Paramètres </h3>
+            <hr>
+
+            {% if not success %}
+                {% if error %}
+                    <p class="text-error"> {{ error }}</p>
+                {% endif %}
+
+                <div class="newPassword">
+                    {{ form_start(form) }}
+
+                    <div class="password">
+                        {{ form_row(form.actualPassword) }}
+
+                        <div>
+                            {{ form_label(form.newPassword.first) }}
+                            {{ form_widget(form.newPassword.first) }}
+
+                            {{ form_label(form.newPassword.second) }}
+                            {{ form_widget(form.newPassword.second) }}
+
+                        </div>
+
+                        <div class="action-login">
+                            <button class="transition" type="submit">Reinitialiser son mot de passe</button>
+                        </div>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+
+
+            {% else %}
+
+                <p class="text-success"> {{ success }} </p>
+
+            {% endif %}
+
+
+        </section>
+    </div>
+
+
+{% endblock %}

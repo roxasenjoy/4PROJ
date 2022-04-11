@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campus Booster - Comptabilité{% endblock %}
+
+{% block body %}
+
+    <div class=" sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Comptabilité</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+        <section class="listLesson-container shadow transition">
+            <h3 class="titleSection"><i class="fa-solid fa-sack-dollar"></i> Comptabilité </h3>
+            <hr>
+
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Opération</th>
+                    <th scope="col">Débit</th>
+                    <th scope="col">Crédit</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    {% for value in comptability %}
+                        <tr>
+                            <td data-label="Date"> {{ value.date|date("d/m/Y") }}</td>
+                            <td data-label="Opération"> {{ value.description }}</td>
+                            <td data-label="Débit"> {{ value.debit }}</td>
+                            <td data-label="Crédit">{{ value.credit }}</td>
+                        </tr>
+                    {% endfor %}
+
+
+
+                    <tr>
+                        <td class="totalCompta">Total</td>
+                        <td></td>
+                        <td></td>
+                        <td class="totalCompta" data-label="Total">{{ total }}</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+        </section>
+
+    </div>
+
+{% endblock %}

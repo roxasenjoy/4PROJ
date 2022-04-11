@@ -1,0 +1,58 @@
+@import "variables";
+
+.listLesson-container{
+    .listLesson-parent {
+        text-align: center;
+        font-family: $msNormal;
+
+        a{
+            text-decoration: none !important;
+        }
+
+        .listLesson-content {
+            height: 250px;
+            width: 31%;
+            margin: 15px;
+            display: inline-block;
+            border-radius: 8px;
+            overflow: hidden;
+
+            .title {
+                font-size: 1em;
+                color: $blue;
+                font-family: $msBold;
+                padding: 10px;
+            }
+
+            .imgBackground {
+                background-image: url("http://via.placeholder.com/1920x1080");
+                background-size: cover;
+                height: 150px;
+                text-align: center;
+                content: "";
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+
+            .credits-ects{
+                color: $blue;
+                font-size: 1em;
+            }
+
+            p{
+                color: $blue;
+            }
+        }
+
+        .listLesson-content:hover{
+            transform: scale(1.05);
+        }
+    }
+}
+
+
+
+@media (max-width: $laptop){
+
+
+}

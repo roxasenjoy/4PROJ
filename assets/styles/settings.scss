@@ -1,0 +1,60 @@
+@import "variables";
+
+.newPassword{
+    form{
+        color: $blue;
+        font-size: 1.25em;
+
+        input{
+            box-sizing: border-box;
+            padding: 10px 20px;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 35px;
+        }
+
+        /* Boutons */
+        .action-login{
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            margin-top: 25px;
+            font-family: $msNormal;
+            justify-content: center;
+            align-items: center;
+
+            button{
+                background-color: $blue;
+                padding: 10px 15px;
+                font-size: 1em;
+                border: none;
+                color: $white;
+                cursor: pointer;
+                margin-bottom: 15px;
+                width: 100%;
+                border-radius: 4px;
+
+                &:hover{
+                    background-color: $darkBlue;
+                }
+
+            }
+        } // Fin action-login
+
+    }
+}
+
+.text-success{
+    font-size: 1.25em;
+    font-family: $msNormal;
+    color: $blue;
+}
+
+
+@media (max-width: $laptop){
+
+}
+
+@media (max-width: $smartphone){
+
+}
