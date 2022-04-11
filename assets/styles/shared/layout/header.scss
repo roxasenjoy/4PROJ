@@ -153,6 +153,7 @@ input[type="checkbox"][name^="menu"] {
         background: $blue;
         padding: 10px 20px;
         border-radius: 8px;
+        z-index: 9999999999999999;
 
     }
 

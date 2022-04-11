@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campus Booster - NOM PRENOM {% endblock %}
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="element ">
+                        <a href="{{ path('app_student')}}" class="transition">
+                            <span class="animationClickableText">Gestion des étudiants</span>
+                        </a>
+                    </li>
+
+                    <li class="current"> Prénom Nom</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+        <section class="left-section shadow">
+            <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> NOM PRENOM </h3>
+            <hr>
+
+        </section>
+    </div>
+
+{% endblock %}

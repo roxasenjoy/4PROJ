@@ -60,6 +60,18 @@
                     </div>
 
 
+
+                    <div class="section-element">
+                        <ul>
+                            <a href="{{ path('app_dashboard') }}">
+                                <li>
+                                    <i class="fa-solid fa-house"></i>
+                                    <span class="animationClickableText">Tableau de bord</span>
+                                </li>
+                            </a>
+                        </ul>
+                    </div>
+
                     <!---------------------------------------------------------
                                         ROLE PEDAGOGIQUE
                     ----------------------------------------------------------->
@@ -149,16 +161,6 @@
                     ----------------------------------------------------------->
                     {% if app.user.roles|join(', ') == 'ROLE_USER' %}
 
-                        <div class="section-element">
-                            <ul>
-                                <a href="{{ path('app_dashboard') }}">
-                                    <li>
-                                        <i class="fa-solid fa-house"></i>
-                                        <span class="animationClickableText">Tableau de bord</span>
-                                    </li>
-                                </a>
-                            </ul>
-                        </div>
                         <!--
                             Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire
                         -->

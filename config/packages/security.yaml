@@ -51,7 +51,7 @@ security:
 
 
         # ÉQUIPE PEDAGOQIQUE
-        - { path: ^/pedagogique, role: ROLE_PEDAGO }
+        - { path: ^/pedago, role: ROLE_PEDAGO }
 
 when@test:
     security:

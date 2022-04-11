@@ -26,11 +26,37 @@
                 <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Gestion des étudiants </h3>
                 <hr>
 
-                <p class="no-information"> Aucune promotion n'est sélectionnée.</p>
+                {% block listStudent %}
 
-                <!----------------------------------
-                        Contenu de la page
-                ----------------------------------->
+                <div class="content">
+
+                    <!-- Elément à boucler -->
+                    <div class="card-container">
+                        {% for student in allStudents %}
+                            <a class="card shadow zoom" href="{{ path('app_student_details', {id: student.id}) }}">
+                                <div class="logo-nav ">
+                                    {% if student.year == 1 %}
+                                        <p class="actualYear one"> {{ student.actualYear }}</p>
+                                    {% elseif student.year == 2 %}
+                                        <p class="actualYear two"> {{ student.actualYear }}</p>
+                                    {% elseif student.year == 3 %}
+                                        <p class="actualYear three"> {{ student.actualYear }}</p>
+                                    {% elseif student.year == 4 %}
+                                        <p class="actualYear four"> {{ student.actualYear }}</p>
+                                    {% elseif student.year == 5 %}
+                                        <p class="actualYear five"> {{ student.actualYear }}</p>
+                                    {% endif %}
+
+                                    <i class="fa-solid fa-circle-user"></i>
+                                    <p id="fullName">{{ student.firstName }} {{ student.lastName }}</p>
+                                    <p id="role-student">- {{ student.campusName }} - </p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+
+                {% endblock %}
+
             </section>
 
             <div class="right-section ">
@@ -39,14 +65,28 @@
                         <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
                         <hr>
 
-                        <div class="containerClass">
-                            <a href="" class="shadow transition"> A.Sc.1 </a>
-                            <a href="" class="shadow transition"> A.Sc.2 </a>
-                            <a href="" class="shadow transition"> B.Sc </a>
-                            <a href="" class="shadow transition"> M.Sc.1 </a>
-                            <a href="" class="shadow transition"> M.Sc.2 </a>
-                        </div>
+                        {% block promotions %}
+                            <div class="containerClass">
+                                <a href="{{ path('app_student_promotion', {promotion: 1}) }}" class="shadow transition"> A.Sc.1 </a>
+                                <a href="{{ path('app_student_promotion', {promotion: 2}) }}" class="shadow transition"> A.Sc.2 </a>
+                                <a href="{{ path('app_student_promotion', {promotion: 3}) }}" class="shadow transition"> B.Sc </a>
+                                <a href="{{ path('app_student_promotion', {promotion: 4}) }}" class="shadow transition"> M.Sc.1 </a>
+                                <a href="{{ path('app_student_promotion', {promotion: 5}) }}" class="shadow transition"> M.Sc.2 </a>
+                                <a href="{{ path('app_student')}}" class="transition shadow selected zoom"> Toutes les promotions </a>
+                            </div>
+                        {% endblock %}
                     </section>
+
+
+
+                    <section class="shadow actionStudent">
+                        <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                        <hr>
+
+                        <a href="" class="linkNewStudent zoom"><i class="fa-solid fa-plus"></i> Ajouter un étudiant </a>
+
+                    </section>
+
                 </div>
             </div>
 

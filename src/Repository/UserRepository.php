@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Service\AuthService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -19,8 +20,9 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, AuthService $authService)
     {
+        $this->authService = $authService;
         parent::__construct($registry, User::class);
     }
 
@@ -60,6 +62,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    public function getAllStudents($promotion){
+
+        $user = $this->authService->isAuthenticatedUser();
+
+        $qb = $this->createQueryBuilder('u')
+            ->select('u.id', 'campus.name as campusName ', 'u.firstName', 'u.lastName', 'al.name as actualYear', 'al.year')
+            ->join('u.userExtended', 'ux')
+            ->join('ux.actualLevel' ,' al')
+            ->join('u.campus', 'campus')
+            ->join('u.role', 'role')
+
+            /* On récupère tous les étudiants du campus */
+            ->where('campus.id = :campusId')
+            ->setParameter('campusId', $user->getCampus()->getId())
+            ->andWhere('role.id = 12')
+            ->orderBy('u.firstName', 'ASC')
+            ->orderBy('al.year', 'ASC');
+
+            /* Si aucune promotion n'est sélectionné, on affiche tous les étudiants du campus */
+            if($promotion > 0){
+                $qb->andWhere('al.year = :promotionSelected')
+                    ->setParameter(':promotionSelected', $promotion);
+            }
+
+            ;
+
+        return $qb->getQuery()->getResult();
+
     }
 
 

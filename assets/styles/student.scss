@@ -33,25 +33,103 @@
                         color: $blue;
                         font-family: $msBold;
 
-                        &:hover{
-
+                        &:hover,
+                        &.selected{
                             background-color: $blue;
                             color: $white;
                         }
                     }
                 }
             }
+
+            .linkNewStudent{
+                text-decoration: none;
+                background: $green;
+                color: $white;
+                font-size: 1.25em;
+                font-family: $msBold;
+                text-align: center;
+                width: 100%;
+                display: block;
+                padding: 10px;
+                box-sizing: border-box;
+                border-radius: 8px;
+            }
         }
-
-
-
     }
 
     .left-section{
         flex: 3;
         margin: 25px;
-    }
 
+        .content{
+            .card-container{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+
+                a{
+
+                }
+                .card{
+                    flex: 1 1 25%;
+                    margin: 10px;
+                    border-radius: 8px;
+                    background-color: white;
+                    text-align: center;
+                    text-decoration: none;
+                    color: #053869;
+                    font-family: $msBold;
+                    display: flex;
+                    flex-direction: column;
+
+                    .logo-nav {
+                        font-family: $msNormal !important;
+                        text-align: center;
+                        color: $blue;
+                        margin-bottom: 10px;
+
+                        .actualYear{
+                            background-image: linear-gradient(to bottom, #04284a, #03305a, #02396b, #04417c, #094a8e);
+                            border-top-left-radius: 8px;
+                            border-top-right-radius: 8px;
+                            color: $white;
+                            padding: 10px;
+                            font-family: $msBold;
+                            margin-bottom: 10px;
+
+                            &.one{background: #E1E8ED}
+                            &.two{background: #AAB8C2}
+                            &.three{background: #657786}
+                            &.four{background: $blue}
+                            &.five{background: #14171A}
+                        }
+
+
+                        i {
+                            font-size: 3em;
+                            color: $blue;
+                            margin-bottom: 15px;
+                        }
+
+                        #fullName {
+                            font-size: 1.5em;
+                            font-weight: 500;
+                            letter-spacing: -1px;
+                            text-transform: capitalize;
+                            margin-bottom: 20px;
+                        }
+
+                        #role-student {
+                            font-size: 0.8em;
+                            font-style: italic;
+                            font-weight: 5900;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -69,12 +147,29 @@
 
         .right-section{
             margin-bottom: 25px !important;
+
+            .actionStudent{
+                margin-top: 25px !important;
+            }
         }
+
+
 
     }
 }
 
 @media (max-width: $smartphone){
+
+    .container-two-rows{
+        .left-section{
+            .content{
+                .card-container{
+                    flex-direction: column !important;
+                }
+            }
+        }
+    }
+
 
 }
 
