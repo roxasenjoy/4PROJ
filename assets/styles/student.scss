@@ -1,6 +1,9 @@
 @import "variables";
 
 
+/**
+    FILTRE DES ETUDIANTS
+*/
 .container-two-rows{
     display: flex;
     flex-direction: row;
@@ -132,6 +135,125 @@
     }
 }
 
+/**
+    FICHE ETUDIANTE
+*/
+.left-section{
+    .personnalInformation{
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+
+        .typeStudent,
+        .contactStudent{
+            flex: 1 1 20%;
+            margin: 10px;
+            color: $blue;
+
+            p{
+                margin-bottom: 10px;
+
+                span{
+                    font-family: $msBold;
+
+                    i{
+                        color:$blue;
+                        font-size: 1.5em;
+                    }
+                }
+            }
+        }
+
+        .contactStudent{
+
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex-direction: row;
+
+            p{
+                flex: 1 1 50%;
+                align-items: center;
+                font-size: 1.2em;
+                word-break: break-word; /* new */
+
+                span{
+                    i{
+                        color:$blue;
+                        font-size: 1.5em;
+                        margin-right: 15px;
+                    }
+                }
+
+            }
+        }
+
+        .typeStudent{
+            text-decoration: none;
+            font-family: $msNormal;
+            font-size: 1.2em;
+        }
+
+
+    }
+
+
+}
+
+/**** Deuxième partie **/
+.scolarInformationContainer{
+
+    margin-top: 20px;
+    word-break: break-word; /* new */
+
+    .scolarInformation{
+        color: $blue;
+        font-size: 1.2em;
+        font-family: $msNormal;
+
+        h3{
+            font-size: 1.5em;
+            font-family: $msBold;
+        }
+
+        p{
+            margin-left: 10px;
+            margin-bottom: 10px;
+            span{
+                font-family: $msBold;
+            }
+        }
+
+    }
+}
+
+.editInformation,
+.submitNewInformation,
+.cancelInformation{
+    background-color: $yellow;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    color: white;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    font-family: $msNormal;
+    font-size: 1.25em;
+
+    &.submitNewInformation{
+        background-color: $green;
+    }
+
+    &.cancelInformation{
+        background-color: $red;
+    }
+
+}
+
+
 
 
 
@@ -166,6 +288,36 @@
                 .card-container{
                     flex-direction: column !important;
                 }
+            }
+        }
+    }
+
+    .personnalInformation{
+
+        .typeStudent,
+        .contactStudent{
+            flex: 1 1 100% !important;
+            margin: 10px;
+            color: $blue;
+
+            p{
+                margin-bottom: 10px;
+
+                span{
+                    font-family: $msBold;
+
+                    i{
+                        color:$blue;
+                        font-size: 1.5em;
+                    }
+                }
+
+            }
+        }
+
+        .contactStudent{
+            p{
+                flex: 1 1 100% !important;
             }
         }
     }
