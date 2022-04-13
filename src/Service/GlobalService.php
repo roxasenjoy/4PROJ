@@ -96,7 +96,6 @@ class GlobalService
     public function getAllEcts($user){
 
         $totalECTS = 0;
-
         // Obtenir le niveau actuel de l'étudiant
         if($user->getUserExtended()){
             $actualYear = $user->getUserExtended()->getActualLevel()->getYear();
@@ -107,9 +106,6 @@ class GlobalService
                 $totalECTS = (($actualYear -1) * 60);
             }
         }
-
-
-
 
         // Ajouter les crédits actuel de l'année en cours
         return $totalECTS + intval($this->em->getRepository(UserGrade::class)->getTotalEctsPerUser($user->getId())[0]['1']);

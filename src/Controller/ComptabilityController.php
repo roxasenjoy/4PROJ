@@ -46,7 +46,7 @@ class ComptabilityController extends AbstractController
             $total = 0;
         }
 
-        return $this->render('comptability/student.html.twig', [
+        return $this->render('comptability/index.html.twig', [
             'comptability'  => $comptability,
             'total'         => $total
         ]);

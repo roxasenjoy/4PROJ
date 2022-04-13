@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Campus Booster - NOM PRENOM {% endblock %}
+{% block title %}Campus Booster - {{ user.firstName }} {{ user.lastName }} {% endblock %}
 
 {% block body %}
 
@@ -21,16 +21,59 @@
                         </a>
                     </li>
 
-                    <li class="current"> Prénom Nom</li>
+                    <li class="current"> {{ user.firstName }} {{ user.lastName }} </li>
                 </ol>
             </nav>
         {% endblock %}
 
         <section class="left-section shadow">
-            <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> NOM PRENOM </h3>
+            <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> {{ user.firstName }} {{ user.lastName }} </h3>
             <hr>
 
+            <div class="personnalInformation">
+
+                <div class="typeStudent">
+                    <p> <span> Rôle : </span>{{ user.role.name }} </p>
+                    <p><span> Campus : </span> {{ user.campus.name }}</p>
+                    <p><span> Années d'études : </span> {{ user.userExtended.yearEntry }} à {{ user.userExtended.yearExit }}</p>
+                </div>
+
+                <div class="contactStudent">
+                    <p> <span><i class="fa-solid fa-envelope"></i></span> {{ user.email }}</p>
+                    <p> <span><i class="fa-solid fa-location-dot"></i></span> {{ user.userExtended.address }}</p>
+                    <p> <span><i class="fa-solid fa-map"></i></span> {{ user.userExtended.region }}</p>
+                    <p> <span><i class="fa-solid fa-cake-candles"></i> </span> {{ user.userExtended.birthday|date("m/d/Y") }}</p>
+
+                </div>
+
+            </div>
         </section>
+
+        <section class="shadow scolarInformationContainer">
+            <div class="scolarInformation">
+
+                <h3><i class="fa-solid fa-circle-info"></i> Informations : </h3>
+                <hr>
+
+                <p> <span>Année scolaire : </span> {{ user.userExtended.actualLevel.name }}</p>
+                <p> <span>Crédits ECTS : </span> {{ ects }}</p>
+                <p> <span>Année d'entrée : </span> {{ user.userExtended.yearEntry }}</p>
+                <p> <span>Année de sortie : </span> {{ user.userExtended.yearExit }}</p>
+                <p> <span>Comptabilité : </span> {{ compta }}</p>
+
+                <p> <span>Possède une alternance : </span> {{ user.userExtended.hasProContract }}</p>
+                <p> <span>Est-il embauché : </span> {{ user.userExtended.isHired }}</p>
+            </div>
+        </section>
+
+        <p class="editInformation"> Éditer les informations</p>
+        <p class="submitNewInformation"> Valider les modifications</p>
+        <p class="cancelInformation"> Annuler</p>
+
+
+        {# Dès que la personne clique sur EDITER, affiche le même design avec le formulaire#}
+        {{ form(form) }}
+
     </div>
 
 {% endblock %}

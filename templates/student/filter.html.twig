@@ -1,0 +1,71 @@
+{% extends '/student/student.html.twig' %}
+
+{% block title %}Campus Booster - Liste des étudiants {% endblock %}
+
+{# Gestion du filtre des promotions #}
+{% block promotions %}
+    <div class="containerClass">
+
+        {% if promotion %}
+
+            <a href="{{ path('app_student_promotion', {promotion: 1}) }}" 
+            class="{{ promotion == 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.1 </a>
+
+            <a href="{{ path('app_student_promotion', {promotion: 2}) }}" 
+            class="{{ promotion == 2 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.2 </a>
+
+            <a href="{{ path('app_student_promotion', {promotion: 3}) }}" 
+            class="{{ promotion == 3 ? 'transition shadow selected zoom' :'transition shadow' }}"> B.Sc </a>
+
+            <a href="{{ path('app_student_promotion', {promotion: 4}) }}" 
+            class="{{ promotion == 4 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.1 </a>
+
+            <a href="{{ path('app_student_promotion', {promotion: 5}) }}" 
+            class="{{ promotion == 5 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.2 </a>
+
+            <a href="{{ path('app_student')}}"
+               class="{{ promotion > 5 or promotion < 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> Toutes les promotions </a>
+
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block listStudent %}
+
+    <div class="content">
+
+        <!-- Elément à boucler -->
+        <div class="card-container">
+            {% for student in allStudents %}
+                    <a class="card shadow zoom" href="{{ path('app_student_details', {id: student.id}) }}">
+
+
+                        <div class="logo-nav">
+
+                            {% if student.year == 1 %}
+                            <p class="actualYear one"> {{ student.actualYear }}</p>
+                            {% elseif student.year == 2 %}
+                            <p class="actualYear two"> {{ student.actualYear }}</p>
+                            {% elseif student.year == 3 %}
+                            <p class="actualYear three"> {{ student.actualYear }}</p>
+                            {% elseif student.year == 4 %}
+                            <p class="actualYear four"> {{ student.actualYear }}</p>
+                            {% elseif student.year == 5 %}
+                            <p class="actualYear five"> {{ student.actualYear }}</p>
+                            {% endif %}
+
+                            <i class="fa-solid fa-circle-user"></i>
+                            <p id="fullName">{{ student.firstName }} {{ student.lastName }}</p>
+                            <p id="role-student">- {{ student.campusName }} - </p>
+                        </div>
+                    </a>
+
+            {% endfor %}
+
+        </div>
+
+
+
+    </div>
+
+{% endblock %}
