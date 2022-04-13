@@ -48,7 +48,7 @@ class CoursController extends AbstractController
         // Récuperer l'id du cours en question
         $cours = $this->em->getRepository(Subject::class)->find($request->get('id'));
 
-        return $this->render('cours/details.html.twig', [
+        return $this->render('cours/filter.html.twig', [
             'cours' => $cours
         ]);
     }
