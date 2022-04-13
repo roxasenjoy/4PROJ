@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
+use App\Entity\Role;
+use App\Entity\StudyLevel;
 use App\Entity\User;
 use App\Entity\UserExtended;
 use App\Form\EditStudentFormType;
@@ -62,19 +65,40 @@ class StudentController extends AbstractController
 
         // Récupérer les éléments via l'id de l'étudiant
         $userDetails = $this->em->getRepository(User::class)->find($userId);
+        $userExtendedDetails = $this->em->getRepository(UserExtended::class)->find($userDetails->getUserExtended()->getId());
+
+
         $compta = $this->globalService->getUserTotalComptability($userId);
         $ects = $this->globalService->getAllEcts($userDetails);
 
         // Edition de la fiche de l'étudiant
-        $user = new User();
-        $form = $this->createForm(EditStudentFormType::class, $user);
+        $form = $this->createForm(EditStudentFormType::class, $userDetails);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
 
+            $data = $form->getData();
 
+            // Modification des informations concernant l'utilisateur
+            $userDetails
+                        ->setFirstName($data->getFirstName())
+                        ->setLastName($data->getLastName())
+                        ->setCampus($form->get("campus")->getData())
+                        ->setEmail($data->getEmail());
 
-            return $this->redirectToRoute('app_student_promotion');
+            // Modification des éléments concernant les données extended de l'utilisateur
+            $userExtendedDetails
+                        ->setAddress($form->get("address")->getData())
+                        ->setRegion($form->get("region")->getData())
+                        ->setActualLevel($form->get("actualLevelName")->getData())
+                        ->setHasProContract($form->get("hasProContract")->getData())
+                        ->setIsHired($form->get("isHired")->getData());
+
+            $this->em->persist($userDetails);
+            $this->em->persist($userExtendedDetails);
+            $this->em->flush();
+
+            return $this->redirectToRoute('app_student_details', ['id' => $userId]);
         }
 
 

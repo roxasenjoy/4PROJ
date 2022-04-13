@@ -26,53 +26,122 @@
             </nav>
         {% endblock %}
 
-        <section class="left-section shadow">
-            <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> {{ user.firstName }} {{ user.lastName }} </h3>
-            <hr>
-
-            <div class="personnalInformation">
-
-                <div class="typeStudent">
-                    <p> <span> Rôle : </span>{{ user.role.name }} </p>
-                    <p><span> Campus : </span> {{ user.campus.name }}</p>
-                    <p><span> Années d'études : </span> {{ user.userExtended.yearEntry }} à {{ user.userExtended.yearExit }}</p>
-                </div>
-
-                <div class="contactStudent">
-                    <p> <span><i class="fa-solid fa-envelope"></i></span> {{ user.email }}</p>
-                    <p> <span><i class="fa-solid fa-location-dot"></i></span> {{ user.userExtended.address }}</p>
-                    <p> <span><i class="fa-solid fa-map"></i></span> {{ user.userExtended.region }}</p>
-                    <p> <span><i class="fa-solid fa-cake-candles"></i> </span> {{ user.userExtended.birthday|date("m/d/Y") }}</p>
-
-                </div>
-
-            </div>
-        </section>
-
-        <section class="shadow scolarInformationContainer">
-            <div class="scolarInformation">
-
-                <h3><i class="fa-solid fa-circle-info"></i> Informations : </h3>
+        <div id="detailsStudent">
+            <section class="left-section shadow" >
+                <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> {{ user.firstName }} {{ user.lastName }} </h3>
                 <hr>
 
-                <p> <span>Année scolaire : </span> {{ user.userExtended.actualLevel.name }}</p>
-                <p> <span>Crédits ECTS : </span> {{ ects }}</p>
-                <p> <span>Année d'entrée : </span> {{ user.userExtended.yearEntry }}</p>
-                <p> <span>Année de sortie : </span> {{ user.userExtended.yearExit }}</p>
-                <p> <span>Comptabilité : </span> {{ compta }}</p>
+                <div class="personnalInformation">
 
-                <p> <span>Possède une alternance : </span> {{ user.userExtended.hasProContract }}</p>
-                <p> <span>Est-il embauché : </span> {{ user.userExtended.isHired }}</p>
+                    <div class="typeStudent">
+                        <p> <span> Rôle : </span>{{ user.role.name }} </p>
+                        <p><span> Campus : </span> {{ user.campus.name }}</p>
+                        <p><span> Années d'études : </span> {{ user.userExtended.yearEntry }} à {{ user.userExtended.yearExit }}</p>
+                    </div>
+
+                    <div class="contactStudent">
+                        <p> <span><i class="fa-solid fa-envelope"></i></span> {{ user.email }}</p>
+                        <p> <span><i class="fa-solid fa-location-dot"></i></span> {{ user.userExtended.address }}</p>
+                        <p> <span><i class="fa-solid fa-earth-europe"></i></span> {{ user.userExtended.region }}</p>
+                        <p> <span><i class="fa-solid fa-cake-candles"></i> </span> {{ user.userExtended.birthday|date("m/d/Y") }}</p>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="shadow scolarInformationContainer">
+                <div class="scolarInformation">
+
+                    <h3><i class="fa-solid fa-circle-info"></i> Informations : </h3>
+                    <hr>
+
+                    <p> <span>Année scolaire : </span> {{ user.userExtended.actualLevel.name }}</p>
+                    <p> <span>Crédits ECTS : </span> {{ ects }}</p>
+                    <p> <span>Comptabilité : </span> {{ compta }} €</p>
+                    <p> <span>Est en alternance : </span>
+
+                        {% if user.userExtended.hasProContract == 1 %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
+
+                    </p>
+                    <p> <span>Est-il embauché : </span>
+                        {% if user.userExtended.isHired == 1 %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
+                    </p>
+                </div>
+            </section>
+
+            <div class="btnContainer">
+                <p class="editInformation zoom" id="editStudent"> Éditer les informations</p>
             </div>
-        </section>
-
-        <p class="editInformation"> Éditer les informations</p>
-        <p class="submitNewInformation"> Valider les modifications</p>
-        <p class="cancelInformation"> Annuler</p>
+        </div>
 
 
-        {# Dès que la personne clique sur EDITER, affiche le même design avec le formulaire#}
-        {{ form(form) }}
+
+        <!-- PARTIE FORMULAIRE - LE MEMBRE DE L'EQUIPE PEDAGO VEUT MODIFIER LES INFORMATIONS DE L'UTILISATEUR -->
+
+        {{ form_start(form) }}
+
+            {{ form_errors(form) }}
+
+            <div id="formEditStudent" class="hidden">
+                <section class="left-section shadow">
+                    <h3 class="titleSection">
+                        <i class="fa-solid fa-circle-user"></i>
+                        {{ form_widget(form.firstName) }}
+                        {{ form_widget(form.lastName) }}
+                    </h3>
+                    <hr>
+
+                    <div class="personnalInformation">
+
+                        <div class="typeStudent">
+                            <p> <span> Rôle : </span>{{ user.role.name }}  </p>
+                            <p><span> Campus : </span> {{ form_widget(form.campus) }} </p>
+                            <p><span> Années d'études : </span> {{ user.userExtended.yearEntry }} à {{ user.userExtended.yearExit }}</p>
+                        </div>
+
+                        <div class="contactStudent">
+                            <p> <span><i class="fa-solid fa-envelope"></i></span> {{ form_widget(form.email) }} </p>
+                            <p> <span><i class="fa-solid fa-location-dot"></i></span> {{ form_widget(form.address) }} </p>
+                            <p> <span><i class="fa-solid fa-earth-europe"></i></span> {{ form_widget(form.region) }} </p>
+                            <p> <span><i class="fa-solid fa-cake-candles"></i> </span> {{ user.userExtended.birthday|date("m/d/Y") }}</p>
+
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="shadow scolarInformationContainer">
+                    <div class="scolarInformation">
+
+                        <h3><i class="fa-solid fa-circle-info"></i> Informations : </h3>
+                        <hr>
+
+                        <p> <span>Année scolaire : </span> {{ form_widget(form.actualLevelName) }} </p>
+                        <p> <span>Crédits ECTS : </span> {{ ects }}</p>
+                        <p> <span>Comptabilité : </span> {{ compta }} €</p>
+                        <p> <span>Possède une alternance : </span> {{ form_widget(form.hasProContract) }} </p>
+                        <p> <span>Est-il embauché : </span> {{ form_widget(form.isHired) }} </p>
+                    </div>
+                </section>
+
+                <div class="btnContainer">
+                    <button class="submitNewInformation zoom" type="submit">
+                        Valider les modifications
+                    </button>
+                    <p class="cancelInformation zoom" id="cancelStudent"> Annuler</p>
+                </div>
+            </div> <!-- Fin form -->
+
+        {{ form_end(form) }}
 
     </div>
 
