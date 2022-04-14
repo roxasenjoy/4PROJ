@@ -186,6 +186,7 @@
                 word-break: break-word; /* new */
                 display: flex;
                 align-content: center;
+                font-family: $msNormal;
 
                 span{
                     i{
@@ -285,10 +286,6 @@
         padding: 10px;
     }
 
-    input[type="checkbox"]{
-
-    }
-
     select{
         padding: 10px;
         font-size: 1em;
@@ -360,6 +357,17 @@
             p{
                 flex: 1 1 100% !important;
             }
+        }
+    }
+
+    .left-section,
+    .scolarInformationContainer{
+        input{
+            width: 150px;
+        }
+
+        select{
+            width: 150px;
         }
     }
 

@@ -9,16 +9,18 @@ use App\Service\AuthService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class EditStudentFormType extends AbstractType
+class AddStudentFormType extends AbstractType
 {
 
     public function __construct(AuthService $authService)
@@ -31,31 +33,26 @@ class EditStudentFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-       $user = $options['data'];
-
         $builder
             ->add('firstName', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'attr' => [
                     'placeholder' => 'Prénom'
-                ],
-                'empty_data' => $user->getFirstName(),
+                ]
 
             ])
 
             ->add('lastName', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'attr' => [
                     'placeholder' => 'Nom'
-                ],
-                'empty_data' => $user->getLastName(),
+                ]
             ])
 
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
                 'required' => true,
-                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Nom du campus'
                 ],
@@ -72,50 +69,44 @@ class EditStudentFormType extends AbstractType
                                         );
                     return $campusRepo;
 
-                },
-                'empty_data' => $user->getCampus()->getId(),
+                }
             ])
 
-//            ->add('role', EntityType::class, [
-//                'class' => Role::class,
-//                'attr' => [
-//                    'placeholder' => 'Rôle'
-//                ],
-//                'query_builder' => function(EntityRepository $roleRepository){
-//                    $roleRepository =  $roleRepository->createQueryBuilder('r');
-//
-//                    // Si le user connecté, est un membre de l'équipe pédago.
-//                    // On enlève le rôle admin car ils n'ont pas la possibilité de le mettre
-//                    if($this->authService->isAuthenticatedUser()->getRole()->getId() === 15){
-//                        $roleRepository = $roleRepository->where('r.id != :idRole')
-//                            ->setParameter('idRole', 16);
-//                    }
-//
-//                    // Si ce n'est pas le cas, le user connecté, il a accès à tous.
-//
-//                    return $roleRepository;
-//
-//                },
-//                'choice_label' => 'name',
-//                'mapped' => false,
-//                'required' => true
-//            ])
+            ->add('role', EntityType::class, [
+                'class' => Role::class,
+                'attr' => [
+                    'placeholder' => 'Rôle'
+                ],
+                'query_builder' => function(EntityRepository $roleRepository){
+                    $roleRepository =  $roleRepository->createQueryBuilder('r');
+
+                    // Si le user connecté, est un membre de l'équipe pédago.
+                    // On enlève le rôle admin car ils n'ont pas la possibilité de le mettre
+                    if($this->authService->isAuthenticatedUser()->getRole()->getId() === 15){
+                        $roleRepository = $roleRepository->where('r.id != :idRole')
+                            ->setParameter('idRole', 16);
+                    }
+
+                    // Si ce n'est pas le cas, le user connecté, il a accès à tous.
+
+                    return $roleRepository;
+
+                },
+                'choice_label' => 'name',
+                'required' => true
+            ])
 
             ->add('email', EmailType::class, [
-                'required'   => false,
+                'required'   => true,
                 'attr' => [
                     'placeholder' => 'Adresse email'
-                ],
-                'empty_data' => $user->getEmail(),
+                ]
             ])
             ->add('address', TextType::class, [
-                'required'   => false,
-                'mapped' => false,
+                'required'   => true,
                 'attr' => [
                     'placeholder' => 'Adresse'
-                ],
-                'empty_data' => $user->getUserExtended()->getAddress(),
-                'data' => $user->getUserExtended()->getAddress()
+                ]
             ])
 
             ->add('region', ChoiceType::class, [
@@ -140,23 +131,18 @@ class EditStudentFormType extends AbstractType
                     'Mayotte' => 'Mayotte'
                 ],
                 'required' => true,
-                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Région'
-                ],
-                'data' => $user->getUserExtended()->getRegion()
+                ]
             ])
 
             ->add('actualLevelName', EntityType::class, [
                 'class' => StudyLevel::class,
                 'choice_label' => 'name',
                 'required' => true,
-                'mapped' => false,
                 'attr' => [
-                    'placeholder' => 'Niveau d\'étude actuel'
+                    'placeholder' => 'Dernier niveau d\'étude'
                 ],
-                'empty_data' => $user->getUserExtended()->getActualLevel()->getId(),
-                'data' => $user->getUserExtended()->getActualLevel(),
                 'query_builder' => function(EntityRepository $level){
                     $level =  $level
                         ->createQueryBuilder('l')
@@ -167,24 +153,55 @@ class EditStudentFormType extends AbstractType
                 },
             ])
 
+            ->add('lastLevelName', EntityType::class, [
+                'class' => StudyLevel::class,
+                'choice_label' => 'name',
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Année d\'entrée à SUPINFO'
+                ],
+                'query_builder' => function(EntityRepository $level){
+                    $level =  $level
+                        ->createQueryBuilder('l')
+                        ->where('l.id >= 6');
+                    return $level;
+
+                },
+            ])
+
+            ->add('yearEntry', IntegerType::class, [
+                'attr' => [
+                        'placeholder' => 'Année d\'entrée'
+                    ]
+            ])
+
+            ->add('yearExit', IntegerType::class, [
+                'attr' => [
+                    'placeholder' => 'Année de sortie'
+                ]
+            ])
+
+            ->add('birthday', BirthdayType::class, [
+                'attr' => [
+                    'placeholder' => 'Anniversaire'
+                ]
+            ])
+
             ->add('hasProContract', ChoiceType::class, [
                 'choices' => [
-                    'Oui, il possède une alternance/stage' => true,
-                    'Non, il ne possède pas d\'alternance/stage' => false
+                    'Non, il ne possède pas d\'alternance/stage' => false,
+                    'Oui, il possède une alternance/stage' => true
                 ],
                 'required' => true,
-                'mapped' => false,
-                'data' => $user->getUserExtended()->getHasProContract(),
             ])
 
             ->add('isHired', ChoiceType::class, [
                 'choices' => [
+                    'Non, il est toujours en recherche de travail' => false,
                     'Oui, il est embauché' => true,
-                    'Non, il est toujours en recherche de travail' => false
+
                 ],
                 'required' => true,
-                'mapped' => false,
-                'data' => $user->getUserExtended()->getIsHired(),
             ])
 
 

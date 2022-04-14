@@ -20,7 +20,14 @@
 }
 
 .text-error{
-  color: $red;
+  color: $red !important  ;
   font-size: 1em;
   margin-bottom: 15px;
+}
+
+.errorBackground{
+  background-color: $red !important;
+  color: $white;
+  margin-bottom: 15px;
+  font-family: $msNormal;
 }

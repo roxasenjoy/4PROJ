@@ -40,7 +40,6 @@ class NotesController extends AbstractController
 
         $combined = array();
 
-        if($allLessons && $grades){
             /**
              * On combine les deux array qu'on vient de récuperer pour ne former plus qu'un
              */
@@ -60,9 +59,9 @@ class NotesController extends AbstractController
                         break;
                     }
                 }
+
                 $combined[] = $comb;
             }
-        }
 
         return $this->render('notes/notes.html.twig', [
             'notes' => $combined

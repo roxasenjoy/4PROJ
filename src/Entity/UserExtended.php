@@ -19,9 +19,6 @@ class UserExtended
     #[ORM\Column(type: 'string', length: 255)]
     private $address;
 
-    #[ORM\Column(type: 'integer')]
-    private $gender;
-
     #[ORM\Column(type: 'string', length: 255)]
     private $region;
 
@@ -79,18 +76,6 @@ class UserExtended
     public function setAddress(string $address): self
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function getGender(): ?int
-    {
-        return $this->gender;
-    }
-
-    public function setGender(int $gender): self
-    {
-        $this->gender = $gender;
 
         return $this;
     }
