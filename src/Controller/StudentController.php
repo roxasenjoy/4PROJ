@@ -22,7 +22,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-#[Route('/pedago')]
+#[Route('/admin')]
 class StudentController extends AbstractController
 {
     public function __construct(StudentService $studentService, EntityManagerInterface $em, GlobalService $globalService){

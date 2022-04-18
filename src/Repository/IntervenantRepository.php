@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Intervenant;
+use App\Service\AuthService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -16,9 +17,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class IntervenantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, AuthService $authService)
     {
         parent::__construct($registry, Intervenant::class);
+        $this->authService = $authService;
     }
 
     /**
@@ -53,12 +55,46 @@ class IntervenantRepository extends ServiceEntityRepository
             ->join('user.userExtended', 'ux')
             ->join('user.campus', 'campus')
             ->join('ux.actualLevel', 'sl')
-            ->where('campus.id = 31')
+            ->where('campus.id = :campusId')
             ->andWhere('sl.year = :userActualLevel')
             ->setParameter(':userActualLevel', $user->getUserExtended()->getActualLevel()->getYear())
+            ->setParameter('campusId', $user->getCampus()->getId())
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    /**
+     * On récupère le nom/prenom de l'intervenant, son campus
+     *
+     * @param $filter
+     * @param $coursId
+     * @return float|int|mixed|string
+     */
+    public function getIntervenantsPerCampus($filter, $coursId){
+
+        $user = $this->authService->isAuthenticatedUser();
+
+        $qb = $this->createQueryBuilder('intervenant')
+            ->select('user.id', 'user.firstName', 'user.lastName', 'campus.name as campusName')
+            ->join('intervenant.user', 'user')
+            ->join('intervenant.subject', 'subject')
+            ->join('user.userExtended', 'ux')
+            ->join('user.campus', 'campus')
+            ->join('ux.actualLevel', 'sl')
+            ->where('subject.id = :coursId')
+            ->setParameter(':coursId', $coursId)
+
+            ->andWhere('campus.id = :campusId')
+            ->setParameter(':campusId', $user->getCampus()->getId())
+        ;
+
+            if($filter){
+                $qb ->andWhere('campus.id IN (:campusId)')
+                    ->setParameter(':campusId', $filter);
+            }
+
+        return $qb->getQuery()->getResult();
     }
 
     // /**

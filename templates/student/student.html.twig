@@ -28,31 +28,32 @@
 
                 {% block listStudent %}
 
-                <div class="content">
+                    <div class="content">
 
-                    <!-- Elément à boucler -->
-                    <div class="card-container">
-                        {% for student in allStudents %}
-                            <a class="card shadow zoom" href="{{ path('app_student_details', {id: student.id}) }}">
-                                <div class="logo-nav ">
-                                    {% if student.year == 1 %}
-                                        <p class="actualYear one"> {{ student.actualYear }}</p>
-                                    {% elseif student.year == 2 %}
-                                        <p class="actualYear two"> {{ student.actualYear }}</p>
-                                    {% elseif student.year == 3 %}
-                                        <p class="actualYear three"> {{ student.actualYear }}</p>
-                                    {% elseif student.year == 4 %}
-                                        <p class="actualYear four"> {{ student.actualYear }}</p>
-                                    {% elseif student.year == 5 %}
-                                        <p class="actualYear five"> {{ student.actualYear }}</p>
-                                    {% endif %}
+                        <!-- Elément à boucler -->
+                        <div class="card-container">
+                            {% for student in allStudents %}
+                                <a class="card shadow zoom" href="{{ path('app_student_details', {id: student.id}) }}">
+                                    <div class="logo-nav ">
+                                        {% if student.year == 1 %}
+                                            <p class="actualYear one"> {{ student.actualYear }}</p>
+                                        {% elseif student.year == 2 %}
+                                            <p class="actualYear two"> {{ student.actualYear }}</p>
+                                        {% elseif student.year == 3 %}
+                                            <p class="actualYear three"> {{ student.actualYear }}</p>
+                                        {% elseif student.year == 4 %}
+                                            <p class="actualYear four"> {{ student.actualYear }}</p>
+                                        {% elseif student.year == 5 %}
+                                            <p class="actualYear five"> {{ student.actualYear }}</p>
+                                        {% endif %}
 
-                                    <i class="fa-solid fa-circle-user"></i>
-                                    <p id="fullName">{{ student.firstName }} {{ student.lastName }}</p>
-                                    <p id="role-student">- {{ student.campusName }} - </p>
-                                </div>
-                            </a>
-                        {% endfor %}
+                                        <i class="fa-solid fa-circle-user"></i>
+                                        <p id="fullName">{{ student.firstName }} {{ student.lastName }}</p>
+                                        <p id="role-student">- {{ student.campusName }} - </p>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
 
                 {% endblock %}

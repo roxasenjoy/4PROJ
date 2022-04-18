@@ -64,6 +64,29 @@ class SubjectRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Obtenir tous les cours dispo à SUPINFO
+     * @param $user
+     * @return float|int|mixed|string
+     */
+    public function getAllLessons(int $promotion = 0){
+
+            $qb = $this->createQueryBuilder('subject')
+                ->select('subject.id','subject.name',  'subject.fullName','level.name as levelName', 'level.year as levelYear')
+                ->join('subject.level', 'level')
+                ->orderBy('subject.name', 'ASC')
+                ->orderBy('level.year', 'ASC');
+
+            if($promotion){
+                $qb->where('level.year = :promotion')
+                    ->setParameter('promotion', $promotion);
+            }
+
+
+            ;
+            return $qb->getQuery()->getResult();
+    }
+
 
     // /**
     //  * @return Subject[] Returns an array of Subject objects

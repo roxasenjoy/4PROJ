@@ -28,7 +28,7 @@ class StudentService
     public function getAllStudentsPerCampus(int $promotion = 0){
 
         // Obtenir tous les étudiants en fonction du campus et de la classe sélectionnée
-        $allStudents = $this->em->getRepository(User::class)->getAllStudents($promotion);
+        $allStudents = $this->em->getRepository(User::class)->getAllStudentsPerPromotion($promotion);
 
         return $allStudents;
 

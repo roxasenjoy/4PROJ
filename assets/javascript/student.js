@@ -9,6 +9,7 @@ let showDetails = document.getElementById('detailsStudent');
 
 // On affiche le formulaire d'édition
 edit.addEventListener('click', function(){
+
     showForm.classList = '';
     showDetails.classList = "hidden";
 });

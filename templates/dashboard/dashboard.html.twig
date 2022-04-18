@@ -97,7 +97,7 @@
                     {% if userGrades %}
                         {% for grade in userGrades %}
                             <div class="note-content">
-                                <i class=" {{ grade.status == true ? 'fa-solid fa-circle-check check' : 'fa-solid fa-circle-check failed' }}"></i>
+                                <i class=" {{ grade.status == true ? 'fa-solid fa-circle-check check' : 'fa-solid fa-circle-xmark failed' }}"></i>
                                 <p class="nameLesson check {{ grade.status == true ? 'nameLesson check' : 'nameLesson failed' }}"> {{ grade.name }} </p>
                                 <p class="noteStudent check {{ grade.status == true ? 'noteStudent check' :'noteStudent failed' }}"> {{ grade.grade }} / 20</p>
                             </div>

@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - {{ actualCours.fullName }}{% endblock %}
+
+{% block body %}
+
+    <div class="student-container-admin sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="element ">
+                        <a href="{{ path('app_cours_campus') }}" class="transition">
+                            <span class="animationClickableText">Gestion des cours</span>
+                        </a>
+                    </li>
+
+                    <li class="current">{{ actualCours.fullName }}</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+    <main class="container-two-rows">
+        <section class="left-section shadow">
+            <h3 class="titleSection" id="titleCours">
+                <i class="fa-solid fa-book-open"></i>
+                {{ actualCours.name }} -
+                {{ actualCours.fullName }}
+            </h3>
+
+
+
+            <!-- Formulaire pour éditer le titre -->
+            <h3 class="titleSection hidden" id="editFormCours">
+                {{ form_start(editForm) }}
+                <i class="fa-solid fa-book-open"></i>
+                    {{ form_widget(editForm.name) }}
+                    {{ form_widget(editForm.fullName) }}
+                    {{ form_widget(editForm.year) }}
+            </h3>
+
+            <p class="text-error">{{ error }}</p>
+            <!---------------------------------------->
+            <hr>
+
+            {% if students %}
+                {% for student in students %}
+                    <div class="notesContent">
+
+
+                        <div class="note-child left ">
+                            <p class="campusName">{{ student.campusName}}</p>
+                        </div>
+
+                        <div class="center-note">
+                            <div class="note-child center">
+                                <p class="title">{{ student.fullName }}  </p>
+                            </div>
+
+                            <div class="note-child right">
+                                <p class="note">{% if student.grade >= 10 %}
+                                <p class="iconStatus success"><i class="fa-solid fa-check"></i></p>
+                                {% elseif student.grade < 10 and student.grade >= 0 %}
+                                    <p class="iconStatus failed"><i class="fa-solid fa-circle-xmark"></i></p>
+                                {% else %}
+                                    <p class="iconStatus"> - </p>
+                                {% endif %} </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else  %}
+
+                <!-- Afficher tous les étudiants sans les notes  -->
+                <p class="no-information"> Aucun étudiant n'est disponible pour cette matière. <br> Merci de vouloir vérifier la liste des campus. </p>
+
+            {% endif %}
+
+        </section>
+
+        <div class="right-section">
+            <div class="fixed">
+
+                <section class="shadow">
+                    <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
+                    <hr>
+
+                    <!-- Afficher le nom de l'intervenant qui propose le cours (en fonction du campus sélectionné -->
+
+                    {% if intervenants %}
+                        {% for intervenant in intervenants %}
+
+                            <div class="intervenantContainer">
+
+                                <div class="campusContainer">
+                                    {{ intervenant.campusName}}
+                                </div>
+                                <div class="fullNameContainer">
+                                    {{ intervenant.firstName }} {{ intervenant.lastName}}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+                    {% else  %}
+
+                        <!-- Afficher tous les étudiants sans les notes  -->
+                        <p class="no-information"> Aucun intervenant n'est assigné à ce cours pour le moment. </p>
+
+                    {% endif %}
+
+                </section>
+
+                <section class="shadow editCoursSection">
+                    <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                    <hr>
+
+                    <p class="editCours zoom" id="editCours">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Éditer le cours
+                    </p>
+
+                    <div id="editTitleCours" class="hidden">
+                        <button class="submitNewInformation zoom" type="submit">
+                            Valider les modifications
+                        </button>
+                        <p class="cancelInformation zoom" id="cancelCours"> Annuler</p>
+                    </div>
+                    {{ form_end(editForm) }}
+
+                </section>
+
+                {% if app.user.roles|join == 'ROLE_ADMIN' %}
+
+                    <section class="shadow">
+                        <h3 class="titleSection">
+                            <i class="fa-solid fa-map"></i>
+                            Liste des campus
+                        </h3>
+                        <hr>
+
+                        <!-- Afficher les campus (Tous les campus pour le super admin ou le campus de l'utilisateur connecté) -->
+                        <div class="containerCours">
+                            {% include  'cours/admin/_filter.html.twig' with {form: form} only %}
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    </main>
+
+{% endblock %}

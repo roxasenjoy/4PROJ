@@ -26,13 +26,13 @@ class Subject
     #[ORM\Column(type: 'integer')]
     private $points;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: UserGrade::class)]
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: UserGrade::class, fetch: 'EAGER')]
     private $userGrades;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class)]
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, fetch: 'EAGER')]
     private $subjectDates;
 
-    #[ORM\ManyToOne(targetEntity: StudyLevel::class)]
+    #[ORM\ManyToOne(targetEntity: StudyLevel::class, fetch:'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private $level;
 

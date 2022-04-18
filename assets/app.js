@@ -37,5 +37,5 @@ import './styles/error.scss';
 
 // start the Stimulus application
 import './bootstrap';
-import './javascript/student.js'
+import './javascript/cours.js';
 

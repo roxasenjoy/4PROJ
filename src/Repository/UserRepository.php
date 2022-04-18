@@ -20,6 +20,9 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+
+    const ROLE_STUDENT = 12;
+
     public function __construct(ManagerRegistry $registry, AuthService $authService)
     {
         $this->authService = $authService;
@@ -64,7 +67,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function getAllStudents($promotion){
+    /**
+     * Utilisé à l'endroit suivant : /admin/cours
+     * Permet d'afficher les élèves en fonction du filtre sélectionné
+     *
+     * @param $promotion
+     * @return float|int|mixed|string
+     */
+    public function getAllStudentsPerPromotion($promotion){
 
         $user = $this->authService->isAuthenticatedUser();
 
@@ -78,7 +88,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             /* On récupère tous les étudiants du campus */
             ->where('campus.id = :campusId')
             ->setParameter('campusId', $user->getCampus()->getId())
-            ->andWhere('role.id = 12')
+            ->andWhere('role.id = :roleStudent')
+            ->setParameter(':roleStudent', self::ROLE_STUDENT)
             ->orderBy('u.firstName', 'ASC')
             ->orderBy('al.year', 'ASC');
 
@@ -88,39 +99,79 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                     ->setParameter(':promotionSelected', $promotion);
             }
 
-            ;
+        return $qb->getQuery()->getResult();
+
+    }
+
+    /**
+     * Utilisé à l'endroit suivant : /admin/cours/details/{id}
+     * Obtenir tous les étudiants se trouvant sur les campus sélectionné + en fonction de l'id de la matière
+     * @param $filter
+     * @return float|int|mixed|string
+     */
+    public function getAllStudentPerCours($filter, $coursId){
+
+        $qb = $this->createQueryBuilder('u')
+
+            ->select('u.id', 'u.firstName', 'u.lastName', 'campus.name as campusName', 'ug.grade', 'ug.status', 'subject.id as subjectId')
+
+            /** Jointure de tous les éléments  **/
+            ->join('u.role', 'role')
+            ->join('u.campus', 'campus')
+            ->join('u.userExtended', 'ux')
+            ->join('ux.actualLevel' ,' al')
+            ->join('u.userGrades', 'ug')
+            ->join('ug.subject', 'subject')
+            ->join('subject.level', 'levelSubject')
+
+            /** Conditions **/
+            ->where('role.id = :roleStudent') // Condition : Le rôle de l'étudiant est 12
+            ->andWhere('al.year = levelSubject.year') // Condition : Le niveau du sujet est égal au niveau de l'étudiant
+            ->andWhere('subject.id = :coursId') // Condition : Le cours est égal à $coursId
+
+            ->setParameter(':roleStudent', self::ROLE_STUDENT)
+            ->setParameter(':coursId', $coursId)
+
+            ->orderBy('ug.status', 'ASC')
+        ;
+
+            if($filter){
+                $qb->andWhere('campus.id IN (:filter)')
+                    ->setParameter('filter', $filter);
+            }
 
         return $qb->getQuery()->getResult();
 
     }
 
+    public function getAllStudentsPerLevel($filter, $cours){
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $user = $this->authService->isAuthenticatedUser();
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->createQueryBuilder('u')
+            ->select('u.id', 'campus.name as campusName ', 'u.firstName', 'u.lastName', 'al.name as actualYear', 'al.year')
+            ->join('u.userExtended', 'ux')
+            ->join('ux.actualLevel' ,' al')
+            ->join('u.campus', 'campus')
+            ->join('u.role', 'role')
+
+            /* On récupère tous les étudiants du campus */
+            ->where('role.id = :roleStudent')
+            ->setParameter(':roleStudent', self::ROLE_STUDENT)
+
+            ->andWhere('al.year = :coursYear')
+            ->setParameter(':coursYear', $cours->getLevel()->getYear())
+
+            ->andWhere('campus.id = :campusId')
+            ->setParameter(':campusId', $user->getCampus()->getId())
+
+            ->orderBy('campus.name', 'ASC');
+
+        if($filter){
+            $qb->andWhere('campus.id IN (:filter)')
+                ->setParameter('filter', $filter);
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }

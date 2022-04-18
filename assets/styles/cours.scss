@@ -50,9 +50,217 @@
     }
 }
 
+.student-container-admin{
+        .notesContent,
+        .intervenantContent{
+            border-bottom: 0.5px solid $greyDark;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+
+            .iconStatus{
+                font-size: 2em;
+            }
+
+            .success{
+                color: $green !important;
+            }
+
+            .failed{
+                color: $red !important;
+            }
+
+
+            .note-child{
+                margin: 15px auto;
+                color: $blue;
+                font-family: $msNormal;
+                //word-break: break-all; /* new */
+            }
+
+            .left {
+                .campusName{
+                    font-size: 0.75em;
+                    display: inline-block;
+                    padding: 10px;
+                    margin: 0px 15px;
+                    background: $blue;
+                    color: $white;
+                    border-radius: 4px;
+                    font-family: $msBold;
+                }
+            }
+
+            .center-note{
+                display: flex;
+                flex-direction: row;
+                flex-grow: 2;
+                align-items: center;
+
+
+
+            .center{
+                    text-align: left;
+                    flex: 0 0 90%;
+                    text-transform: uppercase;
+                    font-size: 1.5em;
+                }
+                .right{
+                    text-align: center;
+                    flex: 0 0 10%;
+                    font-size: 1em;
+
+                    .note{
+                        font-size: 1.5em;
+                        font-family: $msBold;
+                    }
+
+                }
+            }
+    }
+
+    .right-section {
+        section {
+
+            .intervenantContainer{
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+
+                .campusContainer{
+                    background-color: $blue;
+                    color: $white;
+                    padding: 10px;
+                    border-radius: 8px;
+                    font-family: $msBold;
+                    font-size: 0.75em;
+                    margin-right: 5px;
+
+                }
+
+                .fullNameContainer{
+                    flex-grow: 1;
+                    font-size: 1.25em;
+                    color: $blue;
+                    font-family: $msNormal;
+                }
+
+            }
+
+            .containerCours {
+                #campus, div{ // L'id du formulaire -> On le retrouve grâce à l'inspecteur
+                    display: flex;
+                    flex-wrap: wrap;
+
+
+                    // Si  le bouton est check, on change sa couleur
+                    input[type=checkbox]:checked + label {
+                        background-color: $blue;
+                        color: white;
+                    }
+
+                    input {
+                        display: none;
+
+                    }
+
+                    label, input {
+                        flex-grow: 1;
+                        margin: 10px;
+                        padding: 10px;
+                        border-radius: 8px;
+                        background-color: $white;
+                        text-align: center;
+                        font-size: 1.25em;
+                        text-decoration: none;
+                        color: $blue;
+                        font-family: $msBold;
+                        box-shadow: 0 3px 8px #0000003d;
+                        transform: scale(1);
+                        transition: all 0.5s ease-in-out;
+                        text-transform: uppercase;
+
+                        &:hover,
+                        &.selected {
+
+                            transition: all 0.5s ease-in-out;
+                            transform: scale(1.05);
+                            cursor: pointer;
+                        }
+                    }
+                    button{
+                        background-color: $green;
+                        color: $white;
+                        flex-grow: 1;
+                        padding: 10px;
+                        margin: 10px;
+                        font-family: $msBold;
+                        border:none;
+                        font-size: 1.25em;
+                        border-radius: 8px;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .editCours,
+            .submitNewInformation,
+            .cancelInformation {
+                text-decoration: none;
+                background: $yellow;
+                color: $white;
+                font-size: 1.25em;
+                font-family: $msBold;
+                text-align: center;
+                width: 100%;
+                margin-bottom: 10px;
+                display: block;
+                padding: 10px;
+                box-sizing: border-box;
+                border-radius: 8px;
+
+                &.submitNewInformation {
+                    background-color: $green;
+                    border: none;
+                }
+
+                &.cancelInformation {
+                    background-color: $red;
+                }
+
+                &:hover{
+                    cursor:pointer;
+                }
+            }
+        }
+    }
+}
 
 
 @media (max-width: $laptop){
+    .editCoursSection{
+        margin-top: 15px !important;
+    }
+}
 
 
+@media (max-width: $smartphone){
+
+
+    .student-container-admin{
+        .notesContent,
+        .intervenantContent{
+
+            .center-note{
+                flex-direction: column !important;
+
+                .center{
+                    flex: initial !important;
+                }
+                .right{
+                    flex: initial !important;
+                }
+            }
+        }
+    }
 }

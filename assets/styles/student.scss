@@ -14,7 +14,8 @@
 
 
         .fixed {
-            position: fixed;
+            position: sticky;
+            TOP: 25px;
 
             section{
                 margin: 25px;
@@ -313,6 +314,10 @@
             }
         }
 
+
+        .editCoursSection{
+            margin-top: 25px !important;
+        }
 
 
     }
