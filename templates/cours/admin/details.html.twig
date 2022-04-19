@@ -27,20 +27,18 @@
         {% endblock %}
 
 
-{#    {% if error %}#}
-
-{#        <section class="shadow errorBackground">#}
-{#            <ul style="margin-left: 25px">#}
-{#                <li>{{ error }}</li>#}
-{#            </ul>#}
-{#        </section>#}
-
-{#    {% endif %}#}
-
-    {% if error %}
+    {% if error or errorNote %}
         <section class="shadow errorBackground">
             <ul style="margin-left: 25px">
-                <li>Être généreux c'est bien mais les valeurs doivent rester entre 0 et 20.</li>
+
+                {% if error %}
+                    <li>Le diminutif doit avoir 5 caractères.</li>
+                {% endif %}
+
+                {% if errorNote %}
+                    <li>Être généreux c'est bien mais les valeurs doivent rester entre 0 et 20.</li>
+                {% endif %}
+
             </ul>
         </section>
     {% endif %}
@@ -51,9 +49,16 @@
 
         <section class="left-section shadow">
             <h3 class="titleSection" id="titleCours">
+
+
+
                 <i class="fa-solid fa-book-open"></i>
                 {{ actualCours.name }} -
                 {{ actualCours.fullName }}
+
+                {% if error %}
+                    <span class="errorBackground errorTitle shadow"> ERREUR </span>
+                {% endif %}
             </h3>
 
 
@@ -61,10 +66,16 @@
             <!-- Formulaire pour éditer le titre -->
             <h3 class="titleSection hidden" id="editFormCours">
                 {{ form_start(editForm) }}
+
+
                 <i class="fa-solid fa-book-open"></i>
                     {{ form_widget(editForm.name) }}
                     {{ form_widget(editForm.fullName) }}
                     {{ form_widget(editForm.year) }}
+
+                {% if error %}
+                    <span class="errorBackground errorTitle shadow"> ERREUR </span>
+                {% endif %}
             </h3>
             <!---------------------------------------->
             <hr>
@@ -72,9 +83,10 @@
             {% if students %}
                 {% for student in students %}
                     <div class="notesContent">
-                        {% if student.error %}
-                            <section class="shadow errorBackground">
-                                <p> {{ error }} </p>
+
+                        {% if student.errorNote %}
+                            <section class="shadow errorBackground"  style="margin-top: 15px;">
+                                <p> {{ errorNote }} </p>
                             </section>
                         {% endif %}
 
@@ -96,7 +108,7 @@
                                     <p class="iconStatus"> - </p>
                                 {% endif %} </p>
 
-                                <input type="number" name="{{ student.id }}" style="width: 50px">
+                                <input type="number" name="{{ student.id }}" style="width: 50px" class="hidden noteStudent">
 
                             </div>
                         </div>

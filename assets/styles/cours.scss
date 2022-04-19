@@ -251,6 +251,8 @@
         .notesContent,
         .intervenantContent{
 
+            flex-direction: column;
+
             .center-note{
                 flex-direction: column !important;
 

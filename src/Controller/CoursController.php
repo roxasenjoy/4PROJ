@@ -117,6 +117,7 @@ class CoursController extends AbstractController
          */
         $coursId = intval($request->get('id'));
         $error = '';
+        $errorNote = '';
 
         $data = new Campus();
 
@@ -145,7 +146,7 @@ class CoursController extends AbstractController
                 'campusName' => $student['campusName'],
                 'grade' => '--',
                 'status' => null,
-                'error' => '',
+                'errorNote' => '',
             );
 
             foreach ($studentsGrades as $grade) { // Que les étudiants qui poossèdent une note
@@ -168,8 +169,6 @@ class CoursController extends AbstractController
         // On soumet le formulaire
         if($editForm->isSubmitted()){
 
-            $combLoop = array();
-
             // On récupère les données que l'input nous a donné (Celui qui met les notes)
             foreach($editForm->getExtraData() as $key => $value) {
 
@@ -186,8 +185,10 @@ class CoursController extends AbstractController
                     if($value != ""){
                         if ($idUserGrade != []) {
                             $hasUserGrade = $this->em->getRepository(UserGrade::class)->find($idUserGrade[0]['id']);
+                            dump($hasUserGrade);
 
                             if ($hasUserGrade) {
+
                                 intval($value) >= 10 ? $isValid = true : $isValid = false;
 
                                 $hasUserGrade->setStatus($isValid);
@@ -195,9 +196,9 @@ class CoursController extends AbstractController
 
                                 $this->em->persist($hasUserGrade);
                                 $this->em->flush();
-
                             }
                         } else {
+
                             // Il ne possède pas de note, il faut donc lui en créer une.
                             $newNote = new UserGrade();
 
@@ -211,25 +212,26 @@ class CoursController extends AbstractController
                             $this->em->flush();
                         }
                     }
+
                 } else {
-                    $error = 'ERREUR';
+                    $errorNote = 'ERREUR';
                 }
 
+                $studentsGrades = $this->em->getRepository(User::class)->getAllStudentPerCours($filter, $coursId);
 
                 /**
                  * Boucle qui permet d'afficher les erreurs en fonction des étudiants
                  */
-
                 $combLoop = array(
                     'id' => $loopStudent->getId(),
                     'fullName' => $loopStudent->getFirstName() . ' ' . $loopStudent->getLastName(),
                     'campusName' => $loopStudent->getCampus()->getName(),
                     'grade' => '--',
                     'status' => null,
-                    'error' => intval($value) >= 0 && intval($value) <= 20 ? '' : 'ERREUR'
+                    'errorNote' => intval($value) >= 0 && intval($value) <= 20 ? '' : 'ERREUR'
                 );
 
-                foreach ($studentsGrades as $grade) { // Que les étudiants qui poossèdent une note
+                foreach ($studentsGrades as $grade) { // Que les étudiants qui possèdent une note
                     if ($grade['id'] == $loopStudent->getId()) {
                         $combLoop['grade'] = $grade['grade'];
                         $combLoop['status'] = $grade['status'];
@@ -240,12 +242,10 @@ class CoursController extends AbstractController
                 $combinedLoop[] = $combLoop;
 
                 $combined = $combinedLoop;
+
             }
 
-
-            if(strlen($editForm->getViewData()->getName()) != 5){
-                $error = 'L\'acronyme n\'est pas valide';
-            } else {
+            if(strlen($editForm->getViewData()->getName()) == 5){
 
                 $getCours   ->setName($editForm->getViewData()->getName())
                             ->setFullName($editForm->getViewData()->getFullName())
@@ -254,12 +254,13 @@ class CoursController extends AbstractController
                 $this->em->persist($getCours);
                 $this->em->flush();
 
+            } else {
+                $error = 'L\'acronyme n\'est pas valide';
             }
 
         }
 
 
-        dump($combined);
 
         return $this->render('cours/admin/details.html.twig', [
             'form' => $form->createView(),
@@ -267,6 +268,7 @@ class CoursController extends AbstractController
             'intervenants' => $intervenants,
             'actualCours' => $getCours,
             'editForm' => $editForm->createView(),
+            'errorNote' => $errorNote,
             'error' => $error
         ]);
     }

@@ -42,7 +42,7 @@ class EditCoursForm extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Diminutif',
-                    'maxlength' => 5
+
                 ],
                 'empty_data' => $subject->getName(),
                 'data' => $subject->getName(),

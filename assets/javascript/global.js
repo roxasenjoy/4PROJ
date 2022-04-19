@@ -7,6 +7,8 @@ let cancelCours = document.getElementById('cancelCours');
 let showFormCours = document.getElementById('editTitleCours');
 let editFormCours = document.getElementById('editFormCours');
 let showDetailsCours = document.getElementById('titleCours');
+let noteStudent = document.getElementsByClassName('noteStudent');
+
 
 // On affiche le formulaire d'édition
 if(editCours){
@@ -15,6 +17,11 @@ if(editCours){
         editFormCours.classList = 'titleSection';
         showDetailsCours.classList = "hidden ";
         editCours.classList = "hidden";
+
+        for(let i = 0; i< noteStudent.length; i++){
+            noteStudent[i].classList = "noteStudent";
+        }
+
     });
 }
 
@@ -25,6 +32,10 @@ if(cancelCours){
         editFormCours.classList = 'hidden titleSection';
         showDetailsCours.classList = 'titleSection';
         editCours.classList = " editCours zoom";
+
+        for(let i = 0; i< noteStudent.length; i++){
+            noteStudent[i].classList = "hidden noteStudent";
+        }
     });
 }
 
