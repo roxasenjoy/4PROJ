@@ -75,6 +75,23 @@ class UserGradeRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function hasUserGrade($user, $cours){
+
+        $qb = $this->createQueryBuilder('ug')
+                    ->select('ug.id')
+                    ->join('ug.user', 'user')
+                    ->join('ug.subject', 'subject')
+
+                    ->where('subject.id = :cours')
+                    ->setParameter(':cours', $cours->getId())
+
+                    ->andWhere('user.id = :user')
+                    ->setParameter('user', $user->getId());
+
+        return $qb->getQuery()->getResult();
+
+    }
+
     // /**
     //  * @return UserGrade[] Returns an array of UserGrade objects
     //  */

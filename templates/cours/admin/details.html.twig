@@ -26,7 +26,29 @@
             </nav>
         {% endblock %}
 
+
+{#    {% if error %}#}
+
+{#        <section class="shadow errorBackground">#}
+{#            <ul style="margin-left: 25px">#}
+{#                <li>{{ error }}</li>#}
+{#            </ul>#}
+{#        </section>#}
+
+{#    {% endif %}#}
+
+    {% if error %}
+        <section class="shadow errorBackground">
+            <ul style="margin-left: 25px">
+                <li>Être généreux c'est bien mais les valeurs doivent rester entre 0 et 20.</li>
+            </ul>
+        </section>
+    {% endif %}
+
     <main class="container-two-rows">
+
+
+
         <section class="left-section shadow">
             <h3 class="titleSection" id="titleCours">
                 <i class="fa-solid fa-book-open"></i>
@@ -44,15 +66,17 @@
                     {{ form_widget(editForm.fullName) }}
                     {{ form_widget(editForm.year) }}
             </h3>
-
-            <p class="text-error">{{ error }}</p>
             <!---------------------------------------->
             <hr>
 
             {% if students %}
                 {% for student in students %}
                     <div class="notesContent">
-
+                        {% if student.error %}
+                            <section class="shadow errorBackground">
+                                <p> {{ error }} </p>
+                            </section>
+                        {% endif %}
 
                         <div class="note-child left ">
                             <p class="campusName">{{ student.campusName}}</p>
@@ -63,18 +87,26 @@
                                 <p class="title">{{ student.fullName }}  </p>
                             </div>
 
-                            <div class="note-child right">
+                            <div class="note-child right ">
                                 <p class="note">{% if student.grade >= 10 %}
-                                <p class="iconStatus success"><i class="fa-solid fa-check"></i></p>
+                                <p class="iconStatus success">{{ student.grade }}<i class="fa-solid fa-check" style="margin-left: 5px"></i></p>
                                 {% elseif student.grade < 10 and student.grade >= 0 %}
-                                    <p class="iconStatus failed"><i class="fa-solid fa-circle-xmark"></i></p>
+                                    <p class="iconStatus failed">{{ student.grade }}<i class="fa-solid fa-circle-xmark" style="margin-left: 5px"></i></p>
                                 {% else %}
                                     <p class="iconStatus"> - </p>
                                 {% endif %} </p>
+
+                                <input type="number" name="{{ student.id }}" style="width: 50px">
+
                             </div>
                         </div>
+
                     </div>
                 {% endfor %}
+
+
+
+
             {% else  %}
 
                 <!-- Afficher tous les étudiants sans les notes  -->
@@ -132,6 +164,7 @@
                         </button>
                         <p class="cancelInformation zoom" id="cancelCours"> Annuler</p>
                     </div>
+
                     {{ form_end(editForm) }}
 
                 </section>

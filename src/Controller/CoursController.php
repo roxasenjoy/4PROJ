@@ -8,6 +8,7 @@ use App\Entity\Subject;
 use App\Entity\User;
 use App\Entity\UserGrade;
 use App\Form\EditCoursForm;
+use App\Form\EditNotesForm;
 use App\Form\FilterCampusForm;
 use App\Service\AuthService;
 use App\Service\GlobalService;
@@ -111,7 +112,9 @@ class CoursController extends AbstractController
     public function getPedagoCoursDetails(Request $request): Response
     {
 
-        /* Affichage des étudiants qui possèdent ce cours */
+        /**
+         * Affichage du cours et des éléments correspondants
+         */
         $coursId = intval($request->get('id'));
         $error = '';
 
@@ -122,9 +125,10 @@ class CoursController extends AbstractController
 
         $filter = $form->get("campus")->getViewData();
 
-        $studentsGrades = $this->em->getRepository(User::class)->getAllStudentPerCours($filter, $coursId);
-        $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenantsPerCampus($filter, $coursId);
         $getCours = $this->em->getRepository(Subject::class)->find($coursId);
+        $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenantsPerCampus($filter, $coursId);
+
+        $studentsGrades = $this->em->getRepository(User::class)->getAllStudentPerCours($filter, $coursId);
         $allStudents = $this->em->getRepository(User::class)->getAllStudentsPerLevel($filter, $getCours);
 
         /**
@@ -132,13 +136,17 @@ class CoursController extends AbstractController
          */
         $combined = array();
 
+        // Afficher les étudiants sans le message d'erreur
         foreach ($allStudents as $student) { // Tous les étudiants
+
             $comb = array(
                 'id' => $student['id'],
                 'fullName' => $student['firstName'] . ' ' . $student['lastName'],
                 'campusName' => $student['campusName'],
                 'grade' => '--',
-                'status' => null);
+                'status' => null,
+                'error' => '',
+            );
 
             foreach ($studentsGrades as $grade) { // Que les étudiants qui poossèdent une note
                 if ($grade['id'] == $student['id']) {
@@ -151,17 +159,89 @@ class CoursController extends AbstractController
             $combined[] = $comb;
         }
 
-
         /***
          * Édition du cours
          */
-
         $editForm = $this->createForm(EditCoursForm::class, $getCours);
         $editForm->handleRequest($request);
 
-
-
+        // On soumet le formulaire
         if($editForm->isSubmitted()){
+
+            $combLoop = array();
+
+            // On récupère les données que l'input nous a donné (Celui qui met les notes)
+            foreach($editForm->getExtraData() as $key => $value) {
+
+                $loopStudent = $this->em->getRepository(User::class)->find($key);
+
+                // On détermine si la note est entre 0 et 20
+                if(intval($value) >= 0 && intval($value) <= 20) {
+
+                    // Vérifier que l'étudiant possède une note dans cette matière
+                    $getStudent = $this->em->getRepository(User::class)->find($key);
+                    $idUserGrade = $this->em->getRepository(UserGrade::class)->hasUserGrade($getStudent, $getCours); // Obtenenir l'id du cours
+
+                    // Il possède déjà une note
+                    if($value != ""){
+                        if ($idUserGrade != []) {
+                            $hasUserGrade = $this->em->getRepository(UserGrade::class)->find($idUserGrade[0]['id']);
+
+                            if ($hasUserGrade) {
+                                intval($value) >= 10 ? $isValid = true : $isValid = false;
+
+                                $hasUserGrade->setStatus($isValid);
+                                $hasUserGrade->setGrade(intval($value));
+
+                                $this->em->persist($hasUserGrade);
+                                $this->em->flush();
+
+                            }
+                        } else {
+                            // Il ne possède pas de note, il faut donc lui en créer une.
+                            $newNote = new UserGrade();
+
+                            $newNote->setUser($loopStudent)
+                                ->setSubject($getCours)
+                                ->setGrade(intval($value))
+                                ->setStatus(intval($value) >= 10)
+                                ->setDate($this->globalService->getTodayDate());
+
+                            $this->em->persist($newNote);
+                            $this->em->flush();
+                        }
+                    }
+                } else {
+                    $error = 'ERREUR';
+                }
+
+
+                /**
+                 * Boucle qui permet d'afficher les erreurs en fonction des étudiants
+                 */
+
+                $combLoop = array(
+                    'id' => $loopStudent->getId(),
+                    'fullName' => $loopStudent->getFirstName() . ' ' . $loopStudent->getLastName(),
+                    'campusName' => $loopStudent->getCampus()->getName(),
+                    'grade' => '--',
+                    'status' => null,
+                    'error' => intval($value) >= 0 && intval($value) <= 20 ? '' : 'ERREUR'
+                );
+
+                foreach ($studentsGrades as $grade) { // Que les étudiants qui poossèdent une note
+                    if ($grade['id'] == $loopStudent->getId()) {
+                        $combLoop['grade'] = $grade['grade'];
+                        $combLoop['status'] = $grade['status'];
+                        break;
+                    }
+                }
+
+                $combinedLoop[] = $combLoop;
+
+                $combined = $combinedLoop;
+            }
+
 
             if(strlen($editForm->getViewData()->getName()) != 5){
                 $error = 'L\'acronyme n\'est pas valide';
@@ -173,8 +253,13 @@ class CoursController extends AbstractController
 
                 $this->em->persist($getCours);
                 $this->em->flush();
+
             }
+
         }
+
+
+        dump($combined);
 
         return $this->render('cours/admin/details.html.twig', [
             'form' => $form->createView(),
@@ -184,6 +269,13 @@ class CoursController extends AbstractController
             'editForm' => $editForm->createView(),
             'error' => $error
         ]);
+    }
+
+    public function showNote($allStudents, $studentsGrades){
+
+    }
+
+    public function editNote($getCours, $key, $value){
 
     }
 
