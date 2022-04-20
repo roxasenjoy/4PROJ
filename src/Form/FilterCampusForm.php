@@ -35,19 +35,6 @@ class FilterCampusForm extends AbstractType
                 'placeholder' => 'Campus',
                 'class' => ''
             ],
-            'query_builder' => function(EntityRepository $campusRepo){
-                $campusRepo =  $campusRepo
-                    ->createQueryBuilder('c')
-                    ->where('c.id = :idCampus')
-                    ->setParameter('idCampus',
-                        $this->authService
-                            ->isAuthenticatedUser()
-                            ->getCampus()
-                            ->getId()
-                    );
-                return $campusRepo;
-
-            },
         ])
 
         ->add('submit', SubmitType::class, [

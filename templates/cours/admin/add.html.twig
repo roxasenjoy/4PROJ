@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - Ajouter un cours {% endblock %}
+
+{% block body %}
+
+    <div class="sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="element ">
+                        <a href="{{ path('app_cours')}}" class="transition">
+                            <span class="animationClickableText">Gestion des cours</span>
+                        </a>
+                    </li>
+
+                    <li class="current"> Ajouter un cours </li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+
+
+        <main class="container-two-rows">
+            <section class="left-section shadow">
+
+                <!-- Formulaire pour éditer le titre -->
+                <h3 class="titleSection hidden">
+{#                    {{ form_start(editForm) }}#}
+
+                    <i class="fa-solid fa-book-open"></i>
+{#                    {{ form_widget(editForm.name) }}#}
+{#                    {{ form_widget(editForm.fullName) }}#}
+{#                    {{ form_widget(editForm.year) }}#}
+
+                </h3>
+                <!---------------------------------------->
+                <hr>
+            </section>
+
+            <div class="right-section">
+                <div class="fixed">
+
+                    <section class="shadow">
+                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
+                        <hr>
+
+                        <!-- Ajouter un intervenant - Doit pouvoir ajouter autant d'invertenant qu'on souhaite + sélection du campus -->
+
+                    </section>
+
+                    <section class="shadow editCoursSection">
+                        <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                        <hr>
+
+                        <div>
+                            <button class="submitNewInformation zoom" type="submit">
+                                Valider les modifications
+                            </button>
+                            <p class="cancelInformation zoom"> Annuler</p>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+        </main>
+
+
+    </div>
+
+{% endblock %}

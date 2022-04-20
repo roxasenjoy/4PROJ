@@ -4,19 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Campus;
 use App\Entity\Intervenant;
+use App\Entity\Role;
 use App\Entity\Subject;
 use App\Entity\User;
 use App\Entity\UserGrade;
 use App\Form\EditCoursForm;
-use App\Form\EditNotesForm;
 use App\Form\FilterCampusForm;
 use App\Service\AuthService;
 use App\Service\GlobalService;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CoursController extends AbstractController
@@ -28,13 +31,15 @@ class CoursController extends AbstractController
     public function __construct(
         EntityManagerInterface $em,
         AuthService $authService,
-        GlobalService $globalService
+        GlobalService $globalService,
+        TransportInterface $mailer
     )
 
     {
         $this->em = $em;
         $this->authService = $authService;
         $this->globalService = $globalService;
+        $this->mailer = $mailer;
     }
 
     #[Route('/cours', name: 'app_cours')]
@@ -100,6 +105,15 @@ class CoursController extends AbstractController
         return $this->render('cours/admin/cours.html.twig', [
             'promotion' => $promotion,
             'allCours' => $allCours
+        ]);
+    }
+
+
+    #[Route('/admin/cours/add', name: 'app_cours_add')]
+    public function addCours(UserPasswordHasherInterface $userPasswordHasher){
+
+        return $this->render('cours/admin/add.html.twig', [
+
         ]);
     }
 
@@ -169,6 +183,8 @@ class CoursController extends AbstractController
         // On soumet le formulaire
         if($editForm->isSubmitted()){
 
+
+
             // On récupère les données que l'input nous a donné (Celui qui met les notes)
             foreach($editForm->getExtraData() as $key => $value) {
 
@@ -185,7 +201,6 @@ class CoursController extends AbstractController
                     if($value != ""){
                         if ($idUserGrade != []) {
                             $hasUserGrade = $this->em->getRepository(UserGrade::class)->find($idUserGrade[0]['id']);
-                            dump($hasUserGrade);
 
                             if ($hasUserGrade) {
 
@@ -196,6 +211,11 @@ class CoursController extends AbstractController
 
                                 $this->em->persist($hasUserGrade);
                                 $this->em->flush();
+
+                                if($value <= 9 && $value){
+                                    $this->emailFailedCours($getCours, $getStudent, $hasUserGrade->getGrade());
+                                }
+
                             }
                         } else {
 
@@ -278,6 +298,29 @@ class CoursController extends AbstractController
     }
 
     public function editNote($getCours, $key, $value){
+
+    }
+
+    /**
+     * @param $objectCours
+     * @param $objectSubject
+     * @param $user
+     * @return void
+     */
+    public function emailFailedCours($objectSubject, $user, $note){
+
+        $email = (new TemplatedEmail())
+            ->from(new Address('madjid@supinfo.com', 'Reset Email'))
+            ->to($this->authService->isAuthenticatedUser()->getEmail())
+            ->subject($user->getFirstName() . ' ' . $user->getLastName() . ' n\'a pas validé la matière : ' . $objectSubject->getName())
+            ->htmlTemplate('cours/admin/_failed.html.twig')
+            ->context([
+                'note' => $note,
+                'nameStudent' => $user->getFirstName() . ' ' . $user->getLastName(),
+                'coursName' => $objectSubject->getName()
+            ]);
+
+        $this->mailer->send($email);
 
     }
 
