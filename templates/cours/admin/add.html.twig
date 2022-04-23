@@ -16,7 +16,7 @@
                     </li>
 
                     <li class="element ">
-                        <a href="{{ path('app_cours')}}" class="transition">
+                        <a href="{{ path('app_cours_campus')}}" class="transition">
                             <span class="animationClickableText">Gestion des cours</span>
                         </a>
                     </li>
@@ -26,54 +26,81 @@
             </nav>
         {% endblock %}
 
+        {% if error %}
+            <section class="shadow errorBackground">
+                <ul style="margin-left: 25px">
 
+                    {% if error %}
+                        <li>Le diminutif doit avoir 5 caractères.</li>
+                    {% endif %}
 
-        <main class="container-two-rows">
-            <section class="left-section shadow">
-
-                <!-- Formulaire pour éditer le titre -->
-                <h3 class="titleSection hidden">
-{#                    {{ form_start(editForm) }}#}
-
-                    <i class="fa-solid fa-book-open"></i>
-{#                    {{ form_widget(editForm.name) }}#}
-{#                    {{ form_widget(editForm.fullName) }}#}
-{#                    {{ form_widget(editForm.year) }}#}
-
-                </h3>
-                <!---------------------------------------->
-                <hr>
+                </ul>
             </section>
+        {% endif %}
 
-            <div class="right-section">
-                <div class="fixed">
+        {{ form_start(form) }}
+        <main class="container-two-rows">
+            <div class="left-section">
 
-                    <section class="shadow">
-                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
-                        <hr>
+                <section class="shadow" style="margin-bottom: 25px !important">
+                    <!-- Formulaire pour éditer le titre -->
+                    <h3 class="titleSection">
 
-                        <!-- Ajouter un intervenant - Doit pouvoir ajouter autant d'invertenant qu'on souhaite + sélection du campus -->
+                        <i class="fa-solid fa-book-open"></i>
+                        {{ form_widget(form.name) }}
+                        {{ form_widget(form.fullName) }}
 
-                    </section>
+                        {% if error %}
+                            <span class="errorBackground errorTitle shadow"> ERREUR </span>
+                        {% endif %}
 
-                    <section class="shadow editCoursSection">
-                        <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
-                        <hr>
+                    </h3>
+                    <!---------------------------------------->
+                    <hr>
 
-                        <div>
-                            <button class="submitNewInformation zoom" type="submit">
-                                Valider les modifications
-                            </button>
-                            <p class="cancelInformation zoom"> Annuler</p>
-                        </div>
-                    </section>
+                    <p class="labelNewCours"> Année : {{ form_widget(form.year) }} </p>
+                    <p class="labelNewCours"> Points : {{ form_widget(form.points) }} </p>
 
-                </div>
+
+                </section>
+
+
+
+                <section class="shadow">
+                    <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
+                    <hr>
+
+                    <!-- Bouton qui permet de rajouter des intervenants à l'infini -->
+                    <div class="addNewIntervenantContainer">
+                        <a id="addNewIntervenant" href="#" data-collectionHolderClass="listNewIntervenant">
+                            <i class="fa-solid fa-plus"></i>
+                            Ajouter un intervenant
+                        </a>
+
+                    </div>
+
+
+
+                    <div class="listNewIntervenant transition"
+                         data-index="{{ form.intervenants|length > 0 ? form.intervenants|last.vars.name + 1 : 0 }}"
+                         data-prototype="{{ form_widget(form.intervenants.vars.prototype)|e('html_attr') }}">
+                    </div>
+
+                    {{ form_end(form) }}
+                </section>
+
+
+
+                <button class="submitNewInformation zoom" type="submit" style="margin-top: 25px;">
+                    <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Valider les modifications
+                </button>
+
+
+
             </div>
-
         </main>
 
-
     </div>
+
 
 {% endblock %}

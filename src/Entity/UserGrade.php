@@ -23,12 +23,12 @@ class UserGrade
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    #[ORM\ManyToOne(targetEntity: Subject::class, fetch:'EAGER', inversedBy: 'userGrades')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $subject;
-
     #[ORM\Column(type: 'datetime')]
     private $date;
+
+    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'userGrade')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $subject;
 
 
 
@@ -61,17 +61,6 @@ class UserGrade
         return $this;
     }
 
-    public function getSubject(): ?subject
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(?subject $subject): self
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
 
     public function getUser(): ?user
     {
@@ -93,6 +82,18 @@ class UserGrade
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getSubject(): ?Subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?Subject $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }

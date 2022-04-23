@@ -38,17 +38,22 @@
 
                                         {% if cours.levelYear == 1 %}
                                             <p class="actualYear one"> {{ cours.levelName }}</p>
+                                            <i class="fa-solid fa-book-open one"></i>
                                         {% elseif cours.levelYear == 2 %}
                                             <p class="actualYear two"> {{ cours.levelName }}</p>
+                                            <i class="fa-solid fa-book-open two"></i>
                                         {% elseif cours.levelYear == 3 %}
                                             <p class="actualYear three"> {{ cours.levelName }}</p>
+                                            <i class="fa-solid fa-book-open three"></i>
                                         {% elseif cours.levelYear == 4 %}
                                             <p class="actualYear four"> {{ cours.levelName }}</p>
+                                            <i class="fa-solid fa-book-open four"></i>
                                         {% elseif cours.levelYear == 5 %}
                                             <p class="actualYear five"> {{ cours.levelName }}</p>
+                                            <i class="fa-solid fa-book-open five"></i>
                                         {% endif %}
 
-                                        <i class="fa-solid fa-book-open"></i>
+
                                         <p id="fullName">{{ cours.name }}</p>
                                     </div>
                                 </a>

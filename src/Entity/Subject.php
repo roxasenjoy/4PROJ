@@ -23,11 +23,8 @@ class Subject
     #[ORM\Column(type: 'string', length: 255)]
     private $fullName;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'float')]
     private $points;
-
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: UserGrade::class, fetch: 'EAGER')]
-    private $userGrades;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, fetch: 'EAGER')]
     private $subjectDates;
@@ -36,10 +33,18 @@ class Subject
     #[ORM\JoinColumn(nullable: false)]
     private $level;
 
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Intervenant::class, orphanRemoval: true)]
+    private $intervenants;
+
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: UserGrade::class, orphanRemoval: true)]
+    private $userGrade;
+
+
     public function __construct()
     {
-        $this->userGrades = new ArrayCollection();
         $this->subjectDates = new ArrayCollection();
+        $this->intervenants = new ArrayCollection();
+        $this->userGrade = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,48 +76,17 @@ class Subject
         return $this;
     }
 
-    public function getPoints(): ?int
+    public function getPoints(): ?float
     {
         return $this->points;
     }
 
-    public function setPoints(int $points): self
+    public function setPoints(float $points): self
     {
         $this->points = $points;
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, UserGrade>
-     */
-    public function getUserGrades(): Collection
-    {
-        return $this->userGrades;
-    }
-
-    public function addUserGrade(UserGrade $userGrade): self
-    {
-        if (!$this->userGrades->contains($userGrade)) {
-            $this->userGrades[] = $userGrade;
-            $userGrade->setSubject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserGrade(UserGrade $userGrade): self
-    {
-        if ($this->userGrades->removeElement($userGrade)) {
-            // set the owning side to null (unless already changed)
-            if ($userGrade->getSubject() === $this) {
-                $userGrade->setSubject(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, SubjectDate>
      */
@@ -151,6 +125,66 @@ class Subject
     public function setLevel(?studyLevel $level): self
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervenant>
+     */
+    public function getIntervenants(): Collection
+    {
+        return $this->intervenants;
+    }
+
+    public function addIntervenant(Intervenant $intervenant): self
+    {
+        if (!$this->intervenants->contains($intervenant)) {
+            $this->intervenants[] = $intervenant;
+            $intervenant->setSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervenant(Intervenant $intervenant): self
+    {
+        if ($this->intervenants->removeElement($intervenant)) {
+            // set the owning side to null (unless already changed)
+            if ($intervenant->getSubject() === $this) {
+                $intervenant->setSubject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserGrade>
+     */
+    public function getUserGrade(): Collection
+    {
+        return $this->userGrade;
+    }
+
+    public function addUserGrade(UserGrade $userGrade): self
+    {
+        if (!$this->userGrade->contains($userGrade)) {
+            $this->userGrade[] = $userGrade;
+            $userGrade->setSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserGrade(UserGrade $userGrade): self
+    {
+        if ($this->userGrade->removeElement($userGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($userGrade->getSubject() === $this) {
+                $userGrade->setSubject(null);
+            }
+        }
 
         return $this;
     }

@@ -22,6 +22,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 {
 
     const ROLE_STUDENT = 12;
+    const ROLE_VISITEUR = 13;
+    const ROLE_PROFESSEUR = 14;
+    const ROLE_PEDAGO = 15;
+    const ROLE_ADMIN = 16;
 
     public function __construct(ManagerRegistry $registry, AuthService $authService)
     {
@@ -173,5 +177,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+
+    /** Return tous les utilisateurs pour le query_builder de la création d'un cours */
+    public function getAllTeacher(){
+
+        $qb = $this->createQueryBuilder('u')
+            ->join('u.role', 'role')
+            ->where('role.id = :professeur')
+            ->setParameter(':professeur', self::ROLE_PROFESSEUR)
+            ->orderBy('u.email', 'DESC');
+
+        return $qb;
+
+
+
     }
 }

@@ -8,6 +8,7 @@ use App\Entity\Role;
 use App\Entity\Subject;
 use App\Entity\User;
 use App\Entity\UserGrade;
+use App\Form\AddCoursForm;
 use App\Form\EditCoursForm;
 use App\Form\FilterCampusForm;
 use App\Service\AuthService;
@@ -108,12 +109,58 @@ class CoursController extends AbstractController
         ]);
     }
 
-
     #[Route('/admin/cours/add', name: 'app_cours_add')]
-    public function addCours(UserPasswordHasherInterface $userPasswordHasher){
+    public function addCours(Request $request){
+
+
+        // Ajouter un formulaire qui permet de rajouter les éléments suivants :
+        // - Titre du cours
+        // - Nom complet du cours
+        // - Liste des intervenants en fonction du campus
+
+        $subject = new Subject();
+        $error = '';
+
+        $form = $this->createForm(AddCoursForm::class, $subject);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $diminutif = $form->get('name')->getData();
+
+            if(strlen($diminutif) === 5) {
+                // On récupère toutes les informations des intervenants
+                $intervenants = $form->get('intervenants')->getData();
+
+                // On ajoute le cours avant de rajouter les intervenants en question
+                $subject->setName($form->get('name')->getData())
+                    ->setFullName($form->get('fullName')->getData())
+                    ->setPoints($form->get('points')->getData())
+                    ->setLevel($form->get('year')->getData());
+
+                foreach ($intervenants as $key => $value) {
+
+                    $intervenant = new Intervenant();
+                    $intervenant->setSubject($subject)
+                        ->setUser($value['email'])
+                        ->setCampus($value['name']);
+
+                    $this->em->persist($subject);
+                    $this->em->persist($intervenant);
+                    $this->em->flush();
+                }
+
+                return $this->redirectToRoute('app_cours_campus');
+            } else {
+                $error = 'L\'acronyme n\'est pas valide';
+            }
+        }
+
 
         return $this->render('cours/admin/add.html.twig', [
-
+            'form' => $form->createView(),
+            'error' => $error
         ]);
     }
 
@@ -183,8 +230,6 @@ class CoursController extends AbstractController
         // On soumet le formulaire
         if($editForm->isSubmitted()){
 
-
-
             // On récupère les données que l'input nous a donné (Celui qui met les notes)
             foreach($editForm->getExtraData() as $key => $value) {
 
@@ -199,15 +244,19 @@ class CoursController extends AbstractController
 
                     // Il possède déjà une note
                     if($value != ""){
+
+                        $value = floatval($value);
+                        dump($value);
+
                         if ($idUserGrade != []) {
                             $hasUserGrade = $this->em->getRepository(UserGrade::class)->find($idUserGrade[0]['id']);
 
                             if ($hasUserGrade) {
 
-                                intval($value) >= 10 ? $isValid = true : $isValid = false;
+                                $value >= 10 ? $isValid = true : $isValid = false;
 
                                 $hasUserGrade->setStatus($isValid);
-                                $hasUserGrade->setGrade(intval($value));
+                                $hasUserGrade->setGrade($value);
 
                                 $this->em->persist($hasUserGrade);
                                 $this->em->flush();
@@ -224,8 +273,8 @@ class CoursController extends AbstractController
 
                             $newNote->setUser($loopStudent)
                                 ->setSubject($getCours)
-                                ->setGrade(intval($value))
-                                ->setStatus(intval($value) >= 10)
+                                ->setGrade($value)
+                                ->setStatus($value >= 10)
                                 ->setDate($this->globalService->getTodayDate());
 
                             $this->em->persist($newNote);
@@ -265,18 +314,7 @@ class CoursController extends AbstractController
 
             }
 
-            if(strlen($editForm->getViewData()->getName()) == 5){
-
-                $getCours   ->setName($editForm->getViewData()->getName())
-                            ->setFullName($editForm->getViewData()->getFullName())
-                            ->setLevel($editForm->get("year")->getData());
-
-                $this->em->persist($getCours);
-                $this->em->flush();
-
-            } else {
-                $error = 'L\'acronyme n\'est pas valide';
-            }
+            $error = $this->verificationDiminutif($editForm, $getCours);
 
         }
 
@@ -289,17 +327,53 @@ class CoursController extends AbstractController
             'actualCours' => $getCours,
             'editForm' => $editForm->createView(),
             'errorNote' => $errorNote,
-            'error' => $error
+            'error' => $error,
+            'coursId' => $coursId
         ]);
     }
 
-    public function showNote($allStudents, $studentsGrades){
+
+    #[Route('/admin/cours/details/{id}/delete', name: 'cours_delete', requirements: ['id' => '(\d+)'] )]
+    public function deleteCours(Request $request){
+
+        $coursId = intval($request->get('id'));
+
+        $cours = $this->em->getRepository(Subject::class)->find($coursId);
+
+        $this->em->remove($cours);
+        $this->em->flush();
+
+        return $this->redirectToRoute('app_cours_campus');
 
     }
 
-    public function editNote($getCours, $key, $value){
+    public function verificationDiminutif($form, $coursObject){
 
+        $error = '';
+
+        // Si aucun cours, on créer un nouvel objet
+        if(!$coursObject){
+            $coursObject = new Subject();
+        }
+
+        if(strlen($form->getViewData()->getName()) == 5){
+
+            // Update le cours
+            $coursObject    ->setName($form->getViewData()->getName())
+                            ->setFullName($form->getViewData()->getFullName())
+                            ->setLevel($form->get("year")->getData())
+                            ->setPoints($form->get("points")->getData());
+
+            $this->em->persist($coursObject);
+            $this->em->flush();
+
+        } else {
+            $error = 'L\'acronyme n\'est pas valide';
+        }
+
+        return $error;
     }
+
 
     /**
      * @param $objectCours

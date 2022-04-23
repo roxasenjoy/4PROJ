@@ -66,11 +66,13 @@ class AuthController extends AbstractController
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
+
         $lastEmail = $authenticationUtils->getLastUsername();
 
         if($error){
             $error = "Votre adresse email ou votre mot de passe est incorrecte.";
         }
+
 
 
         return $this->render('auth/login.html.twig', [

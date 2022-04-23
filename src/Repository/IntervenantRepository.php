@@ -77,16 +77,14 @@ class IntervenantRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('intervenant')
             ->select('user.id', 'user.firstName', 'user.lastName', 'campus.name as campusName')
+
             ->join('intervenant.user', 'user')
             ->join('intervenant.subject', 'subject')
             ->join('user.userExtended', 'ux')
-            ->join('user.campus', 'campus')
+            ->join('intervenant.campus', 'campus')
             ->join('ux.actualLevel', 'sl')
             ->where('subject.id = :coursId')
             ->setParameter(':coursId', $coursId)
-
-            ->andWhere('campus.id = :campusId')
-            ->setParameter(':campusId', $user->getCampus()->getId())
         ;
 
             if($filter){

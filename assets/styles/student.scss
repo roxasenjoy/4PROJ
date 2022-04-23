@@ -102,17 +102,26 @@
                             font-family: $msBold;
                             margin-bottom: 10px;
 
-                            &.one{background: #E1E8ED}
-                            &.two{background: #AAB8C2}
-                            &.three{background: #657786}
-                            &.four{background: $blue}
-                            &.five{background: #14171A}
+                            &.one{background: #E1E8ED;  }
+                            &.two{background: #AAB8C2;}
+                            &.three{background: #657786; }
+                            &.four{background: $blue;  }
+                            &.five{background: #14171A; }
+
+
+
+
                         }
 
 
+                        i.one{color: #E1E8ED; }
+                        i.two{color: #AAB8C2; }
+                        i.three{color: #657786; }
+                        i.four{color: $blue; }
+                        i.five{color: #14171A; }
+
                         i {
                             font-size: 3em;
-                            color: $blue;
                             margin-bottom: 15px;
                         }
 
@@ -316,6 +325,10 @@
 
 
         .editCoursSection{
+            margin-top: 25px !important;
+        }
+
+        .addCoursSection{
             margin-top: 25px !important;
         }
 

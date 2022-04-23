@@ -83,9 +83,10 @@ class AddStudentFormType extends AbstractType
                     // Si le user connecté, est un membre de l'équipe pédago.
                     // On enlève le rôle admin car ils n'ont pas la possibilité de le mettre
                     if($this->authService->isAuthenticatedUser()->getRole()->getId() === 15){
-                        $roleRepository = $roleRepository->where('r.id != :idRole')
-                            ->setParameter('idRole', 16);
+                        $roleRepository = $roleRepository->where('r.id IN (:idRole)')
+                            ->setParameter('idRole', [12,13]);
                     }
+
 
                     // Si ce n'est pas le cas, le user connecté, il a accès à tous.
 

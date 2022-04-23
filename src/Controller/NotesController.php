@@ -44,6 +44,7 @@ class NotesController extends AbstractController
              * On combine les deux array qu'on vient de récuperer pour ne former plus qu'un
              */
 
+        if($allLessons){
             foreach ($allLessons as $lesson) {
                 $comb = array(
                     'id' => $lesson['id'],
@@ -62,6 +63,8 @@ class NotesController extends AbstractController
 
                 $combined[] = $comb;
             }
+        }
+
 
         return $this->render('notes/notes.html.twig', [
             'notes' => $combined

@@ -9,20 +9,26 @@ use App\Entity\Subject;
 use App\Service\AuthService;
 use App\Service\GlobalService;
 use Doctrine\ORM\EntityRepository;
+use phpDocumentor\Reflection\Types\Collection;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class EditCoursForm extends AbstractType
+class AddCoursForm extends AbstractType
 {
 
     public function __construct(GlobalService $globalService)
@@ -30,10 +36,11 @@ class EditCoursForm extends AbstractType
         $this->globalService = $globalService;
     }
 
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-        $subject = $options['data'];
+
 
         $builder
             ->add('name', TextType::class, [
@@ -41,10 +48,7 @@ class EditCoursForm extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Diminutif',
-
-                ],
-                'empty_data' => $subject->getName(),
-                'data' => $subject->getName(),
+                ]
             ])
 
             ->add('fullName', TextType::class, [
@@ -52,9 +56,7 @@ class EditCoursForm extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Nom complet'
-                ],
-                'empty_data' => $subject->getFullName(),
-                'data' => $subject->getFullName(),
+                ]
             ])
 
             ->add('points', ChoiceType::class, [
@@ -80,27 +82,24 @@ class EditCoursForm extends AbstractType
                         ->where('l.id >= 1')
                         ->andWhere('l.id <= 5');
                     return $level;
-
-                },
-                'empty_data' => $subject->getLevel(),
-                'data' => $subject->getLevel(),
+                }
             ])
 
-
-
+            ->add('intervenants', CollectionType::class, [
+                'entry_type' => _addIntervenantFormType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'mapped' => false,
+                'label' => false,
+            ])
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Subject::class,
-            "allow_extra_fields" => true
+            'data_class' => Subject::class
         ]);
-    }
-
-    public function getBlockPrefix()
-    {
-        return '';
     }
 }

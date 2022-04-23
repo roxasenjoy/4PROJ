@@ -17,7 +17,11 @@ class Intervenant
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    #[ORM\ManyToOne(targetEntity: Subject::class)]
+    #[ORM\ManyToOne(targetEntity: Campus::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $campus;
+
+    #[ORM\ManyToOne(targetEntity: subject::class, inversedBy: 'intervenants')]
     #[ORM\JoinColumn(nullable: false)]
     private $subject;
 
@@ -38,12 +42,24 @@ class Intervenant
         return $this;
     }
 
-    public function getSubject(): ?Subject
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getSubject(): ?subject
     {
         return $this->subject;
     }
 
-    public function setSubject(?Subject $subject): self
+    public function setSubject(?subject $subject): self
     {
         $this->subject = $subject;
 

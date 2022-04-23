@@ -126,6 +126,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
+                margin-bottom: 10px;
 
                 .campusContainer{
                     background-color: $blue;
@@ -236,13 +237,137 @@
     }
 }
 
-
-@media (max-width: $laptop){
-    .editCoursSection{
-        margin-top: 15px !important;
-    }
+.submitNewInformation{
+    background-color: $green;
+    border: none;
+    color: $white;
+    font-size: 1.25em;
+    font-family: $msBold;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+    display: block;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    cursor:pointer;
 }
 
+/************************
+    Ajouter un cours
+ ***********************/
+.listNewIntervenant .newIntervenantContent,
+#add_cours_form_intervenants div div{
+    border-bottom: 0.5px solid #c9ccd3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.listNewIntervenant .newIntervenantContent div,
+#add_cours_form_intervenants div div{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.listNewIntervenant .newIntervenantContent div select,
+#add_cours_form_intervenants div div div select{
+    background-color: $white;
+    border-radius: 8px;
+    flex-grow: 1;
+    font-family: $msNormal;
+    cursor: pointer;
+}
+
+#add_cours_form_intervenants div div div select{
+    padding: 15px 10px;
+}
+
+.listNewIntervenant .newIntervenantContent p i,
+#add_cours_form_intervenants div div p{
+    background-color: $red;
+    color: $white;
+    font-size: 1.25em;
+    border: none;
+    padding: 15px 20px;
+    display: inline-block;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.listNewIntervenant .newIntervenantContent div div:nth-child(2)
+#add_cours_form_intervenants div div div:nth-child(2){
+    width: 25em !important;
+}
+
+.newIntervenantContent div div select::-ms-expand,
+#add_cours_form_intervenants div div div select::-ms-expand{
+    display: none;
+}
+
+.listNewIntervenant .newIntervenantContent div div,
+#add_cours_form_intervenants div div div {
+    position: relative;
+    display: flex;
+    height: 3em;
+    width: 15em;
+    line-height: 3;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-right: 25px;
+}
+.listNewIntervenant .newIntervenantContent div div::after,
+#add_cours_form_intervenants div div div::after{
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: $darkBlue;
+    color: $white;
+    cursor:pointer;
+    pointer-events:none;
+    transition:.25s all ease;
+}
+.newIntervenantContent:hover::after {
+    color: #23b499;
+}
+
+.labelNewCours{
+    color: $blue;
+    font-family: $msBold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.selectNewCours{
+    padding: 10px;
+    font-size: 1em;
+    font-family: "Montserrat", sans-serif;
+    background: #e6e7eb;
+}
+
+.addNewIntervenantContainer{
+    background: $blue;
+    padding: 10px 20px;
+    font-family: $msBold;
+    display: inline-block;
+    border-radius: 8px;
+    text-align: center;
+    width: 15em;
+
+
+    &:hover{
+        background: $darkBlue;
+    }
+
+    #addNewIntervenant{
+        color: $white;
+        text-decoration: none;
+    }
+
+}
 
 @media (max-width: $smartphone){
 
@@ -265,4 +390,39 @@
             }
         }
     }
+
+    .addNewIntervenantContainer{
+        width: initial;
+    }
+
+    .listNewIntervenant .newIntervenantContent div div:nth-child(2),
+    #add_cours_form_intervenants div div div:nth-child(2){
+        width: 100% !important;
+    }
+
+    .newIntervenantContent div,
+    #add_cours_form_intervenants div{
+        position: relative;
+        width: 100%;
+    }
+
+    .listNewIntervenant .newIntervenantContent div div,
+    #add_cours_form_intervenants div div div{
+        width: 100% !important;
+        margin-right: initial !important;
+    }
+
+    .listNewIntervenant .newIntervenantContent,
+    #add_cours_form_intervenants div div{
+        position: relative;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .listNewIntervenant .newIntervenantContent p i{
+        margin-bottom: 10px;
+    }
+
+
 }

@@ -8,6 +8,7 @@ use App\Entity\UserComptability;
 use App\Entity\UserGrade;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Integer;
 
 class GlobalService
 {
@@ -110,6 +111,22 @@ class GlobalService
         // Ajouter les crédits actuel de l'année en cours
         return $totalECTS + intval($this->em->getRepository(UserGrade::class)->getTotalEctsPerUser($user->getId())[0]['1']);
 
+    }
+
+    /**
+     * @param $max - La note maximal disponible.
+     * @return array
+     */
+    public function generatePoints($max)
+    {
+        $min        = 1;
+        $values    = array();
+
+        for($min; $min <= $max; $min++){
+            $values[$min] = $min;
+        }
+
+        return $values;
     }
 
 
