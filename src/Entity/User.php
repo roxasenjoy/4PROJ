@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private $role;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserGrade::class, fetch: 'EAGER')]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserGrade::class, fetch: 'EAGER', cascade: ['remove'])]
     private $userGrades;
 
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]

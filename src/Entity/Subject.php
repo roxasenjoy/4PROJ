@@ -26,7 +26,7 @@ class Subject
     #[ORM\Column(type: 'float')]
     private $points;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, fetch: 'EAGER')]
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, fetch: 'EAGER', orphanRemoval: true)]
     private $subjectDates;
 
     #[ORM\ManyToOne(targetEntity: StudyLevel::class, fetch:'EAGER')]

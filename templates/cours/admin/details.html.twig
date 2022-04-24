@@ -171,10 +171,10 @@
                         Éditer le cours
                     </p>
 
-                    <a href="{{ path('cours_delete', {id: coursId}) }}" class="cancelInformation zoom" id="deleteCours">
+                    <p class="cancelInformation zoom" id="deleteCours">
                         <i class="fa-solid fa-trash-can"></i>
                         Supprimer le cours
-                    </a>
+                    </p>
 
                     <div id="editTitleCours" class="hidden">
                         <button class="submitNewInformation zoom" type="submit">
@@ -209,5 +209,27 @@
         </div>
 
     </main>
+
+    <div class="containerValidationMessage hidden shadow" id="modalDeleteCours">
+        <div class="centered">
+            <h3>Confirmez-vous la suppression ?</h3>
+            <p> Si vous confirmez, votre rôle sera définitivement effacé</p>
+
+            <!-- Delete -->
+            <a  class="deleteValidation transition" href="{{ path('cours_delete', {id: coursId}) }}">
+                <i  class="fas fa-trash"></i>
+                Supprimer
+            </a>
+
+
+
+            <!-- Cancel -->
+            <button class="cancelValidation transition" id="cancelValidation">
+                <i  class="fas fa-times" ></i>
+                Annuler
+            </button>
+        </div>
+    </div>
+
 
 {% endblock %}
