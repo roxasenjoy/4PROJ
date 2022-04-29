@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - Ajouter un étudiant {% endblock %}
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="element ">
+                        <a href="{{ path('app_student')}}" class="transition">
+                            <span class="animationClickableText">Gestion des étudiants</span>
+                        </a>
+                    </li>
+
+                    <li class="current"> Ajouter un étudiant </li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+        <!-- PARTIE FORMULAIRE - LE MEMBRE DE L'EQUIPE PEDAGO VEUT MODIFIER LES INFORMATIONS DE L'UTILISATEUR -->
+
+        {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+
+        {% if error %}
+
+            <section class="shadow errorBackground">
+                <ul style="margin-left: 25px">
+                    <li>{{ error }}</li>
+                </ul>
+            </section>
+
+        {% endif %}
+
+
+        <div id="formEditStudent">
+            <section class="left-section shadow">
+                <h3 class="titleSection">
+                    <i class="fa-solid fa-circle-user"></i>
+                    {{ form_widget(form.firstName) }}
+                    {{ form_widget(form.lastName) }}
+                </h3>
+                <hr>
+
+                <div class="personnalInformation">
+
+                    <div class="typeStudent">
+                        <p><span> Campus : </span> {{ form_widget(form.campus) }} </p>
+                        <p>
+                                <span class="{{ error ? 'text-error' : '' }}">
+                                    <i class="{{ error ? 'fa-solid fa-circle-exclamation text-error' : 'hidden' }}"></i>
+                                    Adresse email :
+                                </span> {{ form_widget(form.email) }}
+                        </p>
+                        <p> <span> Adresse </span> {{ form_widget(form.address) }} </p>
+                        <p> <span> Région :</span> {{ form_widget(form.region) }} </p>
+                        <p> <span> Anniversaire : </span> {{ form_widget(form.birthday) }} </p>
+                    </div>
+
+                </div>
+            </section>
+
+            <div class="btnContainer">
+                <button class="submitNewInformation zoom" type="submit">
+                    <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Ajouter
+                </button>
+                <a href="{{ path('admin_intervenant') }}" class="cancelInformation zoom" style="text-decoration: none;"> Annuler</a>
+            </div>
+
+        </div> <!-- Fin form -->
+
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

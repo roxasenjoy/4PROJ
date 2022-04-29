@@ -71,49 +71,20 @@ class SubjectRepository extends ServiceEntityRepository
      */
     public function getAllLessons(int $promotion = 0){
 
-            $qb = $this->createQueryBuilder('subject')
-                ->select('subject.id','subject.name',  'subject.fullName','level.name as levelName', 'level.year as levelYear')
-                ->join('subject.level', 'level')
-                ->orderBy('subject.name', 'ASC')
-                ->orderBy('level.year', 'ASC');
+        $qb = $this->createQueryBuilder('subject')
+            ->select('subject.id','subject.name',  'subject.fullName','level.name as levelName', 'level.year as levelYear')
+            ->join('subject.level', 'level')
+            ->orderBy('subject.name', 'ASC')
+            ->orderBy('level.year', 'ASC');
 
-            if($promotion){
-                $qb->where('level.year = :promotion')
-                    ->setParameter('promotion', $promotion);
-            }
-
-
-            ;
-            return $qb->getQuery()->getResult();
-    }
+        if($promotion){
+            $qb->where('level.year = :promotion')
+                ->setParameter('promotion', $promotion);
+        }
 
 
-    // /**
-    //  * @return Subject[] Returns an array of Subject objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
         ;
+        return $qb->getQuery()->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Subject
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

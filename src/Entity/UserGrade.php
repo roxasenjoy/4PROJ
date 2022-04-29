@@ -26,11 +26,9 @@ class UserGrade
     #[ORM\Column(type: 'datetime')]
     private $date;
 
-    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'userGrade')]
+    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'userGrades')]
     #[ORM\JoinColumn(nullable: false)]
     private $subject;
-
-
 
     public function getId(): ?int
     {
@@ -97,4 +95,5 @@ class UserGrade
 
         return $this;
     }
+
 }

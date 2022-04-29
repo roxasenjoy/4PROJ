@@ -3,10 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Intervenant;
+use App\Entity\Role;
+use App\Entity\Subject;
+use App\Entity\User;
+use App\Entity\UserExtended;
+use App\Form\AddIntervenantForm;
+use App\Form\AddStudentFormType;
+use App\Form\EditIntervenantFormType;
 use App\Service\AuthService;
+use App\Service\EmailService;
+use App\Service\GlobalService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IntervenantController extends AbstractController
@@ -17,18 +29,22 @@ class IntervenantController extends AbstractController
 
     public function __construct(
         EntityManagerInterface $em,
-        AuthService $authService
+        AuthService $authService,
+        EmailService $emailService,
+        GlobalService $globalService,
     )
     {
         $this->em = $em;
         $this->authService = $authService;
+        $this->emailService = $emailService;
+        $this->globalService = $globalService;
     }
 
     #[Route('/intervenant', name: 'app_intervenant')]
     public function getIntervenants(): Response
     {
-        $user = $this->authService->isAuthenticatedUser();
-        $intervenants = null;
+        $user           = $this->authService->isAuthenticatedUser();
+        $intervenants   = null;
 
         if($user->getUserExtended()){
             $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
@@ -39,4 +55,184 @@ class IntervenantController extends AbstractController
             'intervenants' => $intervenants
         ]);
     }
+
+    /*****************************************************************
+     *                      ROLE PEDAGOGIQUE
+     *****************************************************************/
+
+    #[Route('/admin/intervenant', name: 'admin_intervenant')]
+    public function getAllIntervenantsOnCampus(){
+
+        // Récupérer tous les intervenants
+        $intervenants = $this->em->getRepository(User::class)->getAllTeacherRoleByCampus();
+
+        return $this->render('intervenant/admin/intervenants.html.twig', [
+            'intervenants' => $intervenants
+        ]);
+
+    }
+
+    #[Route('/admin/intervenant/details/{id}', name: 'admin_intervenant_details', requirements: ['id' => '(\d+)'])]
+    public function detailsIntervenant(Request $request){
+
+        $intervenantId          = $request->get('id');
+        $user                   = $this->em->getRepository(User::class)->find($intervenantId);
+        $intervenantSubject     = $this->getSubjectByIntervenant($intervenantId);
+        $newIntervenant         = new Subject();
+
+
+        $form = $this->createForm(EditIntervenantFormType::class, $user);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            dump('test');
+
+        }
+
+        return $this->render('intervenant/admin/details.html.twig', [
+            'user' => $user,
+            'intervenantSubject' => $intervenantSubject,
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/admin/intervenants/add', name: 'admin_intervenant_add')]
+    public function addIntervenant(Request $request, UserPasswordHasherInterface $userPasswordHasher){
+
+        $user = new User();
+        $userExtended = new UserExtended();
+        $error = "";
+
+        // Edition de la fiche de l'étudiant
+        $form = $this->createForm(AddIntervenantForm::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            // On vérifie que l'émail n'est pas déjà utilisé
+            if($this->em->getRepository(User::class)->findBy(array('email' => $form->get("email")->getData()))){
+                $error = 'L\'adresse email que vous avez utilisé est déjà utilisée. ';
+            } else {
+
+                // Génération aléatoire d'un mot de passe
+                $password = $this->globalService->generatePassword();
+
+                // Modification des informations concernant l'utilisateur
+                $user
+                    ->setFirstName($form->get("firstName")->getData())
+                    ->setLastName($form->get("lastName")->getData())
+                    ->setEmail($form->get("email")->getData())
+                    ->setPassword($userPasswordHasher->hashPassword($user,$password))
+                    ->setRoles(array('ROLE_TEACHER'))
+                    ->setCampus($form->get("campus")->getData())
+                    ->setRole($this->em->getRepository(Role::class)->find(14))
+                ;
+
+                // Modification des éléments concernant les données extended de l'utilisateur
+                $userExtended
+                    ->setBirthday($form->get('birthday')->getData())
+                    ->setAddress($form->get("address")->getData())
+                    ->setRegion($form->get("region")->getData())
+                    ->setYearEntry(0)
+                    ->setYearExit(0)
+                    ->setActualLevel(null)
+                    ->setNbAbscence(0)
+                    ->setIsStudent(false)
+                    ->setHasProContract(false)
+                    ->setIsHired(false)
+                    ->setActualLevel(null)
+                    ->setPreviousLevel(null)
+                    ->setUser($user)
+                ;
+
+                $this->em->persist($user);
+                $this->em->persist($userExtended);
+                $this->em->flush();
+
+                /* Envoyer un email avec le mot de passe de l'étudiant */
+
+                $this->emailService->createAccount($user, $password);
+
+                return $this->redirectToRoute('admin_intervenant');
+            }
+        }
+
+        return $this->render('intervenant/admin/add.html.twig', [
+            'form' => $form->createView(),
+            'error' => $error,
+        ]);
+
+    }
+
+    #[Route('/admin/intervenants/delete', name: 'admin_intervenant_delete', requirements: ['id' => '(\d+)'])]
+    public function deleteIntervenant(Request $request){
+
+        $idIntervenant =  intval($request->get('intervenantId'));
+        $idCampus = intval($request->get('campusId'));
+        $idSubject = intval($request->get('subjectId'));
+
+        $deleteId = $this->em->getRepository(Intervenant::class)->deleteIntervenantFromSubject($idIntervenant, $idCampus, $idSubject);
+
+        $objectIntervenant = $this->em->getRepository(Intervenant::class)->find($deleteId[0]['id']);
+
+        $this->em->remove($objectIntervenant);
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin_intervenant_details', array('id' => $idIntervenant));
+
+    }
+
+
+    public function getSubjectByIntervenant($intervenantId){
+
+        $intervenants       = $this->em->getRepository(Intervenant::class)->getSubjectByIntervenant($intervenantId);
+        $subjects           = $this->em->getRepository(Subject::class)->getAllLessons();
+        $combined           = [];
+
+        // Lier les intervenants au cours associé
+        foreach ($subjects as $subject) { // Tous les étudiants
+
+            $comb = array(
+                'id'            => $subject['id'],
+                'name'          => $subject['name'],
+                'levelName'     => $subject['levelName'],
+                'levelYear'     => $subject['levelYear'],
+                'intervenantId' => null,
+                'firstName'     => '--',
+                'lastName'      => '--',
+                'campusId'      => null,
+                'campusName'    => '--',
+            );
+
+            foreach ($intervenants as $intervenant) { // Que les étudiants qui poossèdent une note
+                if ($subject['id'] == $intervenant['idSubject']  ) {
+                    $comb['intervenantId']  = $intervenant['id'];
+                    $comb['firstName']      = $intervenant['firstName'];
+                    $comb['lastName']       = $intervenant['lastName'];
+                    $comb['campusId']       = $intervenant['idCampus'];
+                    $comb['campusName']     = $intervenant['campusName'];
+
+                    $combined[] = $comb;
+                }
+            }
+        }
+
+       // Enleve les array en double.
+        $combined = array_map("unserialize", array_unique(array_map("serialize", $combined)));
+
+        // On tri les données pour qu'elles se retrouvent dans l'ordre
+        $sortCombined = array();
+        foreach ($combined as $key => $row)
+        {
+            $sortCombined[$key] = $row['name'];
+        }
+
+        array_multisort($sortCombined, SORT_ASC, $combined);
+
+        return $combined;
+
+
+    }
+
 }

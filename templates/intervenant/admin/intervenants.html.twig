@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - Gestion des intervenants{% endblock %}
+
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Gestion des intervenants</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+
+        <main class="container-two-rows">
+            <section class="left-section shadow">
+                <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Gestion des intervenants </h3>
+                <hr>
+
+                {% block listCours %}
+                    <div class="content">
+
+                        <!-- Elément à boucler -->
+                        <div class="card-container">
+                            {% for intervenant in intervenants %}
+                                <a class="card shadow zoom" href="{{ path('admin_intervenant_details', {id: intervenant.id}) }}">
+                                    <div class="logo-nav ">
+                                        <p class="actualYear four"> {{ intervenant.campusName }}</p>
+                                        <i class="fa-solid fa-book-open five"></i>
+                                        <p id="fullName">{{ intervenant.firstName }} {{ intervenant.lastName }}</p>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {% endblock %}
+
+            </section>
+
+            <div class="right-section ">
+                <div class="fixed">
+                    <section class="shadow">
+                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
+                        <hr>
+
+                        {% block promotion %}
+                            <div class="containerClass">
+{#                                <a href="{{ path('app_cours_promotion', {promotion: 1}) }}"#}
+{#                                   class="{{ promotion == 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.1 </a>#}
+
+{#                                <a href="{{ path('app_cours_promotion', {promotion: 2}) }}"#}
+{#                                   class="{{ promotion == 2 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.2 </a>#}
+
+{#                                <a href="{{ path('app_cours_promotion', {promotion: 3}) }}"#}
+{#                                   class="{{ promotion == 3 ? 'transition shadow selected zoom' :'transition shadow' }}"> B.Sc </a>#}
+
+{#                                <a href="{{ path('app_cours_promotion', {promotion: 4}) }}"#}
+{#                                   class="{{ promotion == 4 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.1 </a>#}
+
+{#                                <a href="{{ path('app_cours_promotion', {promotion: 5}) }}"#}
+{#                                   class="{{ promotion == 5 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.2 </a>#}
+
+{#                                <a href="{{ path('app_cours_campus')}}"#}
+{#                                   class="{{ promotion > 5 or promotion < 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> Toutes les promotions </a>#}
+                            </div>
+                        {% endblock %}
+                    </section>
+
+
+
+                    <section class="shadow actionStudent">
+                        <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                        <hr>
+
+                        <a href="{{ path('admin_intervenant_add') }}" class="linkNewStudent zoom"><i class="fa-solid fa-plus"></i> Ajouter un intervenant </a>
+
+                    </section>
+
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+{% endblock %}

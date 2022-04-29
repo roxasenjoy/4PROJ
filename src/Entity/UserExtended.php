@@ -41,7 +41,6 @@ class UserExtended
     private $isHired;
 
     #[ORM\ManyToOne(targetEntity: StudyLevel::class, fetch: 'EAGER')]
-    #[ORM\JoinColumn(nullable: false)]
     private $actualLevel;
 
     #[ORM\ManyToOne(targetEntity: StudyLevel::class, fetch: 'EAGER')]

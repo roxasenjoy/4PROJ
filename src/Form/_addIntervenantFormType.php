@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\Role;
 use App\Entity\StudyLevel;
+use App\Entity\Subject;
 use App\Entity\User;
+use App\Repository\CampusRepository;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
 use Doctrine\ORM\EntityRepository;
@@ -28,6 +30,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class _addIntervenantFormType extends AbstractType
 {
 
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
@@ -38,7 +45,7 @@ class _addIntervenantFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'class' => 'campusNameSelected selectNewCours'
-                ]
+                ],
             ])
 
             ->add('email', EntityType::class, [

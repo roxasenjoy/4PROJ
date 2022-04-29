@@ -49,7 +49,7 @@ class IntervenantRepository extends ServiceEntityRepository
 
     public function getIntervenants($user){
         return $this->createQueryBuilder('intervenant')
-            ->select('user.id', 'user.firstName', 'user.lastName', 'subject.name', 'sl.year as actualYear')
+            ->select('user.id', 'user.firstName', 'user.lastName', 'subject.name', 'sl.year as actualYear', 'campus.name as campusName')
             ->join('intervenant.user', 'user')
             ->join('intervenant.subject', 'subject')
             ->join('user.userExtended', 'ux')
@@ -71,21 +71,24 @@ class IntervenantRepository extends ServiceEntityRepository
      * @param $coursId
      * @return float|int|mixed|string
      */
-    public function getIntervenantsPerCampus($filter, $coursId){
-
-        $user = $this->authService->isAuthenticatedUser();
+    public function getIntervenantsPerCampus($filter = null, $coursId = null){
 
         $qb = $this->createQueryBuilder('intervenant')
-            ->select('user.id', 'user.firstName', 'user.lastName', 'campus.name as campusName')
+            ->select('user.id', 'user.firstName', 'user.lastName',
+                'campus.name as campusName', 'subject.id as idSubject',
+                'campus.id as idCampus')
 
             ->join('intervenant.user', 'user')
             ->join('intervenant.subject', 'subject')
             ->join('user.userExtended', 'ux')
             ->join('intervenant.campus', 'campus')
             ->join('ux.actualLevel', 'sl')
-            ->where('subject.id = :coursId')
-            ->setParameter(':coursId', $coursId)
         ;
+
+            if($coursId){
+                $qb ->where('subject.id = :coursId')
+                    ->setParameter(':coursId', $coursId);
+            }
 
             if($filter){
                 $qb ->andWhere('campus.id IN (:campusId)')
@@ -93,6 +96,48 @@ class IntervenantRepository extends ServiceEntityRepository
             }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function getSubjectByIntervenant($intervenantId){
+
+        $qb = $this->createQueryBuilder('intervenant')
+            ->select('user.id', 'user.firstName', 'user.lastName',
+                'campus.name as campusName', 'subject.id as idSubject',
+                'campus.id as idCampus')
+
+            ->join('intervenant.user', 'user')
+            ->join('intervenant.subject', 'subject')
+            ->join('user.userExtended', 'ux')
+            ->join('intervenant.campus', 'campus')
+            ->join('ux.actualLevel', 'sl')
+        ;
+
+        if($intervenantId){
+            $qb ->where('user.id = :userId')
+                ->setParameter(':userId', $intervenantId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function deleteIntervenantFromSubject($idIntervenant, $idCampus, $idSubject){
+
+        $qb =   $this->createQueryBuilder('intervenant')
+                ->select('intervenant.id')
+                ->join('intervenant.user', 'user')
+                ->join('intervenant.subject', 'subject')
+                ->join('intervenant.campus', 'campus')
+
+                ->where('user.id = :idIntervenant')
+                ->andWhere('campus.id = :idCampus')
+                ->andWhere('subject.id = :idSubject')
+
+                ->setParameter(':idIntervenant', $idIntervenant)
+                ->setParameter(':idCampus', $idCampus)
+                ->setParameter(':idSubject', $idSubject);
+
+        return $qb->getQuery()->getResult();
+
     }
 
     // /**

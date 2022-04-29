@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - {{ user.firstName }} {{ user.lastName }} {% endblock %}
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="element ">
+                        <a href="{{ path('admin_intervenant')}}" class="transition">
+                            <span class="animationClickableText">Gestion des intervenants</span>
+                        </a>
+                    </li>
+
+                    <li class="current"> {{ user.firstName }} {{ user.lastName }} </li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+        <div id="detailsIntervenant">
+            <section class="left-section shadow" >
+                <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> {{ user.firstName }} {{ user.lastName }} </h3>
+                <hr>
+
+                <div class="personnalInformation">
+
+                    <div class="typeStudent">
+                        <p> <span> Rôle : </span>{{ user.role.name }} </p>
+                        <p><span> Campus : </span> {{ user.campus.name }}</p>
+                    </div>
+
+                    <div class="contactStudent">
+                        <p> <span><i class="fa-solid fa-envelope"></i></span> {{ user.email }}</p>
+                        <p> <span><i class="fa-solid fa-location-dot"></i></span> {{ user.userExtended.address }}</p>
+                        <p> <span><i class="fa-solid fa-earth-europe"></i></span> {{ user.userExtended.region }}</p>
+                        <p> <span><i class="fa-solid fa-cake-candles"></i> </span> {{ user.userExtended.birthday|date("m/d/Y") }}</p>
+                    </div>
+                </div>
+            </section>
+
+
+            <!--
+                Affichage sans l'édition
+            -->
+            <section class="shadow scolarInformationContainer">
+                <div class="scolarInformation">
+                    <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> Liste des cours </h3>
+                    <hr>
+
+                    {% for subject in intervenantSubject %}
+
+                        <div class="intervenant-container">
+                            <div class="intervenantsTable">
+
+                                <div class="section left">
+                                    <p class="lessonName"> {{subject.name}} </p>
+                                </div>
+
+
+                                <div class="section center">
+                                    <p> {{subject.firstName}} {{ subject.lastName}} </p>
+                                </div>
+
+                                <div class="section right">
+                                    <a  class="edit zoom"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                                    {% if subject.intervenantId != null %}
+                                        <a href="{{ path('admin_intervenant_delete', {intervenantId: subject.intervenantId, campusId: subject.campusId, subjectId: subject.id}) }}" class="delete zoom">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="btnContainer">
+                <p class="editInformation zoom" id="editIntervenant"> Éditer les informations</p>
+            </div>
+        </div>
+
+
+        <!-- PARTIE FORMULAIRE - LE MEMBRE DE L'EQUIPE PEDAGO VEUT MODIFIER LES INFORMATIONS DE L'UTILISATEUR -->
+        <!--
+             Affichage avec l'édition
+             - Rajouter un CollectionType avec le campus, le cours,
+         -->
+
+
+        {{ form_start(form) }}
+            <div id="detailsIntervenant">
+                <section class="left-section shadow" >
+                    <h3 class="titleSection">
+                        <i class="fa-solid fa-circle-user"></i>
+                        {{ form_widget(form.firstName) }}
+                        {{ form_widget(form.lastName)}} </h3>
+                    <hr>
+
+                    <div class="personnalInformation">
+
+                        <div class="typeStudent">
+                            <p> <span> Rôle : </span>{{ user.role.name }} </p>
+                            <p><span> Campus : </span> {{ form_widget(form.campus) }}</p>
+                        </div>
+
+                        <div class="contactStudent">
+                            <p> <span><i class="fa-solid fa-envelope"></i></span> {{  user.email  }}</p>
+                            <p> <span><i class="fa-solid fa-location-dot"></i></span> {{ form_widget(form.address) }}</p>
+                            <p> <span><i class="fa-solid fa-earth-europe"></i></span> {{ form_widget(form.region) }}</p>
+                            <p> <span><i class="fa-solid fa-cake-candles"></i> </span> {{ user.userExtended.birthday|date("m/d/Y") }}</p>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!--
+                    Affichage sans l'édition
+                -->
+                <section class="shadow scolarInformationContainer">
+                    <div class="scolarInformation">
+                        <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> Liste des cours </h3>
+                        <hr>
+
+                        <!-- Bouton qui permet de rajouter des intervenants à l'infini -->
+                        <div class="addNewSubjectContainer">
+                            <a id="addNewSubject" data-collectionHolderClass="listNewSubject">
+                                <i class="fa-solid fa-plus"></i>
+                                Ajouter un cours
+                            </a>
+                        </div>
+
+                        <div class="listNewSubject transition"
+                             data-index="{{ form.subjects|length > 0 ? form.subjects|last.vars.name + 1 : 0 }}"
+                             data-prototype="{{ form_widget(form.subjects.vars.prototype)|e('html_attr') }}">
+                        </div>
+
+                    </div>
+                </section>
+
+                <div class="btnContainer">
+                    <p class="editInformation zoom" id="editIntervenant"> Éditer les informations</p>
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+
+
+
+
+
+    </div>
+
+{% endblock %}

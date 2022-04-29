@@ -184,14 +184,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getAllTeacher(){
 
         $qb = $this->createQueryBuilder('u')
+            ->join('u.campus', 'campus')
             ->join('u.role', 'role')
             ->where('role.id = :professeur')
             ->setParameter(':professeur', self::ROLE_PROFESSEUR)
             ->orderBy('u.email', 'DESC');
 
         return $qb;
+    }
 
+    public function getAllTeacherRoleByCampus(){
 
+        $user = $this->authService->isAuthenticatedUser();
+
+        $qb = $this->createQueryBuilder('u')
+                    ->select('u.id', 'u.firstName', 'u.lastName', 'campus.name as campusName')
+                    ->join('u.campus', 'campus')
+                    ->join('u.role', 'role')
+                    ->where('role.id = :teacherRole')
+                    ->andWhere('campus.id = :userCampus')
+                    ->setParameter(':teacherRole', self::ROLE_PROFESSEUR)
+                    ->setParameter(':userCampus', $user->getCampus()->getId())
+                    ->orderBy('u.firstName', 'ASC');
+
+        return $qb->getQuery()->getResult();
 
     }
+
 }

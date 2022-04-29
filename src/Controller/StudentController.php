@@ -10,6 +10,7 @@ use App\Entity\UserExtended;
 use App\Form\AddStudentFormType;
 use App\Form\EditStudentFormType;
 use App\Form\RegistrationFormType;
+use App\Service\EmailService;
 use App\Service\GlobalService;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,11 +26,16 @@ use Symfony\Component\HttpFoundation\Request;
 #[Route('/admin')]
 class StudentController extends AbstractController
 {
-    public function __construct(StudentService $studentService, EntityManagerInterface $em, GlobalService $globalService){
+    public function __construct(
+        StudentService $studentService,
+        EntityManagerInterface $em,
+        GlobalService $globalService,
+        EmailService $emailService){
 
         $this->em = $em;
         $this->studentService = $studentService;
         $this->globalService = $globalService;
+        $this->emailService = $emailService;
 
     }
 
@@ -117,7 +123,7 @@ class StudentController extends AbstractController
 
 
     #[Route('/student/add', name: 'app_student_add')]
-    public function addStudent(Request $request, UserPasswordHasherInterface $userPasswordHasher, TransportInterface $mailer): Response
+    public function addStudent(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = new User();
         $userExtended = new UserExtended();
@@ -146,14 +152,13 @@ class StudentController extends AbstractController
                     break;
             }
 
-
             // On vérifie que l'émail n'est pas déjà utilisé
             if($this->em->getRepository(User::class)->findBy(array('email' => $form->get("email")->getData()))){
-                $error = 'L\'adresse email que vous avez utilisé est déjà utilisée pour un autre étudiant. ';
+                $error = 'L\'adresse email que vous avez utilisé est déjà utilisée.';
             } else {
 
                 // Génération aléatoire d'un mot de passe
-                $password = $this->randomPassword();
+                $password = $this->globalService->generatePassword();
 
                 // Modification des informations concernant l'utilisateur
                 $user
@@ -189,17 +194,7 @@ class StudentController extends AbstractController
 
                 /* Envoyer un email avec le mot de passe de l'étudiant */
 
-                $email = (new TemplatedEmail())
-                    ->from(new Address('madjid@supinfo.com', 'Création de votre compte Madjid Booster'))
-                    ->to($user->getEmail())
-                    ->subject('Création de votre compte Madjid Booster')
-                    ->htmlTemplate('student/emailCreateAccount.html.twig')
-                    ->context([
-                        'password' => $password,
-                    ]);
-
-                $mailer->send($email);
-
+                $this->emailService->createAccount($user, $password);
 
                 return $this->redirectToRoute('app_student');
             }
@@ -211,14 +206,5 @@ class StudentController extends AbstractController
         ]);
     }
 
-    function randomPassword() {
-        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $pass = array(); //remember to declare $pass as an array
-        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-        for ($i = 0; $i < 8; $i++) {
-            $n = rand(0, $alphaLength);
-            $pass[] = $alphabet[$n];
-        }
-        return implode($pass); //turn the array into a string
-    }
+
 }

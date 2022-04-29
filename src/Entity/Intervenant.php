@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\IntervenantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IntervenantRepository::class)]
@@ -21,9 +23,14 @@ class Intervenant
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
-    #[ORM\ManyToOne(targetEntity: subject::class, inversedBy: 'intervenants')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'intervenant')]
     private $subject;
+
+    public function __construct()
+    {
+        $this->subjects = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -54,15 +61,17 @@ class Intervenant
         return $this;
     }
 
-    public function getSubject(): ?subject
+    public function getSubject(): ?Subject
     {
         return $this->subject;
     }
 
-    public function setSubject(?subject $subject): self
+    public function setSubject(?Subject $subject): self
     {
         $this->subject = $subject;
 
         return $this;
     }
+
+
 }

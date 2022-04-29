@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Campus;
+use App\Service\AuthService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -16,8 +17,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CampusRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    const ROLE_STUDENT = 12;
+    const ROLE_VISITEUR = 13;
+    const ROLE_PROFESSEUR = 14;
+    const ROLE_PEDAGO = 15;
+    const ROLE_ADMIN = 16;
+
+    public function __construct(ManagerRegistry $registry, AuthService $authService)
     {
+        $this->authService = $authService;
         parent::__construct($registry, Campus::class);
     }
 
@@ -44,6 +53,7 @@ class CampusRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
+
 
     // /**
     //  * @return Campus[] Returns an array of Campus objects

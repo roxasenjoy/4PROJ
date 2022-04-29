@@ -26,12 +26,16 @@
             </nav>
         {% endblock %}
 
-        {% if error %}
+        {% if error or errorDiminutif %}
             <section class="shadow errorBackground">
                 <ul style="margin-left: 25px">
 
                     {% if error %}
                         <li>Le diminutif doit avoir 5 caractères.</li>
+                    {% endif %}
+
+                    {% if errorDiminutif %}
+                        <li> Le cours est déjà présent.</li>
                     {% endif %}
 
                 </ul>
@@ -50,7 +54,7 @@
                         {{ form_widget(form.name) }}
                         {{ form_widget(form.fullName) }}
 
-                        {% if error %}
+                        {% if error or errorDiminutif %}
                             <span class="errorBackground errorTitle shadow"> ERREUR </span>
                         {% endif %}
 
@@ -76,10 +80,7 @@
                             <i class="fa-solid fa-plus"></i>
                             Ajouter un intervenant
                         </a>
-
                     </div>
-
-
 
                     <div class="listNewIntervenant transition"
                          data-index="{{ form.intervenants|length > 0 ? form.intervenants|last.vars.name + 1 : 0 }}"
@@ -92,7 +93,7 @@
 
 
                 <button class="submitNewInformation zoom" type="submit" style="margin-top: 25px;">
-                    <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Valider les modifications
+                    <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Créer le cours
                 </button>
 
 

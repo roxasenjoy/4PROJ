@@ -119,7 +119,7 @@ class CoursController extends AbstractController
         // - Liste des intervenants en fonction du campus
 
         $subject = new Subject();
-        $error = '';
+        $error = $errorDiminutif = '';
 
         $form = $this->createForm(AddCoursForm::class, $subject);
         $form->handleRequest($request);
@@ -129,7 +129,9 @@ class CoursController extends AbstractController
 
             $diminutif = $form->get('name')->getData();
 
-            if(strlen($diminutif) === 5) {
+            $diminutifExist = $this->em->getRepository(Subject::class)->findBy(array('name' => $diminutif));
+
+            if(strlen($diminutif) === 5 && !$diminutifExist) {
                 // On récupère toutes les informations des intervenants
                 $intervenants = $form->get('intervenants')->getData();
 
@@ -151,21 +153,38 @@ class CoursController extends AbstractController
                     $this->em->flush();
                 }
 
+                if(!$intervenants){
+                    $this->em->persist($subject);
+                    $this->em->flush();
+                }
+
                 return $this->redirectToRoute('app_cours_campus');
             } else {
-                $error = 'L\'acronyme n\'est pas valide';
+
+                // Le cours est déjà présent.
+                if($diminutifExist){
+                    $errorDiminutif = 'Ce cours exite déjà.';
+                } else {
+                    // Le cours ne possède pas le bon nombre de caractère.
+                    $error = 'L\'acronyme n\'est pas valide';
+                }
             }
         }
 
-
         return $this->render('cours/admin/add.html.twig', [
             'form' => $form->createView(),
-            'error' => $error
+            'error' => $error,
+            'errorDiminutif' => $errorDiminutif,
         ]);
     }
 
     /**
      * Afficher le détails du cours (L'intervenant du campus actuel(en fonction de l'utilisateur connecté) + tous les élèves du même campus)
+     *
+     * Accessible par les rôles suivants :
+     *  - Professeur
+     *  - L'équipe pédagogique
+     *
      * @param Request $request
      * @return Response
      */
@@ -179,6 +198,10 @@ class CoursController extends AbstractController
         $coursId = intval($request->get('id'));
         $error = '';
         $errorNote = '';
+
+        if(!$this->em->getRepository(Subject::class)->find($coursId)){
+            return $this->redirectToRoute('app_cours_campus');
+        }
 
         $data = new Campus();
 

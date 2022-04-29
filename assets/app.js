@@ -39,5 +39,6 @@ import './styles/error.scss';
 import './bootstrap';
 import './javascript/global.js';
 import  './javascript/_deleteCours.js';
+import  './javascript/_addSubject.js';
 
 

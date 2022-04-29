@@ -53,6 +53,9 @@ security:
         # ÉQUIPE PEDAGOQIQUE
         - { path: ^/admin, role: [ROLE_PEDAGO, ROLE_ADMIN] }
 
+        # INTERVENANTS
+        - { path: ^/admin/cours/details/\d+$, role: [ROLE_PEDAGO, ROLE_TEACHER, ROLE_ADMIN] }
+
 when@test:
     security:
         password_hashers:

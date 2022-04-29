@@ -6,10 +6,8 @@ use App\Repository\SubjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
-#[UniqueEntity(fields: ['name'], message: 'Le cours est déjà présent.')]
 class Subject
 {
     #[ORM\Id]
@@ -26,25 +24,24 @@ class Subject
     #[ORM\Column(type: 'float')]
     private $points;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, fetch: 'EAGER', orphanRemoval: true)]
-    private $subjectDates;
-
-    #[ORM\ManyToOne(targetEntity: StudyLevel::class, fetch:'EAGER')]
+    #[ORM\ManyToOne(targetEntity: StudyLevel::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $level;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Intervenant::class, orphanRemoval: true)]
-    private $intervenants;
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, orphanRemoval: true)]
+    private $subjectDates;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: UserGrade::class, orphanRemoval: true)]
-    private $userGrade;
+    private $userGrades;
 
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Intervenant::class)]
+    private $intervenant;
 
     public function __construct()
     {
         $this->subjectDates = new ArrayCollection();
-        $this->intervenants = new ArrayCollection();
-        $this->userGrade = new ArrayCollection();
+        $this->userGrades = new ArrayCollection();
+        $this->intervenant = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,6 +84,19 @@ class Subject
 
         return $this;
     }
+
+    public function getLevel(): ?StudyLevel
+    {
+        return $this->level;
+    }
+
+    public function setLevel(?StudyLevel $level): self
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, SubjectDate>
      */
@@ -117,14 +127,32 @@ class Subject
         return $this;
     }
 
-    public function getLevel(): ?studyLevel
+    /**
+     * @return Collection<int, UserGrade>
+     */
+    public function getUserGrades(): Collection
     {
-        return $this->level;
+        return $this->userGrades;
     }
 
-    public function setLevel(?studyLevel $level): self
+    public function addUserGrade(UserGrade $userGrade): self
     {
-        $this->level = $level;
+        if (!$this->userGrades->contains($userGrade)) {
+            $this->userGrades[] = $userGrade;
+            $userGrade->setSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserGrade(UserGrade $userGrade): self
+    {
+        if ($this->userGrades->removeElement($userGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($userGrade->getSubject() === $this) {
+                $userGrade->setSubject(null);
+            }
+        }
 
         return $this;
     }
@@ -132,15 +160,15 @@ class Subject
     /**
      * @return Collection<int, Intervenant>
      */
-    public function getIntervenants(): Collection
+    public function getIntervenant(): Collection
     {
-        return $this->intervenants;
+        return $this->intervenant;
     }
 
     public function addIntervenant(Intervenant $intervenant): self
     {
-        if (!$this->intervenants->contains($intervenant)) {
-            $this->intervenants[] = $intervenant;
+        if (!$this->intervenant->contains($intervenant)) {
+            $this->intervenant[] = $intervenant;
             $intervenant->setSubject($this);
         }
 
@@ -149,7 +177,7 @@ class Subject
 
     public function removeIntervenant(Intervenant $intervenant): self
     {
-        if ($this->intervenants->removeElement($intervenant)) {
+        if ($this->intervenant->removeElement($intervenant)) {
             // set the owning side to null (unless already changed)
             if ($intervenant->getSubject() === $this) {
                 $intervenant->setSubject(null);
@@ -159,33 +187,8 @@ class Subject
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserGrade>
-     */
-    public function getUserGrade(): Collection
+    public function __toString()
     {
-        return $this->userGrade;
-    }
-
-    public function addUserGrade(UserGrade $userGrade): self
-    {
-        if (!$this->userGrade->contains($userGrade)) {
-            $this->userGrade[] = $userGrade;
-            $userGrade->setSubject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserGrade(UserGrade $userGrade): self
-    {
-        if ($this->userGrade->removeElement($userGrade)) {
-            // set the owning side to null (unless already changed)
-            if ($userGrade->getSubject() === $this) {
-                $userGrade->setSubject(null);
-            }
-        }
-
-        return $this;
+        return $this->getName();
     }
 }
