@@ -33,7 +33,7 @@ class FilterCampusForm extends AbstractType
             'multiple' => true,
             'attr' => [
                 'placeholder' => 'Campus',
-                'class' => ''
+                'class' => 'contentFilterCampus'
             ],
         ])
 

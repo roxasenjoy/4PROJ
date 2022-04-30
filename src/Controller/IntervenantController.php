@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Intervenant;
 use App\Entity\Role;
 use App\Entity\Subject;
@@ -10,6 +11,7 @@ use App\Entity\UserExtended;
 use App\Form\AddIntervenantForm;
 use App\Form\AddStudentFormType;
 use App\Form\EditIntervenantFormType;
+use App\Form\FilterCampusForm;
 use App\Service\AuthService;
 use App\Service\EmailService;
 use App\Service\GlobalService;
@@ -64,13 +66,19 @@ class IntervenantController extends AbstractController
      *****************************************************************/
 
     #[Route('/admin/intervenant', name: 'admin_intervenant')]
-    public function getAllIntervenantsOnCampus(){
+    public function getAllIntervenantsOnCampus(Request $request){
+
+        $campus = new Campus();
+        $form = $this->createForm(FilterCampusForm::class, $campus);
+        $form->handleRequest($request);
+        $formFilter = $form->get("campus")->getViewData();
 
         // Récupérer tous les intervenants
-        $intervenants = $this->em->getRepository(User::class)->getAllTeacherRoleByCampus();
+        $intervenants = $this->em->getRepository(User::class)->getAllTeacherRoleByCampus($formFilter);
 
         return $this->render('intervenant/admin/intervenants.html.twig', [
-            'intervenants' => $intervenants
+            'intervenants' => $intervenants,
+            'form' => $form->createView(),
         ]);
 
     }
@@ -78,12 +86,12 @@ class IntervenantController extends AbstractController
     #[Route('/admin/intervenant/details/{id}', name: 'admin_intervenant_details', requirements: ['id' => '(\d+)'])]
     public function detailsIntervenant(Request $request){
 
+
         $idIntervenant              = $request->get('id');
         $user                       = $this->em->getRepository(User::class)->find($idIntervenant);
         $intervenantSubject         = $this->getSubjectByIntervenant($idIntervenant);
         $error                      = '';
         $errorField                 = '';
-
 
         $form = $this->createForm(EditIntervenantFormType::class, $user);
         $form->handleRequest($request);
@@ -103,25 +111,21 @@ class IntervenantController extends AbstractController
              */
             foreach($form->get('subjects') as $subject){
 
-                $campus = $subject->get('campus')->getData();
-                $subject = $subject->get('subject')->getData();
-
+                $campus                     = $subject->get('campus')->getData();
+                $subject                    = $subject->get('subject')->getData();
                 $isIntervenantAlreadyExist  =  $this->em->getRepository(Intervenant::class)->selectIntervenant(null,$campus->getId(),$subject->getId());
 
                 //On vérifie sur le cours donné n'est pas déjà présent (Même User/Campus/Subject)
                 if($isIntervenantAlreadyExist){
 
-                    $fullName = $isIntervenantAlreadyExist[0]['firstName'] . ' ' . $isIntervenantAlreadyExist[0]['lastName'];
-
-                    $error =    'Le cours ' . $subject->getName() . ' est déjà donné par : '
-                                . $fullName . ' à ' . $campus->getName();
+                    $fullName   = $isIntervenantAlreadyExist[0]['firstName'] . ' ' . $isIntervenantAlreadyExist[0]['lastName'];
+                    $error      = 'Le cours ' . $subject->getName() . ' est déjà donné par : ' . $fullName . ' à ' . $campus->getName();
 
                 } else {
-
-                    $newIntervenant = new Intervenant();
-                    $newIntervenant->setCampus($campus)
-                        ->setSubject($subject)
-                        ->setUser($user);
+                    $newIntervenant     = new Intervenant();
+                    $newIntervenant     ->setCampus($campus)
+                                        ->setSubject($subject)
+                                        ->setUser($user);
 
                     $this->em->persist($newIntervenant);
                 }
@@ -134,22 +138,23 @@ class IntervenantController extends AbstractController
         }
 
 
+
         return $this->render('intervenant/admin/details.html.twig', [
-            'user' => $user,
-            'intervenantSubject' => $intervenantSubject,
-            'form' => $form->createView(),
-            'error' => $error,
-            'errorField' => $errorField,
-            'intervenantId' => $idIntervenant
+            'user'                  => $user,
+            'intervenantSubject'    => $intervenantSubject,
+            'form'                  => $form->createView(),
+            'error'                 => $error,
+            'errorField'            => $errorField,
+            'intervenantId'         => $idIntervenant
         ]);
     }
 
     #[Route('/admin/intervenants/add', name: 'admin_intervenant_add')]
     public function addIntervenant(Request $request, UserPasswordHasherInterface $userPasswordHasher){
 
-        $user = new User();
-        $userExtended = new UserExtended();
-        $error = "";
+        $user           = new User();
+        $userExtended   = new UserExtended();
+        $error          = "";
 
         // Edition de la fiche de l'étudiant
         $form = $this->createForm(AddIntervenantForm::class);
@@ -184,12 +189,12 @@ class IntervenantController extends AbstractController
                     ->setYearEntry(0)
                     ->setYearExit(0)
                     ->setActualLevel(null)
+                    ->setPreviousLevel(null)
                     ->setNbAbscence(0)
                     ->setIsStudent(false)
                     ->setHasProContract(false)
                     ->setIsHired(false)
                     ->setActualLevel(null)
-                    ->setPreviousLevel(null)
                     ->setUser($user)
                 ;
 
@@ -206,7 +211,7 @@ class IntervenantController extends AbstractController
         }
 
         return $this->render('intervenant/admin/add.html.twig', [
-            'form' => $form->createView(),
+            'form'  => $form->createView(),
             'error' => $error,
         ]);
 
@@ -215,13 +220,11 @@ class IntervenantController extends AbstractController
     #[Route('/admin/intervenants/delete', name: 'admin_intervenant_delete', requirements: ['id' => '(\d+)'])]
     public function deleteIntervenant(Request $request){
 
-        $idIntervenant =  intval($request->get('intervenantId'));
-        $idCampus = intval($request->get('campusId'));
-        $idSubject = intval($request->get('subjectId'));
-
-        $deleteId = $this->em->getRepository(Intervenant::class)->selectIntervenant($idIntervenant, $idCampus, $idSubject);
-
-        $objectIntervenant = $this->em->getRepository(Intervenant::class)->find($deleteId[0]['id']);
+        $idIntervenant      = intval($request->get('intervenantId'));
+        $idCampus           = intval($request->get('campusId'));
+        $idSubject          = intval($request->get('subjectId'));
+        $deleteId           = $this->em->getRepository(Intervenant::class)->selectIntervenant($idIntervenant, $idCampus, $idSubject);
+        $objectIntervenant  = $this->em->getRepository(Intervenant::class)->find($deleteId[0]['id']);
 
         $this->em->remove($objectIntervenant);
         $this->em->flush();
@@ -267,10 +270,9 @@ class IntervenantController extends AbstractController
         }
 
        // Enleve les array en double.
-        $combined = array_map("unserialize", array_unique(array_map("serialize", $combined)));
-
+        $combined       = array_map("unserialize", array_unique(array_map("serialize", $combined)));
         // On tri les données pour qu'elles se retrouvent dans l'ordre
-        $sortCombined = array();
+        $sortCombined   = array();
         foreach ($combined as $key => $row)
         {
             $sortCombined[$key] = $row['name'];

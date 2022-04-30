@@ -26,7 +26,7 @@ class UserGrade
     #[ORM\Column(type: 'datetime')]
     private $date;
 
-    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'userGrades')]
+    #[ORM\ManyToOne(targetEntity: Subject::class, fetch: "EAGER", inversedBy: 'userGrades')]
     #[ORM\JoinColumn(nullable: false)]
     private $subject;
 

@@ -23,13 +23,9 @@ class Intervenant
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
-    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'intervenant')]
+    #[ORM\ManyToOne(targetEntity: Subject::class, fetch: "EAGER", inversedBy: 'intervenant')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private $subject;
-
-    public function __construct()
-    {
-        $this->subjects = new ArrayCollection();
-    }
 
 
     public function getId(): ?int

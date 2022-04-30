@@ -199,14 +199,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @return float|int|mixed|string
      */
-    public function getAllTeacherRoleByCampus(){
+    public function getAllTeacherRoleByCampus($filterCampus = []){
         $qb = $this->createQueryBuilder('u')
                     ->select('u.id', 'u.firstName', 'u.lastName', 'campus.name as campusName')
                     ->join('u.campus', 'campus')
                     ->join('u.role', 'role')
                     ->where('role.id = :teacherRole')
                     ->setParameter(':teacherRole', self::ROLE_PROFESSEUR)
-                    ->orderBy('u.firstName', 'ASC');
+                    ->orderBy('campus.name', 'ASC');
+
+        if($filterCampus){
+            $qb->andWhere('campus.id IN (:filterCampus)')
+                ->setParameter(':filterCampus', $filterCampus);
+        }
 
         return $qb->getQuery()->getResult();
 

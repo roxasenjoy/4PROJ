@@ -28,7 +28,7 @@ class EmailService
     }
 
 
-    public function createAccount($user, $password, ){
+    public function createAccount($user, $password){
         $email = (new TemplatedEmail())
             ->from(new Address('madjid@supinfo.com', 'Création de votre compte Madjid Booster'))
             ->to($user->getEmail())

@@ -36,7 +36,7 @@
                                 <a class="card shadow zoom" href="{{ path('admin_intervenant_details', {id: intervenant.id}) }}">
                                     <div class="logo-nav ">
                                         <p class="actualYear four"> {{ intervenant.campusName }}</p>
-                                        <i class="fa-solid fa-book-open five"></i>
+                                        <i class="fa-solid fa-chalkboard-user" style="color: #053869"></i>
                                         <p id="fullName">{{ intervenant.firstName }} {{ intervenant.lastName }}</p>
                                     </div>
                                 </a>
@@ -54,27 +54,9 @@
                         <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
                         <hr>
 
-                        {% block promotion %}
-                            <div class="containerClass">
-{#                                <a href="{{ path('app_cours_promotion', {promotion: 1}) }}"#}
-{#                                   class="{{ promotion == 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.1 </a>#}
-
-{#                                <a href="{{ path('app_cours_promotion', {promotion: 2}) }}"#}
-{#                                   class="{{ promotion == 2 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.2 </a>#}
-
-{#                                <a href="{{ path('app_cours_promotion', {promotion: 3}) }}"#}
-{#                                   class="{{ promotion == 3 ? 'transition shadow selected zoom' :'transition shadow' }}"> B.Sc </a>#}
-
-{#                                <a href="{{ path('app_cours_promotion', {promotion: 4}) }}"#}
-{#                                   class="{{ promotion == 4 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.1 </a>#}
-
-{#                                <a href="{{ path('app_cours_promotion', {promotion: 5}) }}"#}
-{#                                   class="{{ promotion == 5 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.2 </a>#}
-
-{#                                <a href="{{ path('app_cours_campus')}}"#}
-{#                                   class="{{ promotion > 5 or promotion < 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> Toutes les promotions </a>#}
-                            </div>
-                        {% endblock %}
+                        <div class="containerFilterCampus">
+                            {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
+                        </div>
                     </section>
 
 

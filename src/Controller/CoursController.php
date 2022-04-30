@@ -204,10 +204,8 @@ class CoursController extends AbstractController
         }
 
         $data = new Campus();
-
         $form = $this->createForm(FilterCampusForm::class, $data);
         $form->handleRequest($request);
-
         $filter = $form->get("campus")->getViewData();
 
         $getCours = $this->em->getRepository(Subject::class)->find($coursId);

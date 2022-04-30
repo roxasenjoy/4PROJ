@@ -1,0 +1,56 @@
+@import "../variables";
+
+.containerFilterCampus {
+    .contentFilterCampus, div{ // L'id du formulaire -> On le retrouve grâce à l'inspecteur
+        display: flex;
+        flex-wrap: wrap;
+
+
+        // Si  le bouton est check, on change sa couleur
+        input[type=checkbox]:checked + label {
+            background-color: $blue;
+            color: white;
+        }
+
+        input {
+            display: none;
+
+        }
+
+        label, input {
+            flex-grow: 1;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: $white;
+            text-align: center;
+            font-size: 1.25em;
+            text-decoration: none;
+            color: $blue;
+            font-family: $msBold;
+            box-shadow: 0 3px 8px #0000003d;
+            transform: scale(1);
+            transition: all 0.5s ease-in-out;
+            text-transform: uppercase;
+
+            &:hover,
+            &.selected {
+                transition: all 0.5s ease-in-out;
+                transform: scale(1.05);
+                cursor: pointer;
+            }
+        }
+        button{
+            background-color: $green;
+            color: $white;
+            flex-grow: 1;
+            padding: 10px;
+            margin: 10px;
+            font-family: $msBold;
+            border:none;
+            font-size: 1.25em;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    }
+}

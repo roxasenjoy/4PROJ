@@ -197,8 +197,8 @@
                         <hr>
 
                         <!-- Afficher les campus (Tous les campus pour le super admin ou le campus de l'utilisateur connecté) -->
-                        <div class="containerCours">
-                            {% include  'cours/admin/_filter.html.twig' with {form: form} only %}
+                        <div class="containerFilterCampus">
+                            {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
                         </div>
 
                     </section>
