@@ -10,6 +10,8 @@ use App\Service\AuthService;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
@@ -26,7 +28,7 @@ class _addSubjectFormType extends AbstractType
     {
 
         $builder
-            ->add('name', EntityType::class, [
+            ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
                 'label' => false,
@@ -35,7 +37,7 @@ class _addSubjectFormType extends AbstractType
                 ],
             ])
 
-            ->add('test', EntityType::class, [
+            ->add('subject', EntityType::class, [
                 'class' => Subject::class,
                 'choice_name' => 'name',
                 'label' => false,
@@ -43,10 +45,7 @@ class _addSubjectFormType extends AbstractType
                     'class' => 'emailUser selectNewCours'
                 ],
 
-            ])
-
-
-        ;
+            ]);
     }
 
 }

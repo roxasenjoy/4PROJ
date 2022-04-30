@@ -26,9 +26,42 @@
             </nav>
         {% endblock %}
 
+        {% if error %}
+
+            <section class="shadow errorBackground">
+                <ul style="margin-left: 25px">
+                    <li>{{ error }}</li>
+                </ul>
+            </section>
+
+        {% endif %}
+
+        {% if errorField %}
+
+            <section class="shadow errorBackground">
+                <ul style="margin-left: 25px">
+                    <li>Les valeurs ne sont pas correctes.</li>
+                </ul>
+            </section>
+
+        {% endif %}
+
         <div id="detailsIntervenant">
             <section class="left-section shadow" >
-                <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> {{ user.firstName }} {{ user.lastName }} </h3>
+
+
+
+                <h3 class="titleSection">
+                    <i class="fa-solid fa-circle-user"></i>
+                    {{ user.firstName }} {{ user.lastName }}
+                    {% if errorField %}
+                        <span class="errorBackground errorTitle shadow"> {{ errorField }} </span>
+                    {% endif %}
+
+                </h3>
+
+
+
                 <hr>
 
                 <div class="personnalInformation">
@@ -53,7 +86,7 @@
             -->
             <section class="shadow scolarInformationContainer">
                 <div class="scolarInformation">
-                    <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> Liste des cours </h3>
+                    <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> Liste des cours </h3>
                     <hr>
 
                     {% for subject in intervenantSubject %}
@@ -62,19 +95,20 @@
                             <div class="intervenantsTable">
 
                                 <div class="section left">
-                                    <p class="lessonName"> {{subject.name}} </p>
+                                    <p class="lessonName"> {{subject.campusName}} </p>
+                                    <p class="lessonName" id="intervenantSubjectName"> {{subject.name}} </p>
                                 </div>
 
 
                                 <div class="section center">
-                                    <p> {{subject.firstName}} {{ subject.lastName}} </p>
+                                      <p>{{ subject.fullName}} </p>
                                 </div>
 
                                 <div class="section right">
-                                    <a  class="edit zoom"><i class="fa-solid fa-pen-to-square"></i></a>
-
                                     {% if subject.intervenantId != null %}
-                                        <a href="{{ path('admin_intervenant_delete', {intervenantId: subject.intervenantId, campusId: subject.campusId, subjectId: subject.id}) }}" class="delete zoom">
+                                        <a href="{{ path('admin_intervenant_delete', {intervenantId: subject.intervenantId, campusId: subject.campusId, subjectId: subject.id}) }}"
+                                            class="delete zoom"
+                                            id="deleteIntervenantSubject">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </a>
                                     {% endif %}
@@ -102,7 +136,7 @@
 
 
         {{ form_start(form) }}
-            <div id="detailsIntervenant">
+            <div id="formIntervenant" class="hidden">
                 <section class="left-section shadow" >
                     <h3 class="titleSection">
                         <i class="fa-solid fa-circle-user"></i>
@@ -128,16 +162,57 @@
 
 
                 <!--
-                    Affichage sans l'édition
+                Affichage sans l'édition
+            -->
+                <section class="shadow scolarInformationContainer">
+                    <div class="scolarInformation">
+                        <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> Liste des cours </h3>
+                        <hr>
+
+                        {% for subject in intervenantSubject %}
+
+                            <div class="intervenant-container">
+                                <div class="intervenantsTable">
+
+                                    <div class="section left">
+                                        <p class="lessonName"> {{subject.campusName}} </p>
+                                        <p class="lessonName" id="intervenantSubjectName"> {{subject.name}} </p>
+                                    </div>
+
+
+                                    <div class="section center">
+                                        <p>{{ subject.fullName}} </p>
+                                    </div>
+
+                                    <div class="section right">
+                                        {% if subject.intervenantId != null %}
+                                            <a href="{{ path('admin_intervenant_delete', {intervenantId: subject.intervenantId, campusId: subject.campusId, subjectId: subject.id}) }}"
+                                               class="delete zoom"
+                                               id="deleteIntervenantSubject">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <!--
+                    Affichage avec l'édition
                 -->
                 <section class="shadow scolarInformationContainer">
                     <div class="scolarInformation">
-                        <h3 class="titleSection"><i class="fa-solid fa-circle-user"></i> Liste des cours </h3>
+                        <h3 class="titleSection"><i class="fa-solid fa-plus"></i> Ajouter des cours </h3>
                         <hr>
 
                         <!-- Bouton qui permet de rajouter des intervenants à l'infini -->
-                        <div class="addNewSubjectContainer">
-                            <a id="addNewSubject" data-collectionHolderClass="listNewSubject">
+                        <div class="addNewSubjectContainer transition" id="addNewSubject" data-collectionHolderClass="listNewSubject">
+                            <a>
                                 <i class="fa-solid fa-plus"></i>
                                 Ajouter un cours
                             </a>
@@ -146,22 +221,44 @@
                         <div class="listNewSubject transition"
                              data-index="{{ form.subjects|length > 0 ? form.subjects|last.vars.name + 1 : 0 }}"
                              data-prototype="{{ form_widget(form.subjects.vars.prototype)|e('html_attr') }}">
+
                         </div>
+                        {{ form_end(form) }}
 
                     </div>
                 </section>
 
+
+
                 <div class="btnContainer">
-                    <p class="editInformation zoom" id="editIntervenant"> Éditer les informations</p>
+                    <button class="submitNewInformation zoom" type="submit">
+                        <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Valider les modifications
+                    </button>
+                    <a class="cancelInformation zoom" style="text-decoration: none;" id="cancelIntervenant"> Annuler</a>
                 </div>
             </div>
-
-        {{ form_end(form) }}
-
+    </div>
 
 
+    <div class="containerValidationMessage hidden shadow" id="modalDeleteSubjectIntervenant">
+        <div class="centered">
+            <h3>Confirmez-vous la suppression ?</h3>
+            <p> Si vous confirmez, votre l'intervenant ne sera plus attribuer à ce cours</p>
+
+            <!-- Delete -->
+            <a  class="deleteValidation transition" href="{{ path('admin_intervenant_delete', {id: intervenantId}) }}">
+                <i  class="fas fa-trash"></i>
+                Supprimer
+            </a>
 
 
+
+            <!-- Cancel -->
+            <button class="cancelValidation transition" id="cancelValidation">
+                <i  class="fas fa-times" ></i>
+                Annuler
+            </button>
+        </div>
     </div>
 
 {% endblock %}

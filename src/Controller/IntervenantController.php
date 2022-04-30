@@ -13,6 +13,7 @@ use App\Form\EditIntervenantFormType;
 use App\Service\AuthService;
 use App\Service\EmailService;
 use App\Service\GlobalService;
+use App\Service\RegexService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,12 +33,14 @@ class IntervenantController extends AbstractController
         AuthService $authService,
         EmailService $emailService,
         GlobalService $globalService,
+        RegexService $regexService,
     )
     {
         $this->em = $em;
         $this->authService = $authService;
         $this->emailService = $emailService;
         $this->globalService = $globalService;
+        $this->regexService = $regexService;
     }
 
     #[Route('/intervenant', name: 'app_intervenant')]
@@ -75,25 +78,69 @@ class IntervenantController extends AbstractController
     #[Route('/admin/intervenant/details/{id}', name: 'admin_intervenant_details', requirements: ['id' => '(\d+)'])]
     public function detailsIntervenant(Request $request){
 
-        $intervenantId          = $request->get('id');
-        $user                   = $this->em->getRepository(User::class)->find($intervenantId);
-        $intervenantSubject     = $this->getSubjectByIntervenant($intervenantId);
-        $newIntervenant         = new Subject();
+        $idIntervenant              = $request->get('id');
+        $user                       = $this->em->getRepository(User::class)->find($idIntervenant);
+        $intervenantSubject         = $this->getSubjectByIntervenant($idIntervenant);
+        $error                      = '';
+        $errorField                 = '';
 
 
         $form = $this->createForm(EditIntervenantFormType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-
-            dump('test');
-
+        /**
+         * Modification du l'intervenant
+         */
+        if(!$this->regexService->stringValidation($form->get('firstName')->getData()) ||
+            !$this->regexService->stringValidation($form->get('lastName')->getData()))
+        {
+            $errorField = "ERREUR";
         }
+
+        if($form->isSubmitted() && $form->isValid()){
+            /*
+             * Ajout des cours en fonction de l'intervenant
+             */
+            foreach($form->get('subjects') as $subject){
+
+                $campus = $subject->get('campus')->getData();
+                $subject = $subject->get('subject')->getData();
+
+                $isIntervenantAlreadyExist  =  $this->em->getRepository(Intervenant::class)->selectIntervenant(null,$campus->getId(),$subject->getId());
+
+                //On vérifie sur le cours donné n'est pas déjà présent (Même User/Campus/Subject)
+                if($isIntervenantAlreadyExist){
+
+                    $fullName = $isIntervenantAlreadyExist[0]['firstName'] . ' ' . $isIntervenantAlreadyExist[0]['lastName'];
+
+                    $error =    'Le cours ' . $subject->getName() . ' est déjà donné par : '
+                                . $fullName . ' à ' . $campus->getName();
+
+                } else {
+
+                    $newIntervenant = new Intervenant();
+                    $newIntervenant->setCampus($campus)
+                        ->setSubject($subject)
+                        ->setUser($user);
+
+                    $this->em->persist($newIntervenant);
+                }
+            }
+
+            if(!$error && !$errorField){
+                $this->em->flush();
+                return $this->redirectToRoute('admin_intervenant_details', array('id' => $idIntervenant));
+            }
+        }
+
 
         return $this->render('intervenant/admin/details.html.twig', [
             'user' => $user,
             'intervenantSubject' => $intervenantSubject,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'error' => $error,
+            'errorField' => $errorField,
+            'intervenantId' => $idIntervenant
         ]);
     }
 
@@ -172,7 +219,7 @@ class IntervenantController extends AbstractController
         $idCampus = intval($request->get('campusId'));
         $idSubject = intval($request->get('subjectId'));
 
-        $deleteId = $this->em->getRepository(Intervenant::class)->deleteIntervenantFromSubject($idIntervenant, $idCampus, $idSubject);
+        $deleteId = $this->em->getRepository(Intervenant::class)->selectIntervenant($idIntervenant, $idCampus, $idSubject);
 
         $objectIntervenant = $this->em->getRepository(Intervenant::class)->find($deleteId[0]['id']);
 
@@ -196,6 +243,7 @@ class IntervenantController extends AbstractController
             $comb = array(
                 'id'            => $subject['id'],
                 'name'          => $subject['name'],
+                'fullName'      => $subject['fullName'],
                 'levelName'     => $subject['levelName'],
                 'levelYear'     => $subject['levelYear'],
                 'intervenantId' => null,

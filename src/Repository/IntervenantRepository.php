@@ -120,52 +120,28 @@ class IntervenantRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function deleteIntervenantFromSubject($idIntervenant, $idCampus, $idSubject){
+    public function selectIntervenant($idIntervenant, $idCampus, $idSubject){
 
         $qb =   $this->createQueryBuilder('intervenant')
-                ->select('intervenant.id')
+                ->select('intervenant.id', 'user.firstName', 'user.lastName')
                 ->join('intervenant.user', 'user')
                 ->join('intervenant.subject', 'subject')
                 ->join('intervenant.campus', 'campus')
 
-                ->where('user.id = :idIntervenant')
-                ->andWhere('campus.id = :idCampus')
+                ->where('campus.id = :idCampus')
                 ->andWhere('subject.id = :idSubject')
 
-                ->setParameter(':idIntervenant', $idIntervenant)
                 ->setParameter(':idCampus', $idCampus)
                 ->setParameter(':idSubject', $idSubject);
+
+
+
+        if($idIntervenant !== null){
+            $qb->andWhere('user.id = :idIntervenant')
+                ->setParameter(':idIntervenant', $idIntervenant);
+        }
 
         return $qb->getQuery()->getResult();
 
     }
-
-    // /**
-    //  * @return Intervenant[] Returns an array of Intervenant objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Intervenant
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -1,4 +1,26 @@
 
+let editIntervenant = document.getElementById('editIntervenant');
+let cancelIntervenant = document.getElementById('cancelIntervenant');
+
+let formIntervenant = document.getElementById('formIntervenant');
+let detailsIntervenant = document.getElementById('detailsIntervenant');
+
+
+if(editIntervenant){
+    editIntervenant.addEventListener('click', function(){
+        formIntervenant.classList = '';
+        detailsIntervenant.classList = 'hidden';
+    });
+
+    cancelIntervenant.addEventListener('click', function(){
+        formIntervenant.classList = 'hidden';
+        detailsIntervenant.classList = '';
+    });
+}
+
+
+
+
 // Récupération du bouton qui permte de rajouter des intervenants
 const newSubject = document.getElementById('addNewSubject')
 
@@ -35,7 +57,7 @@ if(newSubject){
         // On créer un élément random pour pouvoir rajouter les informations
         const item = document.createElement('p');
 
-        item.classList = 'newIntervenantContent';
+        item.classList = 'newSubjectContent';
 
         // On remplace le __name__ par l'index de l'intervenant créé
         item.innerHTML = listNewSubject

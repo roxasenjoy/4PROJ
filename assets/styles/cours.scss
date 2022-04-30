@@ -257,7 +257,11 @@
     Ajouter un cours
  ***********************/
 .listNewIntervenant .newIntervenantContent,
-#add_cours_form_intervenants div div{
+#add_cours_form_intervenants div div,
+
+.listNewSubject .newSubjectContent,
+#edit_intervenant_form_subjects div div
+{
     border-bottom: 0.5px solid #c9ccd3;
     display: flex;
     flex-wrap: wrap;
@@ -265,14 +269,29 @@
 }
 
 .listNewIntervenant .newIntervenantContent div,
-#add_cours_form_intervenants div div{
+#add_cours_form_intervenants div div,
+
+.listNewSubject .newSubjectContent div,
+#edit_intervenant_form_subjects div div{
     display: flex;
     flex-wrap: wrap;
     margin: 10px 0;
 }
 
+#edit_intervenant_form_subjects div div{
+    margin-left: 5px ;
+}
+
+#edit_intervenant_form_subjects div div p{
+    margin-bottom: initial !important;
+    margin-left: 5px !important;
+}
+
 .listNewIntervenant .newIntervenantContent div select,
-#add_cours_form_intervenants div div div select{
+#add_cours_form_intervenants div div div select,
+
+.listNewSubject .newSubjectContent div select,
+#edit_intervenant_form_subjects div div div select{
     background-color: $white;
     border-radius: 8px;
     flex-grow: 1;
@@ -280,12 +299,18 @@
     cursor: pointer;
 }
 
-#add_cours_form_intervenants div div div select{
+#add_cours_form_intervenants div div div select,
+
+#edit_intervenant_form_subjects div div div select{
     padding: 15px 10px;
 }
 
 .listNewIntervenant .newIntervenantContent p i,
-#add_cours_form_intervenants div div p{
+#add_cours_form_intervenants div div p,
+
+.listNewSubject .newSubjectContent p i,
+#edit_intervenant_form_subjects div div p
+{
     background-color: $red;
     color: $white;
     font-size: 1.25em;
@@ -296,18 +321,29 @@
     cursor: pointer;
 }
 
+.listNewSubject .newSubjectContent p{
+    margin-bottom: 0px !important;
+}
+
 .listNewIntervenant .newIntervenantContent div div:nth-child(2)
-#add_cours_form_intervenants div div div:nth-child(2){
+#add_cours_form_intervenants div div div:nth-child(2)
+{
     width: 25em !important;
 }
 
 .newIntervenantContent div div select::-ms-expand,
-#add_cours_form_intervenants div div div select::-ms-expand{
+#add_cours_form_intervenants div div div select::-ms-expand,
+
+.listNewSubject .newSubjectContent div div select::-ms-expand,
+#edit_intervenant_form_subjects div div div select::-ms-expand{
     display: none;
 }
 
 .listNewIntervenant .newIntervenantContent div div,
-#add_cours_form_intervenants div div div {
+#add_cours_form_intervenants div div div,
+
+.listNewSubject .newSubjectContent div div,
+#edit_intervenant_form_subjects div div div{
     position: relative;
     display: flex;
     height: 3em;
@@ -318,7 +354,10 @@
     margin-right: 25px;
 }
 .listNewIntervenant .newIntervenantContent div div::after,
-#add_cours_form_intervenants div div div::after{
+#add_cours_form_intervenants div div div::after,
+
+.listNewSubject .newSubjectContent div div::after,
+#edit_intervenant_form_subjects div div div::after{
     content: '\25BC';
     position: absolute;
     top: 0;
@@ -330,7 +369,8 @@
     pointer-events:none;
     transition:.25s all ease;
 }
-.newIntervenantContent:hover::after {
+.newIntervenantContent:hover::after,
+.newSubjectContent:hover::after{
     color: #23b499;
 }
 
@@ -348,7 +388,8 @@
     background: #e6e7eb;
 }
 
-.addNewIntervenantContainer{
+.addNewIntervenantContainer,
+.addNewSubjectContainer{
     background: $blue;
     padding: 10px 20px;
     font-family: $msBold;
@@ -356,13 +397,16 @@
     border-radius: 8px;
     text-align: center;
     width: 15em;
+    color: $white;
 
 
     &:hover{
         background: $darkBlue;
+        cursor: pointer;
     }
 
-    #addNewIntervenant{
+    #addNewIntervenant,
+    #addNewSubject{
         color: $white;
         text-decoration: none;
     }
@@ -496,37 +540,56 @@
         }
     }
 
-    .addNewIntervenantContainer{
-        width: initial;
+    .addNewIntervenantContainer,
+    .addNewSubjectContainer{
+        width: initial !important;
     }
 
     .listNewIntervenant .newIntervenantContent div div:nth-child(2),
-    #add_cours_form_intervenants div div div:nth-child(2){
+    #add_cours_form_intervenants div div div:nth-child(2),
+
+    .listNewSubject .newSubjectContent div div:nth-child(2),
+    #edit_intervenant_form_subjects div div div:nth-child(2){
         width: 100% !important;
     }
 
     .newIntervenantContent div,
-    #add_cours_form_intervenants div{
+    #add_cours_form_intervenants div,
+
+    .newSubjectContent div,
+    #edit_intervenant_form_subjects div{
         position: relative;
         width: 100%;
     }
 
     .listNewIntervenant .newIntervenantContent div div,
-    #add_cours_form_intervenants div div div{
+    #add_cours_form_intervenants div div div,
+
+    .listNewSubject .newSubjectContent div div,
+    #edit_intervenant_form_subjects div div div
+    {
         width: 100% !important;
         margin-right: initial !important;
     }
 
     .listNewIntervenant .newIntervenantContent,
-    #add_cours_form_intervenants div div{
+    #add_cours_form_intervenants div div,
+
+    .listNewSubject .newSubjectContent,
+    #edit_intervenant_form_subjects div div{
         position: relative;
         width: 100%;
         text-align: center;
         justify-content: center;
     }
 
-    .listNewIntervenant .newIntervenantContent p i{
+    .listNewIntervenant .newIntervenantContent p i,
+    .listNewSubject .newSubjectContent p i,{
         margin-bottom: 10px;
+    }
+
+    .scolarInformationContainer .scolarInformation p{
+        margin: initial !important;
     }
 
 

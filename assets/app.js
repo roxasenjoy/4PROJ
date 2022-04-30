@@ -38,7 +38,7 @@ import './styles/error.scss';
 // start the Stimulus application
 import './bootstrap';
 import './javascript/global.js';
-import  './javascript/_deleteCours.js';
+import  './javascript/_deleteSubject.js';
 import  './javascript/_addSubject.js';
 
 

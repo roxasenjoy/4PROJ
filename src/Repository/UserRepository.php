@@ -180,8 +180,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-    /** Return tous les utilisateurs pour le query_builder de la création d'un cours */
-    public function getAllTeacher(){
+    /**
+     * Return tous les utilisateurs pour le query_builder de la création d'un cours
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function queryGetAllTeacher(){
 
         $qb = $this->createQueryBuilder('u')
             ->join('u.campus', 'campus')
@@ -193,18 +196,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
+    /**
+     * @return float|int|mixed|string
+     */
     public function getAllTeacherRoleByCampus(){
-
-        $user = $this->authService->isAuthenticatedUser();
-
         $qb = $this->createQueryBuilder('u')
                     ->select('u.id', 'u.firstName', 'u.lastName', 'campus.name as campusName')
                     ->join('u.campus', 'campus')
                     ->join('u.role', 'role')
                     ->where('role.id = :teacherRole')
-                    ->andWhere('campus.id = :userCampus')
                     ->setParameter(':teacherRole', self::ROLE_PROFESSEUR)
-                    ->setParameter(':userCampus', $user->getCampus()->getId())
                     ->orderBy('u.firstName', 'ASC');
 
         return $qb->getQuery()->getResult();

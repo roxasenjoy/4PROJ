@@ -53,7 +53,7 @@ class _addIntervenantFormType extends AbstractType
                 'choice_label' => 'email',
                 'label' => false,
                 'query_builder' => function(UserRepository $user){
-                    return $user->getAllTeacher();
+                    return $user->queryGetAllTeacher();
                 },
                 'attr' => [
                     'class' => 'emailUser selectNewCours'
