@@ -27,7 +27,7 @@
         {% endblock %}
 
 
-    {% if error or errorNote %}
+    {% if error or errorNote or errorDate %}
         <section class="shadow errorBackground">
             <ul style="margin-left: 25px">
 
@@ -39,18 +39,17 @@
                     <li>Être généreux c'est bien mais les valeurs doivent rester entre 0 et 20.</li>
                 {% endif %}
 
+                {% if errorDate %}
+                    <li> {{ errorDate }}</li>
+                {% endif %}
+
             </ul>
         </section>
     {% endif %}
 
     <main class="container-two-rows">
-
-
-
         <section class="left-section shadow">
             <h3 class="titleSection" id="titleCours">
-
-
 
                 <i class="fa-solid fa-book-open"></i>
                 {{ actualCours.name }} -
@@ -166,6 +165,11 @@
                     <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
                     <hr>
 
+                    <p class="addHour zoom" id="addHour">
+                        <i class="fa-solid fa-clock"></i>
+                        Ajouter une heure de cours
+                    </p>
+
                     <p class="editCours zoom" id="editCours">
                         <i class="fa-solid fa-pen-to-square"></i>
                         Éditer le cours
@@ -228,6 +232,42 @@
                 <i  class="fas fa-times" ></i>
                 Annuler
             </button>
+        </div>
+    </div>
+
+    <div class="modalAddHours hidden shadow" id="modalAddHours">
+        <div class="centered">
+            {{ form_start(addHour) }}
+
+
+            {% if errorDate != "t" %}
+
+            {% endif %}
+
+            <div class="datesContainer">
+
+                <div class="dateBegin">
+                    <span class="label"> {{ form_label(addHour.dateBegin) }} :</span>
+                    <span>{{ form_widget(addHour.dateBegin) }}</span>
+                </div>
+                <div class="dateEnd">
+                    <span class="label">{{ form_label(addHour.dateEnd) }} :</span>
+                    <span class="date">{{ form_widget(addHour.dateEnd) }}</span>
+                </div>
+            </div>
+
+
+
+
+            <button class="addNewHours transition shadow" type="submit">
+                Ajouter
+            </button>
+
+            <a class="cancelValidation transition shadow" id="cancelDate">
+                Annuler
+            </a>
+
+            {{ form_end(addHour) }}
         </div>
     </div>
 

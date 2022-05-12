@@ -6,9 +6,11 @@ use App\Entity\Campus;
 use App\Entity\Intervenant;
 use App\Entity\Role;
 use App\Entity\Subject;
+use App\Entity\SubjectDate;
 use App\Entity\User;
 use App\Entity\UserGrade;
 use App\Form\AddCoursForm;
+use App\Form\AddHourForm;
 use App\Form\EditCoursForm;
 use App\Form\FilterCampusForm;
 use App\Service\AuthService;
@@ -204,15 +206,57 @@ class CoursController extends AbstractController
         }
 
         $data = new Campus();
+        /* Formulaire pour la modification des notes */
         $form = $this->createForm(FilterCampusForm::class, $data);
         $form->handleRequest($request);
         $filter = $form->get("campus")->getViewData();
 
+        /* Liste des cours et des intervenants */
         $getCours = $this->em->getRepository(Subject::class)->find($coursId);
         $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenantsPerCampus($filter, $coursId);
 
+        /* Liste des étudiants */
         $studentsGrades = $this->em->getRepository(User::class)->getAllStudentPerCours($filter, $coursId);
         $allStudents = $this->em->getRepository(User::class)->getAllStudentsPerLevel($filter, $getCours);
+
+        /* Formulaire pour ajouter une date */
+
+        $errorDate = '';
+        $dateCours = new SubjectDate();
+        $dateForm = $this->createForm(addHourForm::class, $dateCours);
+        $dateForm->handleRequest($request);
+        /**
+         * Formulaire pour rajouter une heure pour le cours en question
+         */
+        if($dateForm->isSubmitted() && $dateForm->isValid()){
+
+            $begin = $dateForm->get("dateBegin")->getData();
+            $end = $dateForm->get("dateEnd")->getData();
+
+
+            if($begin > $end){
+                $errorDate = "Oups... Le cours se termine avant de commencer";
+            } else {
+
+                foreach($allStudents as $studentValue){
+                    $dateCours = new SubjectDate();
+                    $dateCours  ->setUser($this->em->getRepository(User::class)->find($studentValue['id']))
+                                ->setDateBegin($begin)
+                                ->setDateEnd($end)
+                                ->setSubject($getCours);
+
+                    $this->em->persist($dateCours);
+                    $this->em->flush();
+
+                }
+
+                unset($dateForm);
+                $dateCours = new SubjectDate();
+                $dateForm = $this->createForm(addHourForm::class, $dateCours);
+
+            }
+
+        }
 
         /**
          * Afficher les étudiants qui ne possèdent pas encore de note
@@ -349,7 +393,9 @@ class CoursController extends AbstractController
             'editForm' => $editForm->createView(),
             'errorNote' => $errorNote,
             'error' => $error,
-            'coursId' => $coursId
+            'coursId' => $coursId,
+            'addHour' => $dateForm->createView(),
+            'errorDate' => $errorDate
         ]);
     }
 

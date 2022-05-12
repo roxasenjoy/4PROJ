@@ -55,7 +55,6 @@ class IntervenantController extends AbstractController
             $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
         }
 
-
         return $this->render('intervenant/intervenant.html.twig', [
             'intervenants' => $intervenants
         ]);

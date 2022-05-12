@@ -55,10 +55,6 @@ class IntervenantRepository extends ServiceEntityRepository
             ->join('user.userExtended', 'ux')
             ->join('user.campus', 'campus')
             ->join('ux.actualLevel', 'sl')
-            ->where('campus.id = :campusId')
-            ->andWhere('sl.year = :userActualLevel')
-            ->setParameter(':userActualLevel', $user->getUserExtended()->getActualLevel()->getYear())
-            ->setParameter('campusId', $user->getCampus()->getId())
             ->getQuery()
             ->getResult()
             ;

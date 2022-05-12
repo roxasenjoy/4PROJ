@@ -150,7 +150,8 @@
 
             .editCours,
             .submitNewInformation,
-            .cancelInformation {
+            .cancelInformation,
+            .addHour{
                 text-decoration: none;
                 background: $yellow;
                 color: $white;
@@ -171,6 +172,10 @@
 
                 &.cancelInformation {
                     background-color: $red;
+                }
+
+                &.addHour{
+                    background-color: $blue;
                 }
 
                 &:hover{
@@ -362,7 +367,8 @@
     Validation de suppression
 ***********/
 
-.containerValidationMessage{
+.containerValidationMessage,
+.modalAddHours{
     position: fixed;
     top: 0;
     left: 0;
@@ -441,15 +447,71 @@
     }
 }
 
+.modalAddHours{
+    .centered{
+
+        h3{
+            margin-bottom: 50px !important;
+        }
+
+        .datesContainer{
+            div{
+
+                .date{
+                    display: flex;
+                    justify-content: left;
+                    flex: 1 100%;
+                    margin-bottom: 15px;
+
+
+
+                    select{
+                        color: $blue;
+                        font-size: 1em;
+                        padding: 5px 10px;
+                        margin: 5px;
+                        border: none;
+                        border-bottom: solid 2px $blue;
+                    }
+
+                    #add_hour_form_dateBegin_time,
+                    #add_hour_form_dateEnd_time{
+                        margin-left: 20px;
+                    }
+                }
+
+                .label{
+                    display: flex;
+                    justify-content: left;
+                    margin-bottom: 5px;
+                    color: $blue;
+                    font-family: $msBold;
+                }
+
+            }
+        }
+
+        .addNewHours{
+            background-color: $green;
+            color: $white;
+
+            &:hover{
+                background-color: $blue !important;
+            }
+        }
+    }
+}
+
 @media (max-width: $laptop){
-    .containerValidationMessage{
+    .containerValidationMessage,
+    .modalAddHours{
         &::before{
             display: initial;
         }
 
         .centered{
             position: relative;
-            top: 20%;
+            top: 10%;
 
             button, a{
                 margin: auto;
@@ -458,6 +520,33 @@
                 margin-bottom: 10px;
             }
 
+        }
+    }
+
+    .modalAddHours{
+        .centered{
+
+            height: 500px;
+            overflow: auto;
+
+            .datesContainer{
+                div{
+
+                    .date{
+                        flex-direction: column;
+                        margin-bottom: 20px;
+
+                        #add_hour_form_dateBegin_time,
+                        #add_hour_form_dateEnd_time{
+                            margin-left: 0;
+                        }
+
+                        select{
+                            width: 100%;
+                        }
+                    }
+                }
+            }
         }
     }
 }
