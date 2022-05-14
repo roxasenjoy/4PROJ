@@ -113,17 +113,17 @@
 
                         <div class="section-element">
                             <ul>
-                                <a href="">
-                                    <li>
-                                        <i class="fa-solid fa-building"></i>
-                                        <span class="animationClickableText"> Entreprises </span>
-                                    </li>
-                                </a>
-
-                                <a href="">
+                                <a href="{{ path('show_offer') }}">
                                     <li>
                                         <i class="fa-solid fa-pencil"></i>
                                         <span class="animationClickableText">Offres entreprises </span>
+                                    </li>
+                                </a>
+
+                                <a href="{{ path('import') }}">
+                                    <li>
+                                        <i class="fa-solid fa-file-import"></i>
+                                        <span class="animationClickableText"> Importer  </span>
                                     </li>
                                 </a>
                             </ul>
@@ -204,7 +204,7 @@
                                     </li>
                                 </a>
 
-                                <a href="">
+                                <a href="{{ path('show_offer') }}">
                                     <li>
                                         <i class="fa-solid fa-pencil"></i>
                                         <span class="animationClickableText">Offres entreprises</span>

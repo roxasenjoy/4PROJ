@@ -56,8 +56,7 @@ class IntervenantRepository extends ServiceEntityRepository
             ->join('user.campus', 'campus')
             ->join('ux.actualLevel', 'sl')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     /**

@@ -26,6 +26,7 @@ import './styles/settings.scss';
 import './styles/cours.scss';
 import './styles/comptability.scss';
 import './styles/student.scss';
+import './styles/offer.scss';
 
 // Toutes les librairies
 import './styles/libraries/hint.css'

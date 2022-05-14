@@ -19,42 +19,6 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class AuthController extends AbstractController
 {
 
-//    #[Route('/register', name: 'app_register')]
-//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-//    {
-//        $user = new User();
-//        $form = $this->createForm(RegistrationFormType::class, $user);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            // encode the plain password
-//            $user->setPassword(
-//                $userPasswordHasher->hashPassword(
-//                    $user,
-//                    $form->get('plainPassword')->getData()
-//                )
-//            );
-//
-//            // A rendre dynamique
-//            $user->setRole($entityManager->getRepository(Role::class)->find(15));
-//            $user->setCampus($entityManager->getRepository(Campus::class)->find(32));
-//            $user->setRoles(array('ROLE_PEDAGO'));
-//
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            return $userAuthenticator->authenticateUser(
-//                $user,
-//                $authenticator,
-//                $request
-//            );
-//        }
-//
-//        return $this->render('auth/register.html.twig', [
-//            'registrationForm' => $form->createView(),
-//        ]);
-//    }
-
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {

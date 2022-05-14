@@ -25,6 +25,7 @@ security:
                 path: app_logout
                 target: app_login
             custom_authenticator: App\Security\LoginFormAuthenticator
+            access_denied_handler: App\Security\AccessDeniedHandler
 
 
 
@@ -38,6 +39,11 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
+
+    role_hierarchy:
+        IS_AUTHENTICATED_ANONYMOUSLY: IS_AUTHENTICATED_ANONYMOUSLY
+        ROLE_ADMIN: [ROLE_ADMIN]
+
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
@@ -46,15 +52,20 @@ security:
         - { path: ^/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        #L'utilisateur est connecté est possede un rôle
-        - { path: ^/, role: [ROLE_USER, ROLE_PEDAGO, ROLE_ADMIN, ROLE_TEACHER] }
 
-
-        # ÉQUIPE PEDAGOQIQUE
+        # Admin
         - { path: ^/admin, role: [ROLE_PEDAGO, ROLE_ADMIN] }
 
-        # INTERVENANTS
-        - { path: ^/admin/cours/details/\d+$, role: [ROLE_PEDAGO, ROLE_TEACHER, ROLE_ADMIN] }
+        #Page: Offres entreprises
+        - { path: ^/admin/cours/details/\d+$, role: [ROLE_PEDAGO, ROLE_ADMIN] }
+
+        #Intervenants
+        - { path: ^/offres/add, role: [ROLE_PEDAGO, ROLE_ADMIN] }
+        - { path: ^/offres/edit/\d+$, role: [ROLE_PEDAGO, ROLE_ADMIN] }
+        - { path: ^/offres/remove/\d+$, role: [ROLE_PEDAGO, ROLE_ADMIN] }
+
+        #L'utilisateur est connecté est possede un rôle
+        - { path: ^/, role: [ ROLE_USER, ROLE_PEDAGO, ROLE_ADMIN, ROLE_TEACHER ] }
 
 when@test:
     security:

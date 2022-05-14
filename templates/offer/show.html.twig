@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - Offres entreprises{% endblock %}
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Offres entreprises</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+
+        {% block error %} {% endblock %}
+
+        <main class="container-two-rows">
+            <section class="left-section shadow">
+                <h3 class="titleSection">
+                    <i class="fa-solid fa-pencil"></i>
+                    {% block sectionTitle %}Offres entreprises {% endblock %}
+                </h3>
+                <hr>
+
+                {% block content %}
+
+                    {% for offer in offers %}
+                        <!-- Design pour un élément des offres -->
+                        <a href="{{ path('details_offer', {id: offer.id }) }}" class="linkOffer">
+                            <div class="offerContainer shadow transition">
+                                <h2>
+                                    <span class="newOffer"> NEW </span>
+                                    {{ offer.title }}
+                                </h2>
+                                <p class="nameCompany">{{ offer.company }}</p>
+
+                                <div class="criteres">
+                                    <p class="type"> {{ offer.typeContract }}</p>
+                                    <p class="separate"> | </p>
+                                    <p class="location"> {{ offer.location }} </p>
+                                    <p class="separate"> | </p>
+                                    <p class="datePublication"> Publiée le : {{ offer.datePublication|date("d/m/Y") }} </p>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                {% endblock %}
+
+            </section>
+
+            {% if app.user.role.id != 12 %}
+                {% block sectionRight %}
+
+                    <div class="right-section ">
+                        <div class="fixed">
+                            <section class="shadow actionStudent">
+                                <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                                <hr>
+                                <a href="{{ path('add_offer') }}" class="linkNewStudent zoom"><i class="fa-solid fa-plus"></i> Ajouter une offre </a>
+                            </section>
+                        </div>
+                    </div>
+
+                {% endblock %}
+            {% endif %}
+        </main>
+
+    </div>
+
+{% endblock %}

@@ -59,7 +59,7 @@
                     <p> <span>Année scolaire : </span> {{ user.userExtended.actualLevel.name }}</p>
                     <p> <span>Crédits ECTS : </span> {{ ects }}</p>
                     <p> <span>Comptabilité : </span> {{ compta }} €</p>
-                    <p> <span>Est en alternance : </span>
+                    <p> <span>Est-il en alternance : </span>
 
                         {% if user.userExtended.hasProContract == 1 %}
                             Oui
@@ -128,7 +128,7 @@
                         <p> <span>Année scolaire : </span> {{ form_widget(form.actualLevelName) }} </p>
                         <p> <span>Crédits ECTS : </span> {{ ects }}</p>
                         <p> <span>Comptabilité : </span> {{ compta }} €</p>
-                        <p> <span>Possède une alternance : </span> {{ form_widget(form.hasProContract) }} </p>
+                        <p> <span>Est-il en alternance : </span> {{ form_widget(form.hasProContract) }} </p>
                         <p> <span>Est-il embauché : </span> {{ form_widget(form.isHired) }} </p>
                     </div>
                 </section>

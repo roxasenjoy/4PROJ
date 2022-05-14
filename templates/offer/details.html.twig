@@ -1,0 +1,85 @@
+{% extends 'offer/show.html.twig' %}
+
+{% block title %}Madjid Booster - Offres entreprises{% endblock %}
+
+
+{% block filAriana %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumbs ">
+            <li class="element ">
+                <a href="{{ path('app_dashboard') }}" class="transition">
+                    <span class="animationClickableText">Tableau de bord</span>
+                </a>
+            </li>
+
+            <li class="element ">
+                <a href="{{ path('show_offer') }}" class="transition">
+                    <span class="animationClickableText">Offres entreprises</span>
+                </a>
+            </li>
+
+            <li class="current"> 1 </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block sectionTitle %} Ingénieur Etudes et Développement FullStack JAVA Angular - Secteur Télécom (H/F) {% endblock %}
+
+{% block content %}
+
+    <!-- Design pour un élément des offres -->
+    <div class="offerDetails">
+
+        <div class="offerElements">
+            <div class="element">
+                <p class="type"> Type de contrat </p>
+                <p class="text"> {{ offer.typeContract }} </p>
+            </div>
+
+            <div class="element">
+                <p class="type"> Expérience requise </p>
+                <p class="text"> {{ offer.experience }} </p>
+            </div>
+
+            <div class="element">
+                <p class="type">Salaire </p>
+                <p class="text"> {{ offer.salaire }}€ </p>
+            </div>
+        </div>
+
+        <div class="presentation">
+            <p class="title"> Description du poste </p>
+            <p class="description">{{ offer.description }}
+            </p>
+
+            <p class="title"> Votre profil </p>
+            <p class="description">{{ offer.description }}
+            </p>
+
+            {% if offer.website %}
+                <div class="websiteContainer">
+                    <a target="_blank" href="https://{{ offer.website }}">Postuler sur le site de l'entreprise <i class="fa-solid fa-right-from-bracket"></i> </a>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block sectionRight %}
+
+    {% if app.user.role.id != 12 %}
+
+            <div class="right-section ">
+                <div class="fixed">
+                    <section class="shadow actionStudent">
+                        <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                        <hr>
+                        <a href="{{ path('edit_offer', {id: idOffer }) }}" class="editOffer zoom"><i class="fa-solid fa-pen-to-square"></i> Éditer l'offre </a>
+                    </section>
+                </div>
+            </div>
+    {% endif %}
+
+{% endblock %}

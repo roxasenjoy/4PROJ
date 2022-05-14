@@ -1,0 +1,107 @@
+{% extends 'offer/show.html.twig' %}
+
+{% block title %}Madjid Booster - Ajouter une nouvelle offre{% endblock %}
+
+
+{% block filAriana %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumbs ">
+            <li class="element ">
+                <a href="{{ path('app_dashboard') }}" class="transition">
+                    <span class="animationClickableText">Tableau de bord</span>
+                </a>
+            </li>
+
+            <li class="element ">
+                <a href="{{ path('show_offer') }}" class="transition">
+                    <span class="animationClickableText">Offres entreprises</span>
+                </a>
+            </li>
+
+            <li class="current"> Ajouter une nouvelle offre </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block error %}
+
+    {% if errorMessage %}
+
+        <section class="shadow errorBackground">
+            <ul style="margin-left: 25px">
+                <li>{{ errorMessage }}</li>
+            </ul>
+        </section>
+
+    {% endif %}
+
+{% endblock %}
+
+
+{% block sectionTitle %}
+    {{ form_start(form) }}
+
+        {{ form_row(form.title) }}
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- Design pour un élément des offres -->
+    <div class="offerDetails">
+        <div class="offerElements">
+            <div class="element">
+                <p class="type"> Type de contrat </p>
+                <p class="text"> {{ form_row(form.type_contract) }} </p>
+            </div>
+
+            <div class="element">
+                <p class="type"> Expérience requise </p>
+                <p class="text"> {{ form_row(form.experience) }} </p>
+            </div>
+
+            <div class="element">
+                <p class="type">Salaire </p>
+                <p class="text"> {{ form_row(form.salaire) }}</p>
+            </div>
+        </div>
+
+        <div class="offerElements">
+            <div class="element">
+                <p class="type"> Nom de l'entreprise </p>
+                <p class="text"> {{ form_row(form.company) }} </p>
+            </div>
+
+            <div class="element">
+                <p class="type"> Adresse de l'entreprise </p>
+                <p class="text"> {{ form_row(form.location) }} </p>
+            </div>
+
+            <div class="element">
+                <p class="type">Site internet </p>
+                <p class="text"> {{ form_row(form.website) }}</p>
+            </div>
+        </div>
+
+        <div class="presentation">
+            <p class="title"> Description du poste </p>
+            <p class="description textType">
+                {{ form_row(form.description) }}
+            </p>
+
+            <p class="title"> Votre profil </p>
+            <p class="description textType">
+                {{ form_row(form.profil) }}
+            </p>
+        </div>
+
+        <button class="submitNewInformation zoom" type="submit">
+            <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Ajouter
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block sectionRight %} {% endblock %}

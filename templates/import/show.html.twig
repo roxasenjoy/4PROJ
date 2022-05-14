@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Madjid Booster - Importer{% endblock %}
+
+{% block body %}
+
+    <div class="student-container sectionContainer transition">
+
+        {% block filAriana %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumbs ">
+                    <li class="element ">
+                        <a href="{{ path('app_dashboard') }}" class="transition">
+                            <span class="animationClickableText">Tableau de bord</span>
+                        </a>
+                    </li>
+
+                    <li class="current">Importer</li>
+                </ol>
+            </nav>
+        {% endblock %}
+
+
+
+
+        <main class="container-two-rows">
+            <section class="left-section shadow">
+                <h3 class="titleSection">
+                    <i class="fa-solid fa-file-import"></i>
+                    Importer
+                    <hr>
+
+                    {{ form_start(form) }}
+                        {{ form_row(form.import) }}
+                    <button type="submit">Submit</button>
+                    {{ form_end(form) }}
+                </h3>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+{% endblock %}
