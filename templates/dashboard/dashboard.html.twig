@@ -72,7 +72,7 @@
 
                         {% for date in agenda %}
                             <div class="lesson-content">
-                                <p class="date"> <span> {{ date.date }}</span> {{ date.name }}</p>
+                                <p class="date"> <span> {{ date.date|date('d/m') }}</span> {{ date.name }}</p>
                                 <p class="time"> {{ date.date_begin }} - {{ date.date_end }}</p>
                             </div>
                         {% endfor %}

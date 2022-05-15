@@ -94,8 +94,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('campusId', $user->getCampus()->getId())
             ->andWhere('role.id = :roleStudent')
             ->setParameter(':roleStudent', self::ROLE_STUDENT)
-            ->orderBy('u.firstName', 'ASC')
-            ->orderBy('al.year', 'ASC');
+            ->addOrderBy('al.year', 'ASC')
+            ->addOrderBy('u.firstName', 'ASC')
+           ;
 
             /* Si aucune promotion n'est sélectionné, on affiche tous les étudiants du campus */
             if($promotion > 0){
@@ -136,8 +137,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter(':roleStudent', self::ROLE_STUDENT)
             ->setParameter(':coursId', $coursId)
 
-            ->orderBy('ug.status', 'ASC')
-        ;
+            ->addOrderBy('ug.status', 'ASC')
+            ->addOrderBy('u.firstName', 'ASC');
 
             if($filter){
                 $qb->andWhere('campus.id IN (:filter)')

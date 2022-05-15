@@ -15,6 +15,7 @@ use App\Form\EditCoursForm;
 use App\Form\FilterCampusForm;
 use App\Service\AuthService;
 use App\Service\GlobalService;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -250,12 +251,8 @@ class CoursController extends AbstractController
 
                 }
 
-                unset($dateForm);
-                $dateCours = new SubjectDate();
-                $dateForm = $this->createForm(addHourForm::class, $dateCours);
-
+                return $this->redirect($request->getUri());
             }
-
         }
 
         /**
@@ -311,7 +308,6 @@ class CoursController extends AbstractController
                     if($value != ""){
 
                         $value = floatval($value);
-                        dump($value);
 
                         if ($idUserGrade != []) {
                             $hasUserGrade = $this->em->getRepository(UserGrade::class)->find($idUserGrade[0]['id']);
