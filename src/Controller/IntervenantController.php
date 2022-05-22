@@ -84,8 +84,7 @@ class IntervenantController extends AbstractController
     #[Route('/admin/intervenant/details/{id}', name: 'admin_intervenant_details', requirements: ['id' => '(\d+)'])]
     public function detailsIntervenant(Request $request){
 
-
-        $idIntervenant              = $request->get('id');
+        $idIntervenant              = $request->get('id'); //4
         $user                       = $this->em->getRepository(User::class)->find($idIntervenant);
         $intervenantSubject         = $this->getSubjectByIntervenant($idIntervenant);
         $error                      = '';

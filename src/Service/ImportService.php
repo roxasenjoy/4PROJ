@@ -117,7 +117,7 @@ class ImportService
         }
 
 
-        return $this->em->getRepository(StudyLevel::class)->findBy(array('year' => $year))[0];
+        return $this->em->getRepository(StudyLevel::class)->findBy(array('year' => $year))[0]->getId();
 
     }
 
