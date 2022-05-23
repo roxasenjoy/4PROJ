@@ -45,6 +45,14 @@ class OfferRepository extends ServiceEntityRepository
         }
     }
 
+    public function countOffer(){
+        return $this->createQueryBuilder('offer')
+                ->select('count(offer.id)')
+            ->getQuery()
+            ->getResult();
+
+    }
+
     // /**
     //  * @return Offer[] Returns an array of Offer objects
     //  */

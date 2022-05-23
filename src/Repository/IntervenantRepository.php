@@ -47,16 +47,30 @@ class IntervenantRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Affiche tous les intervenants de l'étudiant en fonction du campus et de l'année des sujets
+     * @param $user
+     * @return float|int|mixed|string
+     */
     public function getIntervenants($user){
-        return $this->createQueryBuilder('intervenant')
-            ->select('user.id', 'user.firstName', 'user.lastName', 'subject.name', 'sl.year as actualYear', 'campus.name as campusName')
+
+        $qb = $this->createQueryBuilder('intervenant')
+            ->select('user.id', 'user.firstName', 'user.lastName', 'subject.name', 'campus.name as campusName')
             ->join('intervenant.user', 'user')
             ->join('intervenant.subject', 'subject')
             ->join('user.userExtended', 'ux')
             ->join('user.campus', 'campus')
-            ->join('ux.actualLevel', 'sl')
-            ->getQuery()
-            ->getResult();
+            ->join('subject.level', 'level')
+
+            ->where('campus.id = :campusId')
+            ->setParameter(':campusId', $user->getCampus()->getId())
+
+            ->andWhere('level.year = :year')
+            ->setParameter(':year', $user->getUserExtended()->getActualLevel()->getYear())
+
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -77,7 +91,7 @@ class IntervenantRepository extends ServiceEntityRepository
             ->join('intervenant.subject', 'subject')
             ->join('user.userExtended', 'ux')
             ->join('intervenant.campus', 'campus')
-            ->join('ux.actualLevel', 'sl')
+            ->join('subject.level', 'sl')
         ;
 
             if($coursId){
@@ -95,6 +109,7 @@ class IntervenantRepository extends ServiceEntityRepository
 
     public function getSubjectByIntervenant($intervenantId){
 
+
         $qb = $this->createQueryBuilder('intervenant')
             ->select('user.id', 'user.firstName', 'user.lastName',
                 'campus.name as campusName', 'subject.id as idSubject',
@@ -104,7 +119,6 @@ class IntervenantRepository extends ServiceEntityRepository
             ->join('intervenant.subject', 'subject')
             ->join('user.userExtended', 'ux')
             ->join('intervenant.campus', 'campus')
-            ->join('ux.actualLevel', 'sl')
         ;
 
         if($intervenantId){

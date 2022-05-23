@@ -15,20 +15,32 @@
 
                 <h3 class="title-dashboard"><i class="fa-solid fa-house"></i> Dashboard </h3>
                 <hr>
-                <div class="elementGlobal-content">
-                    <div class="element" id="globalECTS">
-                        <span> {{ ectsTotal }} </span>
-                        <p>ECTS </p>
+
+                {% if app.user.role.id == 12 %}
+
+
+                    <div class="elementGlobal-content">
+                        <a href="{{ path('app_notes') }}" class="element zoom" id="globalECTS">
+
+                                <span> {{ ectsTotal }} </span>
+                                <p>ECTS </p>
+
+                        </a>
+                        <a href="{{ path('show_offer') }}" class="element zoom" id="globalOpportunities">
+                            <div >
+                                <span> {{ offersTotal }} </span>
+                                <p>Offres entreprises </p>
+                            </div>
+                        </a>
+
+                        <a href="{{ path('app_user_comptability') }}" class="element zoom" id="globalFinance">
+                            <div >
+                                <span> {{ comptability }} </span>
+                                <p>Comptabilité </p>
+                            </div>
+                        </a>
                     </div>
-                    <div class="element" id="globalOpportunities">
-                        <span> XXXX </span>
-                        <p>Offres entreprises </p>
-                    </div>
-                    <div class="element" id="globalFinance">
-                        <span> {{ comptability }} </span>
-                        <p>Comptabilité </p>
-                    </div>
-                </div>
+                {% endif %}
 
             </section>
 

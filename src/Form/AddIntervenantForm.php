@@ -55,6 +55,19 @@ class AddIntervenantForm extends AbstractType
                 'attr' => [
                     'placeholder' => 'Nom du campus'
                 ],
+                'query_builder' => function(EntityRepository $campusRepo){
+                    $campusRepo =  $campusRepo
+                        ->createQueryBuilder('c')
+                        ->where('c.id = :idCampus')
+                        ->setParameter('idCampus',
+                            $this->authService
+                                ->isAuthenticatedUser()
+                                ->getCampus()
+                                ->getId()
+                        );
+                    return $campusRepo;
+
+                }
             ])
 
             ->add('email', EmailType::class, [

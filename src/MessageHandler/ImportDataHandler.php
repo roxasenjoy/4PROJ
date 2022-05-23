@@ -24,6 +24,10 @@ class ImportDataHandler implements MessageHandlerInterface
     CONST notes = "id;first_name;last_name;email;campus;level;speciality;1WORK;1WDEV;1ITWO;1TEAM;1PYTH;1O365;2JAVA;2PHPD;2GRAP;2DTTL;2DVST;2AWSP;3ANDM;3CCNA;3ASPC;3LPIC;3AGIL;4AZUR;4BOSS;4GDPR;4DOCKR;4CHGM;4BINT;4SECU;5CCNA;5DATA;5DOOP;5ITIL;5RBIG;5BLOC;5MDD";
     CONST intervenants = "";
 
+
+    /* A CHANGER DEMAIN */
+    CONST pattern = "^[a-zA-Z0-9]+([\w\.\'\!\#\$\%\&\*\+\-\/\=\?\^\`\{\|\}\~])*([a-zA-Z0-9])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$";
+
     /**
      * @param GlobalService $globalService
      * @param UserPasswordHasherInterface $userPasswordHasher
@@ -70,9 +74,18 @@ class ImportDataHandler implements MessageHandlerInterface
                 $i++;
 
                 $keyWithData = $this->setCleanData($keyWithData);
-                if($keyWithData['first_name'] && $keyWithData['email']){
+
+
+                /* VERIFIER LA CONDITION DEMAIN */
+                dump(gettype($keyWithData['email']));
+                dump(preg_match(self::pattern, $keyWithData['email']));
+
+                // Le prénom et le nom sont corrects et l'adresse email est valide (Aucun caractère à la con)
+                if($keyWithData['first_name'] && $keyWithData['last_name'] && preg_match(self::pattern, $keyWithData['email']) === 1){
                     $this->setDataInDatabase(count($headerArray), $keyWithData, $i);
                 }
+
+
             }
             fclose($handle);
         }
@@ -89,7 +102,6 @@ class ImportDataHandler implements MessageHandlerInterface
 
         $data['first_name']         = $this->cleanData($data['first_name']);
         $data['last_name']          = $this->cleanData($data['last_name']);
-        $data['email']              = $this->cleanData($data['email']);
 
         return $data;
     }

@@ -179,6 +179,21 @@ class OfferController extends AbstractController
         ]);
     }
 
+    #[Route('/offres/delete/{id}', name: 'delete_offer')]
+    public function deleteOffer(Request $request){
+
+        $offerId = intval($request->get('id'));
+
+        $offer = $this->em->getRepository(Offer::class)->find($offerId);
+
+        $this->em->remove($offer);
+        $this->em->flush();
+
+        return $this->redirectToRoute('show_offer');
+
+    }
+
+
     #[Route('/offres', name: 'show_offer')]
     public function showOffer(): Response
     {

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Offer;
 use App\Entity\Subject;
 use App\Entity\SubjectDate;
 use App\Entity\UserComptability;
@@ -96,21 +97,30 @@ class GlobalService
      */
     public function getAllEcts($user){
 
-        $totalECTS = 0;
-        // Obtenir le niveau actuel de l'étudiant
-        if($user->getUserExtended()){
-            $actualYear = $user->getUserExtended()->getActualLevel()->getYear();
-            $hasPreviousYear = $user->getUserExtended()->getPreviousLevel()->getYear();
+        if($user->getRole()->getId() === 12){
+            $totalECTS = 0;
+            // Obtenir le niveau actuel de l'étudiant
+            if($user->getUserExtended()){
+                $actualYear = $user->getUserExtended()->getActualLevel()->getYear();
+                $hasPreviousYear = $user->getUserExtended()->getPreviousLevel()->getYear();
 
-            // Si l'étudiant ne possède pas de previous_level_id, on multiplie son année actuel -1 par 60
-            if($hasPreviousYear === null){
-                $totalECTS = (($actualYear -1) * 60);
+                // Si l'étudiant ne possède pas de previous_level_id, on multiplie son année actuel -1 par 60
+                if($hasPreviousYear === null){
+                    $totalECTS = (($actualYear -1) * 60);
+                }
             }
+
+            // Ajouter les crédits actuel de l'année en cours
+            return $totalECTS + intval($this->em->getRepository(UserGrade::class)->getTotalEctsPerUser($user->getId())[0]['1']);
         }
 
-        // Ajouter les crédits actuel de l'année en cours
-        return $totalECTS + intval($this->em->getRepository(UserGrade::class)->getTotalEctsPerUser($user->getId())[0]['1']);
+        return 0;
 
+
+    }
+
+    public function getAllOffer(){
+        return $this->em->getRepository(Offer::class)->countOffer()[0]['1'];
     }
 
     /**

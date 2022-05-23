@@ -7,6 +7,7 @@ use App\Entity\Subject;
 
 use App\Service\AuthService;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,6 +36,20 @@ class _addSubjectFormType extends AbstractType
                 'attr' => [
                     'class' => 'campusNameSelected selectNewCours'
                 ],
+
+                'query_builder' => function(EntityRepository $campusRepo){
+                    $campusRepo =  $campusRepo
+                        ->createQueryBuilder('c')
+                        ->where('c.id = :idCampus')
+                        ->setParameter('idCampus',
+                            $this->authService
+                                ->isAuthenticatedUser()
+                                ->getCampus()
+                                ->getId()
+                        );
+                    return $campusRepo;
+
+                }
             ])
 
             ->add('subject', EntityType::class, [

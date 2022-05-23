@@ -50,14 +50,18 @@
 
             <div class="right-section ">
                 <div class="fixed">
-                    <section class="shadow">
-                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
-                        <hr>
 
-                        <div class="containerFilterCampus">
-                            {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
-                        </div>
-                    </section>
+                    {% if app.user.roles|join == 'ROLE_ADMIN' %}
+
+                        <section class="shadow">
+                            <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
+                            <hr>
+
+                            <div class="containerFilterCampus">
+                                {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
+                            </div>
+                        </section>
+                    {% endif %}
 
 
 

@@ -46,6 +46,20 @@ class _addIntervenantFormType extends AbstractType
                 'attr' => [
                     'class' => 'campusNameSelected selectNewCours'
                 ],
+
+                'query_builder' => function(EntityRepository $campusRepo){
+                    $campusRepo =  $campusRepo
+                        ->createQueryBuilder('c')
+                        ->where('c.id = :idCampus')
+                        ->setParameter('idCampus',
+                            $this->authService
+                                ->isAuthenticatedUser()
+                                ->getCampus()
+                                ->getId()
+                        );
+                    return $campusRepo;
+
+                }
             ])
 
             ->add('email', EntityType::class, [
@@ -53,7 +67,7 @@ class _addIntervenantFormType extends AbstractType
                 'choice_label' => 'email',
                 'label' => false,
                 'query_builder' => function(UserRepository $user){
-                    return $user->queryGetAllTeacher();
+                    return $user->queryGetAllTeacher($this->authService->isAuthenticatedUser());
                 },
                 'attr' => [
                     'class' => 'emailUser selectNewCours'

@@ -185,13 +185,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * Return tous les utilisateurs pour le query_builder de la création d'un cours
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function queryGetAllTeacher(){
+    public function queryGetAllTeacher($user){
 
         $qb = $this->createQueryBuilder('u')
             ->join('u.campus', 'campus')
             ->join('u.role', 'role')
             ->where('role.id = :professeur')
             ->setParameter(':professeur', self::ROLE_PROFESSEUR)
+            ->andWhere('campus.id = :campusId')
+            ->setParameter(':campusId', $user->getCampus()->getId())
             ->orderBy('u.email', 'DESC');
 
         return $qb;

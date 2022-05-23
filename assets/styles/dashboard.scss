@@ -146,6 +146,10 @@
                 justify-content: center;
                 flex-direction: row;
 
+                a{
+                    text-decoration: none;
+                }
+
                 .element{
                     margin: 10px 30px;
                     flex: 1;
@@ -157,6 +161,7 @@
                     text-align: center;
                     font-family: $msNormal;
                     border-radius: 8px;
+
 
                     span{
                         margin-bottom: 10px;

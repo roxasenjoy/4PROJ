@@ -46,7 +46,8 @@ class DashboardController extends AbstractController
             'agenda'        => $this->globalService->getAgenda($user), // Agenda
             'cours'         => $this->globalService->getCours($user), // Cours
             'comptability'  => $this->globalService->getUserTotalComptability($user->getId()), // La comptabilité de l'étudiant
-            'ectsTotal'     => $this->globalService->getAllEcts($user) // Total des crédits ECTS de l'étudiants
+            'ectsTotal'     => $this->globalService->getAllEcts($user), // Total des crédits ECTS de l'étudiants
+            'offersTotal'   => $this->globalService->getAllOffer()
         ]);
     }
 }

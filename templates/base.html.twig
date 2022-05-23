@@ -72,6 +72,25 @@
                         </ul>
                     </div>
 
+
+                    <!---------------------------------------------------------
+                                        ROLE PEDAGOGIQUE
+                    ----------------------------------------------------------->
+                    {% if app.user.roles|join(', ') == 'ROLE_TEACHER' %}
+                        <div class="section-title"> Gestion des notes </div>
+
+                        <div class="section-element">
+                            <ul>
+                                <a href="{{ path('app_cours_teacher') }}">
+                                    <li>
+                                        <i class="fa-solid fa-book-open"></i>
+                                        <span class="animationClickableText"> Cours </span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+                    {% endif %}
+
                     <!---------------------------------------------------------
                                         ROLE PEDAGOGIQUE
                     ----------------------------------------------------------->
@@ -124,30 +143,6 @@
                                     <li>
                                         <i class="fa-solid fa-file-import"></i>
                                         <span class="animationClickableText"> Importer  </span>
-                                    </li>
-                                </a>
-                            </ul>
-                        </div>
-
-                        <div class="section-title"> A PROPOS </div>
-
-                        <div class="section-element">
-                            <ul>
-                                <a href="{{ path('app_settings') }}">
-                                    <li>
-                                        <i class="fa-solid fa-gear"></i>
-                                        <span class="animationClickableText">Paramètres</span>
-                                    </li>
-                                </a>
-                            </ul>
-                        </div>
-
-                        <div class="section-element disconnect">
-                            <ul>
-                                <a href="{{ path('app_logout') }}">
-                                    <li>
-                                        <i class="fa-solid fa-door-open"></i>
-                                        <span class="animationClickableText">Déconnexion</span>
                                     </li>
                                 </a>
                             </ul>
@@ -213,12 +208,16 @@
                             </ul>
                         </div>
 
+                    {% endif %}
+
+                        <!---------------------------------------------------------
+                                                ELEMENT GENERAL
+                        ----------------------------------------------------------->
 
                         <div class="section-title"> A PROPOS </div>
 
                         <div class="section-element">
                             <ul>
-
                                 <a href="{{ path('app_settings') }}">
                                     <li>
                                         <i class="fa-solid fa-gear"></i>
@@ -238,8 +237,6 @@
                                 </a>
                             </ul>
                         </div>
-
-                    {% endif %}
 
                 </div>
 

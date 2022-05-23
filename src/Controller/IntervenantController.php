@@ -48,11 +48,11 @@ class IntervenantController extends AbstractController
     public function getIntervenants(): Response
     {
         $user           = $this->authService->isAuthenticatedUser();
-        $intervenants   = null;
 
-        if($user->getUserExtended()){
-            $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
-        }
+
+        $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
+
+
 
         return $this->render('intervenant/intervenant.html.twig', [
             'intervenants' => $intervenants
@@ -84,7 +84,7 @@ class IntervenantController extends AbstractController
     #[Route('/admin/intervenant/details/{id}', name: 'admin_intervenant_details', requirements: ['id' => '(\d+)'])]
     public function detailsIntervenant(Request $request){
 
-        $idIntervenant              = $request->get('id'); //4
+        $idIntervenant              = $request->get('id');
         $user                       = $this->em->getRepository(User::class)->find($idIntervenant);
         $intervenantSubject         = $this->getSubjectByIntervenant($idIntervenant);
         $error                      = '';

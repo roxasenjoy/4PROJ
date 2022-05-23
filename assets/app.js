@@ -41,6 +41,7 @@ import './styles/error.scss';
 import './bootstrap';
 import './javascript/global.js';
 import  './javascript/_deleteSubject.js';
+import  './javascript/_deleteOffer.js';
 import  './javascript/_addSubject.js';
 import  './javascript/_addDateSubject.js';
 
