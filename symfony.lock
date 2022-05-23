@@ -134,6 +134,9 @@
             "./config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "softcreatr/jsonpath": {
+        "version": "0.7.5"
+    },
     "symfony/amqp-messenger": {
         "version": "v5.4.5"
     },
@@ -559,5 +562,8 @@
     },
     "webmozart/assert": {
         "version": "1.10.0"
+    },
+    "wizaplace/php-etl": {
+        "version": "2.2"
     }
 }

@@ -52,7 +52,7 @@ class ImportDataHandler implements MessageHandlerInterface
     {
 
         $baseUrl = getcwd();
-        $path = $baseUrl . '/public/uploads/import/' . $import;
+        $path = $baseUrl . "\public\uploads\import\\" . $import;
         $i = 0;
 
         // On ouvre le fichier qu'on vient de récupérer
@@ -69,16 +69,31 @@ class ImportDataHandler implements MessageHandlerInterface
 
                 $i++;
 
-                $this->setDataInDatabase(count($headerArray), $keyWithData, $i);
-
-
+                $keyWithData = $this->setCleanData($keyWithData);
+                if($keyWithData['first_name'] && $keyWithData['email']){
+                    $this->setDataInDatabase(count($headerArray), $keyWithData, $i);
+                }
             }
-
             fclose($handle);
         }
 
 
     }
+
+    /**
+     * Retourne les valeurs nettoyées
+     * @param $data
+     * @return mixed
+     */
+    public function setCleanData($data){
+
+        $data['first_name']         = $this->cleanData($data['first_name']);
+        $data['last_name']          = $this->cleanData($data['last_name']);
+        $data['email']              = $this->cleanData($data['email']);
+
+        return $data;
+    }
+
 
     /**
      * @param $nbElementInHeader
@@ -97,6 +112,7 @@ class ImportDataHandler implements MessageHandlerInterface
         $region             = $data['region'];
         $yearEntry          = $data['year_of_entry'];
 
+        // Traitement des données pour les ajouter à ma DB
         $campusId           = $this->importService->getCampusEntity($data['campus']);
         $birthday           = $this->importService->setDateIntoDatetime($data['date_of_birth'])->format('Y-m-d H:i:s');
         $isStudent          = filter_var($data['still_student'], FILTER_VALIDATE_BOOLEAN);
@@ -110,6 +126,8 @@ class ImportDataHandler implements MessageHandlerInterface
         // Set password
         $password           = $this->globalService->generatePassword();
         $password           = $this->userPasswordHasher->hashPassword($newUser,$password);
+
+
 
         switch($nbElementInHeader){
             case self::alternance:
@@ -135,8 +153,8 @@ class ImportDataHandler implements MessageHandlerInterface
                       VALUES
                             ('$email', '$password', '" . '["ROLE_USER"]' ."', 12, '$campusId', '$first_name', '$last_name')";
 
-                $statement = $this->em->getConnection()->prepare($sqlUser);
-                $statement->execute();
+                $userStatement = $this->em->getConnection()->prepare($sqlUser);
+                $userStatement->execute();
 
                 dump("Utilisateur n°" . $i . " ajouté : " . $email);
 
@@ -146,28 +164,10 @@ class ImportDataHandler implements MessageHandlerInterface
                       VALUES
                             ((SELECT id FROM user WHERE email='$email'),'$getActualLevel', '$getPreviousLevel', '$birthday', '$address', '$region', '$yearEntry', '$getExitLevel', '$nbMissing', '$isStudent', '$hasProContract', '$isHired')";
 
-                $statement = $this->em->getConnection()->prepare($sqlUserExtended);
-                $statement->execute();
+                $userExtendedStatement = $this->em->getConnection()->prepare($sqlUserExtended);
+                $userExtendedStatement->execute();
 
                 dump("Données supplémentaires ajoutés  : " . $i);
-
-//
-//
-//                    $newUserExtended
-//                        ->setBirthday($birthday)
-//                        ->setAddress($data['street_address'])
-//                        ->setRegion($data['region'])
-//                        ->setYearEntry($data['year_of_entry'])
-//                        ->setYearExit($getExitLevel)
-//                        ->setActualLevel($getActualLevel) // Niveau actuel
-//                        ->setPreviousLevel($this->em->getRepository(StudyLevel::class)->find($getPreviousLevel)) // Niveau de l'année précédent son année actuelle
-//                        ->setNbAbscence($nbMissing)
-//                        ->setIsStudent($isStudent)
-//                        ->setHasProContract($hasProContract)
-//                        ->setIsHired($isHired)
-//                        ->setUser($newUser)
-//                    ;
-
 
 
                 // On rajoute les données supplémentaires à l'utilisateur (UserExtended)
@@ -189,4 +189,15 @@ class ImportDataHandler implements MessageHandlerInterface
         }
 
     }
+
+    /**
+     * Permet d'enlever les caractères spéciaux des strings
+     * @param $data
+     * @return array|string|string[]|null
+     */
+    public function cleanData($data){
+        return preg_replace('/[^A-Za-z]/', '', $data);
+    }
+
+
 }
