@@ -30,82 +30,89 @@
                 {% block listCours %}
                     <div class="content">
 
-                        <!-- Elément à boucler -->
-                        <div class="card-container">
-                            {% for cours in allCours %}
-                                <a class="card shadow zoom" href="{{ path('pedago_cours_details', {id: cours.id}) }}">
-                                    <div class="logo-nav ">
+                        {% if allCours %}
+                            <!-- Elément à boucler -->
+                            <div class="card-container">
+                                {% for cours in allCours %}
+                                    <a class="card shadow zoom" href="{{ path('pedago_cours_details', {id: cours.id}) }}">
+                                        <div class="logo-nav ">
 
-                                        {% if cours.levelYear == 1 %}
-                                            <p class="actualYear one"> {{ cours.levelName }}</p>
-                                            <i class="fa-solid fa-book-open one"></i>
-                                        {% elseif cours.levelYear == 2 %}
-                                            <p class="actualYear two"> {{ cours.levelName }}</p>
-                                            <i class="fa-solid fa-book-open two"></i>
-                                        {% elseif cours.levelYear == 3 %}
-                                            <p class="actualYear three"> {{ cours.levelName }}</p>
-                                            <i class="fa-solid fa-book-open three"></i>
-                                        {% elseif cours.levelYear == 4 %}
-                                            <p class="actualYear four"> {{ cours.levelName }}</p>
-                                            <i class="fa-solid fa-book-open four"></i>
-                                        {% elseif cours.levelYear == 5 %}
-                                            <p class="actualYear five"> {{ cours.levelName }}</p>
-                                            <i class="fa-solid fa-book-open five"></i>
-                                        {% endif %}
+                                            {% if cours.levelYear == 1 %}
+                                                <p class="actualYear one"> {{ cours.levelName }}</p>
+                                                <i class="fa-solid fa-book-open one"></i>
+                                            {% elseif cours.levelYear == 2 %}
+                                                <p class="actualYear two"> {{ cours.levelName }}</p>
+                                                <i class="fa-solid fa-book-open two"></i>
+                                            {% elseif cours.levelYear == 3 %}
+                                                <p class="actualYear three"> {{ cours.levelName }}</p>
+                                                <i class="fa-solid fa-book-open three"></i>
+                                            {% elseif cours.levelYear == 4 %}
+                                                <p class="actualYear four"> {{ cours.levelName }}</p>
+                                                <i class="fa-solid fa-book-open four"></i>
+                                            {% elseif cours.levelYear == 5 %}
+                                                <p class="actualYear five"> {{ cours.levelName }}</p>
+                                                <i class="fa-solid fa-book-open five"></i>
+                                            {% endif %}
 
 
-                                        <p id="fullName">{{ cours.name }}</p>
-                                    </div>
-                                </a>
-                            {% endfor %}
-                        </div>
+                                            <p id="fullName">{{ cours.name }}</p>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="no-information">Vous n'êtes assigné sur aucun cours pour le moment.</
+                        {% endif %}
                     </div>
 
                 {% endblock %}
 
             </section>
 
-            <div class="right-section ">
-                <div class="fixed">
-                    <section class="shadow">
-                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
-                        <hr>
 
-                        {% block promotion %}
-                            <div class="containerClass">
-                                    <a href="{{ path('app_cours_promotion', {promotion: 1}) }}"
-                                       class="{{ promotion == 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.1 </a>
+            {% if app.user.roles|join == 'ROLE_PEDAGO' or app.user.roles|join == 'ROLE_ADMIN' %}
+                <div class="right-section ">
+                    <div class="fixed">
+                        <section class="shadow">
+                            <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
+                            <hr>
 
-                                    <a href="{{ path('app_cours_promotion', {promotion: 2}) }}"
-                                       class="{{ promotion == 2 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.2 </a>
+                            {% block promotion %}
+                                <div class="containerClass">
+                                        <a href="{{ path('app_cours_promotion', {promotion: 1}) }}"
+                                           class="{{ promotion == 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.1 </a>
 
-                                    <a href="{{ path('app_cours_promotion', {promotion: 3}) }}"
-                                       class="{{ promotion == 3 ? 'transition shadow selected zoom' :'transition shadow' }}"> B.Sc </a>
+                                        <a href="{{ path('app_cours_promotion', {promotion: 2}) }}"
+                                           class="{{ promotion == 2 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.2 </a>
 
-                                    <a href="{{ path('app_cours_promotion', {promotion: 4}) }}"
-                                       class="{{ promotion == 4 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.1 </a>
+                                        <a href="{{ path('app_cours_promotion', {promotion: 3}) }}"
+                                           class="{{ promotion == 3 ? 'transition shadow selected zoom' :'transition shadow' }}"> B.Sc </a>
 
-                                    <a href="{{ path('app_cours_promotion', {promotion: 5}) }}"
-                                       class="{{ promotion == 5 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.2 </a>
+                                        <a href="{{ path('app_cours_promotion', {promotion: 4}) }}"
+                                           class="{{ promotion == 4 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.1 </a>
 
-                                    <a href="{{ path('app_cours_campus')}}"
-                                       class="{{ promotion > 5 or promotion < 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> Toutes les promotions </a>
-                            </div>
-                        {% endblock %}
-                    </section>
+                                        <a href="{{ path('app_cours_promotion', {promotion: 5}) }}"
+                                           class="{{ promotion == 5 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.2 </a>
+
+                                        <a href="{{ path('app_cours_campus')}}"
+                                           class="{{ promotion > 5 or promotion < 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> Toutes les promotions </a>
+                                </div>
+                            {% endblock %}
+                        </section>
 
 
 
-                    <section class="shadow actionStudent">
-                        <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
-                        <hr>
+                        <section class="shadow actionStudent">
+                            <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
+                            <hr>
 
-                        <a href="{{ path('app_cours_add') }}" class="linkNewStudent zoom"><i class="fa-solid fa-plus"></i> Ajouter un cours </a>
+                            <a href="{{ path('app_cours_add') }}" class="linkNewStudent zoom"><i class="fa-solid fa-plus"></i> Ajouter un cours </a>
 
-                    </section>
+                        </section>
 
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
         </main>
 

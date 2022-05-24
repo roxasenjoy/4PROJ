@@ -75,13 +75,25 @@ class CoursController extends AbstractController
      *****************************************************************/
 
     /**
-     * Obtenir tous les caurs disponible à SUPINFO
+     *  Obtenir tous les caurs disponible à SUPINFO
+     *
+        Accessible par les rôles suivants :
+           - Professeurs
+           - L'équipe pédagogique
+     *
      */
     #[Route('/admin/cours', name: 'app_cours_campus')]
     public function getAllCours(): Response
     {
+        $user = $this->authService->isAuthenticatedUser();
 
-        $allCours = $this->em->getRepository(Subject::class)->getAllLessons();
+        //Vérification de tous les cours possédés par l'utilisateur connecté
+        if($user->getRoles()[0] == 'ROLE_TEACHER'){
+            $allCours = $this->em->getRepository(Intervenant::class)->getAllowedSubjectPerIntervenant($user->getId());
+        } else {
+            $allCours = $this->em->getRepository(Subject::class)->getAllLessons();
+        }
+
 
         return $this->render('cours/admin/cours.html.twig', [
             'promotion' => 0,
@@ -198,9 +210,22 @@ class CoursController extends AbstractController
         /**
          * Affichage du cours et des éléments correspondants
          */
-        $coursId = intval($request->get('id'));
-        $error = '';
-        $errorNote = '';
+        $coursId            = intval($request->get('id'));
+        $error              = '';
+        $errorNote          = '';
+        $user               = $this->authService->isAuthenticatedUser();
+        $isHisSubject       = $this->em->getRepository(Intervenant::class)->getAllowedSubjectPerIntervenant($user->getId(), $coursId);
+
+        /**
+         * Vérification en cas de changement d'url
+         */
+        // Vérifie sur le prof change d'url
+        if($user->getRoles()[0] === "ROLE_TEACHER"){
+            if(!$this->em->getRepository(Intervenant::class)->getAllowedSubjectPerIntervenant($user->getId(), $coursId)){
+                return $this->redirectToRoute('app_cours_campus');
+            }
+        }
+
 
         if(!$this->em->getRepository(Subject::class)->find($coursId)){
             return $this->redirectToRoute('app_cours_campus');
@@ -226,6 +251,7 @@ class CoursController extends AbstractController
         $dateCours = new SubjectDate();
         $dateForm = $this->createForm(addHourForm::class, $dateCours);
         $dateForm->handleRequest($request);
+
         /**
          * Formulaire pour rajouter une heure pour le cours en question
          */
@@ -233,7 +259,6 @@ class CoursController extends AbstractController
 
             $begin = $dateForm->get("dateBegin")->getData();
             $end = $dateForm->get("dateEnd")->getData();
-
 
             if($begin > $end){
                 $errorDate = "Oups... Le cours se termine avant de commencer";
@@ -287,7 +312,11 @@ class CoursController extends AbstractController
          * Édition du cours
          */
         $editForm = $this->createForm(EditCoursForm::class, $getCours);
+
         $editForm->handleRequest($request);
+
+        $teacherRole = $user->getRoles()[0];
+
 
         // On soumet le formulaire
         if($editForm->isSubmitted()){
@@ -375,11 +404,15 @@ class CoursController extends AbstractController
 
             }
 
-            $error = $this->verificationDiminutif($editForm, $getCours);
+            /*
+             * Modification des éléments du cours (Nom, diminutif, notes, années scolaire du cours)
+             */
+            if($teacherRole !== 'ROLE_TEACHER'){
+                $error = $this->verificationDiminutif($editForm, $getCours);
+            }
+
 
         }
-
-
 
         return $this->render('cours/admin/details.html.twig', [
             'form' => $form->createView(),

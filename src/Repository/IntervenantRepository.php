@@ -118,6 +118,41 @@ class IntervenantRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Détermine tous les cours enseignés par un intervenant + vérifie si c'est bien son cours
+     * @param $intervenantId
+     * @param $coursId
+     * @return float|int|mixed|string
+     */
+    public function getAllowedSubjectPerIntervenant($intervenantId, $coursId = null){
+        $qb = $this->createQueryBuilder('intervenant')
+            ->select('subject.id','subject.name',  'subject.fullName','level.name as levelName','level.year as levelYear')
+
+            ->join('intervenant.user', 'user')
+            ->join('intervenant.subject', 'subject')
+            ->join('subject.level', 'level')
+            ->join('user.userExtended', 'ux')
+            ->join('intervenant.campus', 'campus')
+        ;
+
+        if($intervenantId){
+            $qb ->where('user.id = :userId')
+                ->setParameter(':userId', $intervenantId);
+        }
+
+        if($coursId){
+            $qb ->andWhere('subject.id = :subjectId')
+                ->setParameter(':subjectId', $coursId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Obtenir tous les sujets en fonction de l'id de l'intervenant
+     * @param $intervenantId
+     * @return float|int|mixed|string
+     */
     public function getSubjectByIntervenant($intervenantId){
 
 

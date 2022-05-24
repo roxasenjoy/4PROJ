@@ -15,10 +15,18 @@ let deleteCours = document.getElementById('deleteCours');
 if(editCours){
     editCours.addEventListener('click', function(){
         showFormCours.classList = '';
-        editFormCours.classList = 'titleSection';
+
         showDetailsCours.classList = "hidden ";
         editCours.classList = "hidden";
-        deleteCours.classList = "hidden";
+
+        if(editFormCours){
+            editFormCours.classList = 'titleSection';
+        }
+
+        if(deleteCours){
+            deleteCours.classList = "hidden";
+        }
+
 
         for(let i = 0; i< noteStudent.length; i++){
             noteStudent[i].classList = "noteStudent";
@@ -31,10 +39,17 @@ if(editCours){
 if(cancelCours){
     cancelCours.addEventListener('click', function(){
         showFormCours.classList = 'hidden titleSection';
-        editFormCours.classList = 'hidden titleSection';
         showDetailsCours.classList = 'titleSection';
         editCours.classList = " editCours zoom";
-        deleteCours.classList = "cancelInformation zoom transition";
+
+        if(editFormCours){
+            editFormCours.classList = 'hidden titleSection';
+        }
+
+        if(deleteCours){
+            deleteCours.classList = "cancelInformation zoom transition";
+        }
+
 
         for(let i = 0; i< noteStudent.length; i++){
             noteStudent[i].classList = "hidden noteStudent";

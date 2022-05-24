@@ -54,7 +54,10 @@ security:
 
 
         # Admin
-        - { path: ^/admin, role: [ROLE_PEDAGO, ROLE_ADMIN] }
+        - { path: ^/admin, role: [ROLE_PEDAGO, ROLE_ADMIN, ROLE_TEACHER] }
+
+        # Accès TEACHER
+
 
         #Page: Offres entreprises
         - { path: ^/admin/cours/details/\d+$, role: [ROLE_PEDAGO, ROLE_ADMIN] }
