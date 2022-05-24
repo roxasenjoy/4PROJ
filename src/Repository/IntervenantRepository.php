@@ -47,6 +47,17 @@ class IntervenantRepository extends ServiceEntityRepository
         }
     }
 
+    public function getIntervenant($idIntervenant){
+
+        return $this->createQueryBuilder('i')
+                ->join('i.user', 'user')
+                ->andWhere('user.id = :idIntervenant')
+                ->setParameter(':idIntervenant', $idIntervenant)
+                ->getQuery()
+                ->getResult();
+
+    }
+
     /**
      * Affiche tous les intervenants de l'étudiant en fonction du campus et de l'année des sujets
      * @param $user

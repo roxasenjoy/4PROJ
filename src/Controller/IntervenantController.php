@@ -134,8 +134,6 @@ class IntervenantController extends AbstractController
             }
         }
 
-
-
         return $this->render('intervenant/admin/details.html.twig', [
             'user'                  => $user,
             'intervenantSubject'    => $intervenantSubject,
@@ -214,8 +212,9 @@ class IntervenantController extends AbstractController
 
     }
 
+
     #[Route('/admin/intervenants/delete', name: 'admin_intervenant_delete', requirements: ['id' => '(\d+)'])]
-    public function deleteIntervenant(Request $request){
+    public function deleteSubjectIntervenant(Request $request){
 
         $idIntervenant      = intval($request->get('intervenantId'));
         $idCampus           = intval($request->get('campusId'));
@@ -227,6 +226,20 @@ class IntervenantController extends AbstractController
         $this->em->flush();
 
         return $this->redirectToRoute('admin_intervenant_details', array('id' => $idIntervenant));
+
+    }
+
+    #[Route('/admin/intervenants/delete/{id}', name: 'intervenant_delete', requirements: ['id' => '(\d+)'])]
+    public function deleteIntervenant(Request $request){
+
+        $idIntervenant      = intval($request->get('id'));
+
+        $intervenant        = $this->em->getRepository(User::class)->find($idIntervenant);
+
+        $this->em->remove($intervenant);
+        $this->em->flush();
+
+        return $this->redirectToRoute('app_intervenant');
 
     }
 

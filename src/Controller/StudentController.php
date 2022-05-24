@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Entity\Offer;
 use App\Entity\Role;
 use App\Entity\StudyLevel;
 use App\Entity\User;
@@ -78,7 +79,6 @@ class StudentController extends AbstractController
         $userDetails = $this->em->getRepository(User::class)->find($userId);
         $userExtendedDetails = $this->em->getRepository(UserExtended::class)->find($userDetails->getUserExtended()->getId());
 
-
         $compta = $this->globalService->getUserTotalComptability($userId);
         $ects = $this->globalService->getAllEcts($userDetails);
 
@@ -118,6 +118,7 @@ class StudentController extends AbstractController
             'compta' => $compta,
             'ects' => $ects,
             'form' => $form->createView(),
+            'studentId' => $userId
         ]);
     }
 
@@ -204,6 +205,21 @@ class StudentController extends AbstractController
             'form' => $form->createView(),
             'error' => $error,
         ]);
+    }
+
+    #[Route('/student/delete/{id}', name: 'delete_student', requirements: ['id' => '(\d+)'] )]
+    public function deleteStudent(Request $request){
+
+
+        $studentId = intval($request->get('id'));
+
+        $student = $this->em->getRepository(User::class)->find($studentId);
+
+        $this->em->remove($student);
+        $this->em->flush();
+
+        return $this->redirectToRoute('app_student');
+
     }
 
 

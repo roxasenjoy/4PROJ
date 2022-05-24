@@ -7,7 +7,7 @@ let modalDeleteCours = document.getElementById('modalDeleteCours');
 if(deleteCours){
     deleteCours.addEventListener('click', function (){
 
-        modalDeleteCours.classList = "containerValidationMessage";
+        modalDeleteCours.classList = "containerValidationMessage shadow";
 
     });
 

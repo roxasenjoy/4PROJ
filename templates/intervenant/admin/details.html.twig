@@ -124,6 +124,7 @@
 
             <div class="btnContainer">
                 <p class="editInformation zoom" id="editIntervenant"> Éditer les informations</p>
+                <p class="cancelInformation zoom" id="deleteIntervenant"> Supprimer l'intervenant </p>
             </div>
         </div>
 
@@ -240,13 +241,13 @@
     </div>
 
 
-    <div class="containerValidationMessage hidden shadow" id="modalDeleteSubjectIntervenant">
+    <div class="containerValidationMessage hidden shadow" id="modalDeleteIntervenant">
         <div class="centered">
             <h3>Confirmez-vous la suppression ?</h3>
             <p> Si vous confirmez, votre l'intervenant ne sera plus attribuer à ce cours</p>
 
             <!-- Delete -->
-            <a  class="deleteValidation transition" href="{{ path('admin_intervenant_delete', {id: intervenantId}) }}">
+            <a  class="deleteValidation transition" href="{{ path('intervenant_delete', {id: intervenantId}) }}">
                 <i  class="fas fa-trash"></i>
                 Supprimer
             </a>

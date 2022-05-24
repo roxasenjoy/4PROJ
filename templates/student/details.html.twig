@@ -80,6 +80,7 @@
 
             <div class="btnContainer">
                 <p class="editInformation zoom" id="editStudent"> Éditer les informations</p>
+                <p class="cancelInformation zoom" id="deleteStudent"> Supprimer l'étudiant </p>
             </div>
         </div>
 
@@ -140,9 +141,30 @@
                     <p class="cancelInformation zoom" id="cancelStudent"> Annuler</p>
                 </div>
             </div> <!-- Fin form -->
-
         {{ form_end(form) }}
 
+    </div>
+
+
+    <div class="containerValidationMessage hidden shadow" id="modalDeleteStudent">
+        <div class="centered">
+            <h3>Confirmez-vous la suppression ?</h3>
+            <p> Si vous confirmez, l'étudiant sera supprimé de la base de données</p>
+
+            <!-- Delete -->
+            <a  class="deleteValidation transition" href="{{ path('delete_student', {id: studentId}) }}">
+                <i  class="fas fa-trash"></i>
+                Supprimer
+            </a>
+
+
+
+            <!-- Cancel -->
+            <button class="cancelValidation transition" id="cancelValidation">
+                <i  class="fas fa-times" ></i>
+                Annuler
+            </button>
+        </div>
     </div>
 
 {% endblock %}
