@@ -34,7 +34,13 @@
                             <!-- Elément à boucler -->
                             <div class="card-container">
                                 {% for cours in allCours %}
+
+                                {% if app.user.roles|join == 'ROLE_PEDAGO' or app.user.roles|join == 'ROLE_ADMIN' %}
                                     <a class="card shadow zoom" href="{{ path('pedago_cours_details', {id: cours.id}) }}">
+                                {% else %}
+                                    <a class="card shadow zoom" href="{{ path('pedago_cours_details_teacher', {id: cours.id}) }}">
+                                {% endif %}
+
                                         <div class="logo-nav ">
 
                                             {% if cours.levelYear == 1 %}

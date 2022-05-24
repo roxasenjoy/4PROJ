@@ -82,6 +82,7 @@ class CoursController extends AbstractController
            - L'équipe pédagogique
      *
      */
+    #[Route('/teacher/cours', name: 'app_cours_campus_teacher')]
     #[Route('/admin/cours', name: 'app_cours_campus')]
     public function getAllCours(): Response
     {
@@ -203,6 +204,7 @@ class CoursController extends AbstractController
      * @param Request $request
      * @return Response
      */
+    #[Route('/teacher/cours/details/{id}', name: 'pedago_cours_details_teacher', requirements: ['id' => '(\d+)'] )]
     #[Route('/admin/cours/details/{id}', name: 'pedago_cours_details', requirements: ['id' => '(\d+)'] )]
     public function getPedagoCoursDetails(Request $request): Response
     {

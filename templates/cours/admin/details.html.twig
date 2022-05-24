@@ -15,8 +15,13 @@
                         </a>
                     </li>
 
+
                     <li class="element ">
-                        <a href="{{ path('app_cours_campus') }}" class="transition">
+                        {% if app.user.roles|join == 'ROLE_PEDAGO' or app.user.roles|join == 'ROLE_ADMIN' %}
+                            <a href="{{ path('app_cours_campus') }}" class="transition">
+                        {% else %}
+                            <a href="{{ path('app_cours_campus_teacher') }}" class="transition">
+                        {% endif %}
                             <span class="animationClickableText">Gestion des cours</span>
                         </a>
                     </li>
