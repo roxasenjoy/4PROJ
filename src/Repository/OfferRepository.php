@@ -53,6 +53,13 @@ class OfferRepository extends ServiceEntityRepository
 
     }
 
+    public function getAllOffer(){
+        return $this->createQueryBuilder('offer')
+                ->orderBy('offer.datePublication', 'DESC')
+                ->getQuery()
+                ->getResult();
+    }
+
     // /**
     //  * @return Offer[] Returns an array of Offer objects
     //  */

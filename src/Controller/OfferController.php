@@ -173,6 +173,10 @@ class OfferController extends AbstractController
 
         $offer = $this->em->getRepository(Offer::class)->find($id);
 
+        if($offer){
+            return $this->redirectToRoute('show_offer');
+        }
+
         return $this->render('offer/details.html.twig', [
             'offer' => $offer,
             'idOffer' => $id
@@ -198,7 +202,7 @@ class OfferController extends AbstractController
     public function showOffer(): Response
     {
 
-        $offers = $this->em->getRepository(Offer::class)->findAll();
+        $offers = $this->em->getRepository(Offer::class)->getAllOffer();
 
         return $this->render('offer/show.html.twig', [
             'offers' => $offers

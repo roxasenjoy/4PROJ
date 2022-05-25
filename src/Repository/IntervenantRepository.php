@@ -199,4 +199,28 @@ class IntervenantRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
 
     }
+
+    /**
+     * Obtenir tous les sujets en fonction de l'id de l'intervenant
+     * @param $intervenantId
+     * @return float|int|mixed|string
+     */
+    public function getIntervenantBySubject($subjectId){
+
+
+        $qb = $this->createQueryBuilder('intervenant')
+            ->select('campus.name as campusName', 'user.firstName', 'user.lastName', 'user.email')
+            ->join('intervenant.user', 'user')
+            ->join('intervenant.subject', 'subject')
+            ->join('user.userExtended', 'ux')
+            ->join('intervenant.campus', 'campus')
+        ;
+
+        if($subjectId){
+            $qb ->where('subject.id = :subjectId')
+                ->setParameter(':subjectId', $subjectId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

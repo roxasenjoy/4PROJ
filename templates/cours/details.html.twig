@@ -26,16 +26,46 @@
             </nav>
         {% endblock %}
 
-        <section class="listLesson-container shadow transition">
+        <main class="container-two-rows">
+            <section class="left-section listLesson-container shadow transition">
 
-            <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> {{ cours.fullName }}   </h3>
-            <hr>
+                <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> {{ cours.fullName }}   </h3>
+                <hr>
+
+                <p class="no-information">Les détails de ce cours ne sont pas disponibles.</p>
+
+            </section>
+
+            <div class="right-section">
+                <div class="fixed">
+                    <section class="shadow">
+                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
+                        <hr>
+
+                        <!-- Afficher le nom de l'intervenant qui propose le cours (en fonction du campus sélectionné -->
+                        {% if intervenant %}
+                            <div class="intervenantContainer ">
+                                <div class="fullNameContainer intervenantSubject">
+                                    {{ intervenant.firstName }} {{ intervenant.lastName}}
+                                </div>
+                                <div class="fullNameContainer intervenantSubject">
+                                    {{ intervenant.email }}
+                                </div>
+
+                            </div>
+                        {% else  %}
+
+                            <!-- Afficher tous les étudiants sans les notes  -->
+                            <p class="no-information"> Aucun intervenant n'est assigné à ce cours pour le moment. </p>
+
+                        {% endif %}
+
+                    </section>
+                </div>
+            </div>
+        </main>
 
 
-            <p class="no-information">Les détails de ce cours ne sont pas disponibles.</p>
-
-
-        </section>
     </div>
 
 {% endblock %}

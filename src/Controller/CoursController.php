@@ -64,8 +64,12 @@ class CoursController extends AbstractController
         // Récuperer l'id du cours en question
         $cours = $this->em->getRepository(Subject::class)->find($request->get('id'));
 
+        $intervenant = $this->em->getRepository(Intervenant::class)->getIntervenantBySubject($cours);
+
+
         return $this->render('cours/details.html.twig', [
-            'cours' => $cours
+            'cours' => $cours,
+            'intervenant' => $intervenant[0]
         ]);
     }
 
@@ -412,8 +416,6 @@ class CoursController extends AbstractController
             if($teacherRole !== 'ROLE_TEACHER'){
                 $error = $this->verificationDiminutif($editForm, $getCours);
             }
-
-
         }
 
         return $this->render('cours/admin/details.html.twig', [

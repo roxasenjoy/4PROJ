@@ -61,11 +61,11 @@ class AddOfferForm extends AbstractType
             ->add('salaire', IntegerType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => "Salaire potentiel"
+                    'placeholder' => "Salaire potentiel",
+                    'min' => 0,
+                    'max' => 99999999
                 ]
             ])
-
-
 
             ->add('location', TextType::class, [
                 'label' => false,

@@ -12,6 +12,14 @@
     .right-section {
         flex: 1;
 
+        .intervenantSubject{
+            font-size: 1.2em;
+            color: $blue;
+            font-family: $msNormal;
+            text-align: center;
+            margin-top: 25px;
+        }
+
 
         .fixed {
             position: sticky;
