@@ -19,13 +19,13 @@ class SubjectDate
     #[ORM\Column(type: 'datetime')]
     private $date_end;
 
-    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $user;
-
     #[ORM\ManyToOne(targetEntity: Subject::class, fetch: "EAGER", inversedBy: 'subjectDates')]
     #[ORM\JoinColumn(nullable: false)]
     private $subject;
+
+    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'subjectDates')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
     public function getId(): ?int
     {
@@ -56,18 +56,6 @@ class SubjectDate
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getSubject(): ?Subject
     {
         return $this->subject;
@@ -76,6 +64,18 @@ class SubjectDate
     public function setSubject(?Subject $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

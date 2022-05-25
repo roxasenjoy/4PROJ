@@ -28,7 +28,7 @@ class Subject
     #[ORM\JoinColumn(nullable: false)]
     private $level;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: SubjectDate::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private $subjectDates;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: UserGrade::class, orphanRemoval: true)]

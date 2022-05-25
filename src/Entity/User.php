@@ -41,15 +41,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private $role;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserGrade::class, fetch: 'EAGER', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserGrade::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
     private $userGrades;
 
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserExtended::class, cascade: ['persist', 'remove'])]
     private $userExtended;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SubjectDate::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private $subjectDates;
+
+
     public function __construct()
     {
         $this->userGrades = new ArrayCollection();
+        $this->subjectDates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,6 +240,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->userExtended = $userExtended;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SubjectDate>
+     */
+    public function getSubjectDates(): Collection
+    {
+        return $this->subjectDates;
+    }
+
+    public function addSubjectDate(SubjectDate $subjectDate): self
+    {
+        if (!$this->subjectDates->contains($subjectDate)) {
+            $this->subjectDates[] = $subjectDate;
+            $subjectDate->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubjectDate(SubjectDate $subjectDate): self
+    {
+        if ($this->subjectDates->removeElement($subjectDate)) {
+            // set the owning side to null (unless already changed)
+            if ($subjectDate->getUser() === $this) {
+                $subjectDate->setUser(null);
+            }
+        }
 
         return $this;
     }
