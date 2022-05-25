@@ -6,6 +6,7 @@
 
     <div class="student-container-admin sectionContainer transition">
 
+        <!-- Fil d'ariane -->
         {% block filAriana %}
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumbs ">
@@ -32,6 +33,7 @@
         {% endblock %}
 
 
+    <!-- Affichage des erreurs -->
     {% if error or errorNote or errorDate %}
         <section class="shadow errorBackground">
             <ul style="margin-left: 25px">
@@ -52,13 +54,14 @@
         </section>
     {% endif %}
 
+    <!-- Affichage du contenu de la page -->
     <main class="container-two-rows">
         <section class="left-section shadow">
             <h3 class="titleSection" id="titleCours">
 
                 <i class="fa-solid fa-book-open"></i>
                 {{ actualCours.name }} -
-                {{ actualCours.fullName }}
+                {{ actualCours.fullName }} - {{ actualCours.points }} ECTS
 
                 {% if error %}
                     <span class="errorBackground errorTitle shadow"> ERREUR </span>
@@ -161,6 +164,26 @@
 
                 </section>
 
+
+                    {% if app.user.roles|join == 'ROLE_ADMIN' %}
+
+                    <section class="shadow">
+                        <h3 class="titleSection">
+                            <i class="fa-solid fa-map"></i>
+                            Liste des campus
+                        </h3>
+                        <hr>
+
+                        <!-- Afficher les campus (Tous les campus pour le super admin ou le campus de l'utilisateur connecté) -->
+                        <div class="containerFilterCampus">
+                            {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
+                        </div>
+
+                    </section>
+
+                    {% endif %}
+
+
                 <section class="shadow editCoursSection">
                     <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>
                     <hr>
@@ -199,24 +222,7 @@
 
                 </section>
 
-                {% if app.user.roles|join == 'ROLE_ADMIN' %}
-
-                    <section class="shadow">
-                        <h3 class="titleSection">
-                            <i class="fa-solid fa-map"></i>
-                            Liste des campus
-                        </h3>
-                        <hr>
-
-                        <!-- Afficher les campus (Tous les campus pour le super admin ou le campus de l'utilisateur connecté) -->
-                        <div class="containerFilterCampus">
-                            {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
-                        </div>
-
-                    </section>
-
-                {% endif %}
-
+                
             </div>
         </div>
     </main>

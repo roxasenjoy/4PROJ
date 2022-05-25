@@ -49,14 +49,16 @@ class _addIntervenantFormType extends AbstractType
 
                 'query_builder' => function(EntityRepository $campusRepo){
                     $campusRepo =  $campusRepo
-                        ->createQueryBuilder('c')
-                        ->where('c.id = :idCampus')
-                        ->setParameter('idCampus',
-                            $this->authService
-                                ->isAuthenticatedUser()
-                                ->getCampus()
-                                ->getId()
-                        );
+                        ->createQueryBuilder('c');
+                        if($this->authService->isAuthenticatedUser()->getRoles()[0] != 'ROLE_ADMIN'){
+                            $campusRepo->where('c.id = :idCampus')
+                            ->setParameter('idCampus',
+                                $this->authService
+                                    ->isAuthenticatedUser()
+                                    ->getCampus()
+                                    ->getId()
+                            );
+                        }
                     return $campusRepo;
 
                 }

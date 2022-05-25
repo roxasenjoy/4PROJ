@@ -78,7 +78,7 @@ class UserGradeRepository extends ServiceEntityRepository
     public function hasUserGrade($user, $cours){
 
         $qb = $this->createQueryBuilder('ug')
-                    ->select('ug.id')
+                    ->select('ug.id', 'ug.grade')
                     ->join('ug.user', 'user')
                     ->join('ug.subject', 'subject')
 

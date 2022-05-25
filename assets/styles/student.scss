@@ -1,60 +1,68 @@
 @import "variables";
 
-
 /**
     FILTRE DES ETUDIANTS
 */
-.container-two-rows{
+
+.container-two-rows {
     display: flex;
     flex-direction: row;
     justify-content: center;
-
     .right-section {
         flex: 1;
-
-        .intervenantSubject{
+        .intervenantSubject {
             font-size: 1.2em;
             color: $blue;
             font-family: $msNormal;
-            text-align: center;
-            margin-top: 25px;
+            text-align: left;
+            word-wrap: break-word;
+            p {
+                background-color: $blue;
+                width: 90%;
+                font-size: 1.25em;
+                text-align: center;
+                margin: auto;
+                color: $white;
+                border-radius: 8px;
+                padding: 10px 0;
+                margin-top: 25px;
+                &.validated {
+                    background-color: $green
+                }
+                &.failed {
+                    background-color: $red
+                }
+            }
         }
-
-
         .fixed {
             position: sticky;
             TOP: 25px;
-
-            section{
+            section {
                 margin: 25px;
                 margin-left: 0px;
-
-                .containerClass{
+                .containerClass {
                     display: flex;
                     flex-wrap: wrap;
-
-                    a{
-                        flex-grow:1;
+                    a {
+                        flex-grow: 1;
                         margin: 10px;
                         padding: 10px;
                         border-radius: 8px;
                         background-color: white;
                         text-align: center;
-                        font-size: 1.25em;
+                        font-size: 0.95em;
                         text-decoration: none;
                         color: $blue;
                         font-family: $msBold;
-
                         &:hover,
-                        &.selected{
+                        &.selected {
                             background-color: $blue;
                             color: $white;
                         }
                     }
                 }
             }
-
-            .linkNewStudent{
+            .linkNewStudent {
                 text-decoration: none;
                 background: $green;
                 color: $white;
@@ -69,21 +77,16 @@
             }
         }
     }
-
-    .left-section{
+    .left-section {
         flex: 3;
         margin: 25px;
-
-        .content{
-            .card-container{
+        .content {
+            .card-container {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
-
-                a{
-
-                }
-                .card{
+                a {}
+                .card {
                     flex: 1 1 25%;
                     margin: 10px;
                     border-radius: 8px;
@@ -94,14 +97,12 @@
                     font-family: $msBold;
                     display: flex;
                     flex-direction: column;
-
                     .logo-nav {
                         font-family: $msNormal !important;
                         text-align: center;
                         color: $blue;
                         margin-bottom: 10px;
-
-                        .actualYear{
+                        .actualYear {
                             background-image: linear-gradient(to bottom, #04284a, #03305a, #02396b, #04417c, #094a8e);
                             border-top-left-radius: 8px;
                             border-top-right-radius: 8px;
@@ -109,30 +110,41 @@
                             padding: 10px;
                             font-family: $msBold;
                             margin-bottom: 10px;
-
-                            &.one{background: #E1E8ED;  }
-                            &.two{background: #AAB8C2;}
-                            &.three{background: #657786; }
-                            &.four{background: $blue;  }
-                            &.five{background: #14171A; }
-
-
-
-
+                            &.one {
+                                background: #E1E8ED;
+                            }
+                            &.two {
+                                background: #AAB8C2;
+                            }
+                            &.three {
+                                background: #657786;
+                            }
+                            &.four {
+                                background: $blue;
+                            }
+                            &.five {
+                                background: #14171A;
+                            }
                         }
-
-
-                        i.one{color: #E1E8ED; }
-                        i.two{color: #AAB8C2; }
-                        i.three{color: #657786; }
-                        i.four{color: $blue; }
-                        i.five{color: #14171A; }
-
+                        i.one {
+                            color: #E1E8ED;
+                        }
+                        i.two {
+                            color: #AAB8C2;
+                        }
+                        i.three {
+                            color: #657786;
+                        }
+                        i.four {
+                            color: $blue;
+                        }
+                        i.five {
+                            color: #14171A;
+                        }
                         i {
                             font-size: 3em;
                             margin-bottom: 15px;
                         }
-
                         #fullName {
                             font-size: 1.5em;
                             font-weight: 500;
@@ -140,7 +152,6 @@
                             text-transform: capitalize;
                             margin-bottom: 20px;
                         }
-
                         #role-student {
                             font-size: 0.8em;
                             font-style: italic;
@@ -153,113 +164,95 @@
     }
 }
 
+
 /******************************************************
 ******************************************************
                     FICHE ETUDIANTE
 ******************************************************
 *****************************************************/
-.left-section{
-    .personnalInformation{
 
+.left-section {
+    .personnalInformation {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-
-
         .typeStudent,
-        .contactStudent{
+        .contactStudent {
             flex: 1 1 20%;
             margin: 10px;
             color: $blue;
-
-
-            p{
+            p {
                 margin-bottom: 10px;
-
-                span{
+                span {
                     font-family: $msBold;
-
-                    i{
-                        color:$blue;
+                    i {
+                        color: $blue;
                         font-size: 1.5em;
                     }
                 }
             }
         }
-
-        .contactStudent{
-
+        .contactStudent {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             flex-direction: row;
-
-            p{
+            p {
                 flex: 1 1 50%;
                 align-items: center;
                 font-size: 1.2em;
-                word-break: break-word; /* new */
+                word-break: break-word;
+                /* new */
                 display: flex;
                 align-content: center;
                 font-family: $msNormal;
-
-                span{
-                    i{
-                        color:$blue;
+                span {
+                    i {
+                        color: $blue;
                         font-size: 1.5em;
                         margin-right: 15px;
                     }
                 }
-
             }
         }
-
-        .typeStudent{
+        .typeStudent {
             text-decoration: none;
             font-family: $msNormal;
             font-size: 1.2em;
         }
-
-
     }
-
-
 }
 
+
 /**** Deuxième partie **/
-.scolarInformationContainer{
 
+.scolarInformationContainer {
     margin-top: 20px;
-    word-break: break-word; /* new */
-
-    .scolarInformation{
+    word-break: break-word;
+    /* new */
+    .scolarInformation {
         color: $blue;
         font-size: 1.2em;
         font-family: $msNormal;
-
-        h3{
+        h3 {
             font-size: 1.5em;
             font-family: $msBold;
         }
-
-        p{
+        p {
             margin-left: 10px;
             margin-bottom: 10px;
-            span{
+            span {
                 font-family: $msBold;
             }
         }
-
     }
 }
 
-
-.btnContainer{
+.btnContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     flex-direction: row;
-
     .editInformation,
     .submitNewInformation,
     .cancelInformation {
@@ -274,25 +267,22 @@
         font-family: $msNormal;
         font-size: 1.25em;
         margin: 20px;
-
         &.submitNewInformation {
             background-color: $green;
             border: none;
         }
-
         &.cancelInformation {
             background-color: $red;
         }
-
-        &:hover{
-            cursor:pointer;
+        &:hover {
+            cursor: pointer;
         }
     }
 }
 
 .left-section,
-.scolarInformationContainer{
-    input{
+.scolarInformationContainer {
+    input {
         border: none;
         color: $blue;
         font-family: $msBold;
@@ -300,8 +290,7 @@
         background: $greyLight;
         padding: 10px;
     }
-
-    select{
+    select {
         padding: 10px;
         font-size: 1em;
         font-family: $msNormal;
@@ -309,91 +298,69 @@
     }
 }
 
-
 // La taille maximal du design est de 1024px et la taille minimum est celle du téléphone : 700px
-@media (max-width: $laptop){
-    .container-two-rows{
+@media (max-width: $laptop) {
+    .container-two-rows {
         flex-direction: column-reverse;
-
         .right-section,
-        section{
+        section {
             margin: initial !important;
         }
-
-        .right-section{
+        .right-section {
             margin-bottom: 25px !important;
-
-            .actionStudent{
+            .actionStudent {
                 margin-top: 25px !important;
             }
         }
-
-
-        .editCoursSection{
+        .editCoursSection {
             margin-top: 25px !important;
         }
-
-        .addCoursSection{
+        .addCoursSection {
             margin-top: 25px !important;
         }
-
-
     }
 }
 
-@media (max-width: $smartphone){
-
-    .container-two-rows{
-        .left-section{
-            .content{
-                .card-container{
+@media (max-width: $smartphone) {
+    .container-two-rows {
+        .left-section {
+            .content {
+                .card-container {
                     flex-direction: column !important;
                 }
             }
         }
     }
-
-    .personnalInformation{
-
+    .personnalInformation {
         .typeStudent,
-        .contactStudent{
+        .contactStudent {
             flex: 1 1 100% !important;
             margin: 10px;
             color: $blue;
-
-            p{
+            p {
                 margin-bottom: 10px;
-
-                span{
+                span {
                     font-family: $msBold;
-
-                    i{
-                        color:$blue;
+                    i {
+                        color: $blue;
                         font-size: 1.5em;
                     }
                 }
-
             }
         }
-
-        .contactStudent{
-            p{
+        .contactStudent {
+            p {
                 flex: 1 1 100% !important;
             }
         }
     }
-
     .left-section,
-    .scolarInformationContainer{
-        input{
+    .scolarInformationContainer {
+        input {
             width: 150px;
         }
-
-        select{
+        select {
             width: 150px;
         }
     }
-
-
 }
-

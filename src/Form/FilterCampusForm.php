@@ -33,12 +33,15 @@ class FilterCampusForm extends AbstractType
             'multiple' => true,
             'attr' => [
                 'placeholder' => 'Campus',
-                'class' => 'contentFilterCampus'
+                'class' => 'contentFilterCampus '
             ],
         ])
 
         ->add('submit', SubmitType::class, [
-            'label' => 'Filtrer'
+            'label' => 'Filtrer',
+            'attr' => [
+                'class' => 'zoom'
+            ]
         ]);
     }
 

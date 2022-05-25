@@ -61,15 +61,23 @@ class CoursController extends AbstractController
     public function getDetails(Request $request): Response
     {
 
+        $user = $this->authService->isAuthenticatedUser();
+
         // Récuperer l'id du cours en question
         $cours = $this->em->getRepository(Subject::class)->find($request->get('id'));
-
         $intervenant = $this->em->getRepository(Intervenant::class)->getIntervenantBySubject($cours);
+        $isValidated = $this->em->getRepository(UserGrade::class)->hasUserGrade($user, $cours);
 
+        if(!$isValidated){
+            $isValidated = null;
+        } else {
+            $isValidated = $isValidated[0]['grade'];
+        }
 
         return $this->render('cours/details.html.twig', [
             'cours' => $cours,
-            'intervenant' => $intervenant[0]
+            'intervenant' => $intervenant[0],
+            'isValidated' => $isValidated
         ]);
     }
 
@@ -351,11 +359,14 @@ class CoursController extends AbstractController
 
                                 $value >= 10 ? $isValid = true : $isValid = false;
 
-                                $hasUserGrade->setStatus($isValid);
-                                $hasUserGrade->setGrade($value);
+                                // Changement des crédits ECTS de la matière + changement de l'année scolaire
+                                if($teacherRole !== 'ROLE_TEACHER') {
+                                    $hasUserGrade->setStatus($isValid);
+                                    $hasUserGrade->setGrade($value);
 
-                                $this->em->persist($hasUserGrade);
-                                $this->em->flush();
+                                    $this->em->persist($hasUserGrade);
+                                    $this->em->flush();
+                                }
 
                                 if($value <= 9 && $value){
                                     $this->emailFailedCours($getCours, $getStudent, $hasUserGrade->getGrade());
@@ -417,6 +428,7 @@ class CoursController extends AbstractController
                 $error = $this->verificationDiminutif($editForm, $getCours);
             }
         }
+
 
         return $this->render('cours/admin/details.html.twig', [
             'form' => $form->createView(),

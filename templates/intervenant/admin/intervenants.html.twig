@@ -30,18 +30,22 @@
                 {% block listCours %}
                     <div class="content">
 
-                        <!-- Elément à boucler -->
-                        <div class="card-container">
-                            {% for intervenant in intervenants %}
-                                <a class="card shadow zoom" href="{{ path('admin_intervenant_details', {id: intervenant.id}) }}">
-                                    <div class="logo-nav ">
-                                        <p class="actualYear four"> {{ intervenant.campusName }}</p>
-                                        <i class="fa-solid fa-chalkboard-user" style="color: #053869"></i>
-                                        <p id="fullName">{{ intervenant.firstName }} {{ intervenant.lastName }}</p>
-                                    </div>
-                                </a>
-                            {% endfor %}
-                        </div>
+                        {% if intervenants %}
+                            <!-- Elément à boucler -->
+                            <div class="card-container">
+                                {% for intervenant in intervenants %}
+                                    <a class="card shadow zoom" href="{{ path('admin_intervenant_details', {id: intervenant.id}) }}">
+                                        <div class="logo-nav ">
+                                            <p class="actualYear four"> {{ intervenant.campusName }}</p>
+                                            <i class="fa-solid fa-chalkboard-user" style="color: #053869"></i>
+                                            <p id="fullName">{{ intervenant.firstName }} {{ intervenant.lastName }}</p>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="no-information">Aucun intervenant n'est présent pour le moment.</p>
+                        {% endif %}
                     </div>
 
                 {% endblock %}

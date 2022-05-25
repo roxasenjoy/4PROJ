@@ -74,7 +74,7 @@
 
 
                     <!---------------------------------------------------------
-                                        ROLE PEDAGOGIQUE
+                                        ROLE INTERVENANT
                     ----------------------------------------------------------->
                     {% if app.user.roles|join(', ') == 'ROLE_TEACHER' %}
                         <div class="section-title"> Gestion des notes </div>
@@ -94,7 +94,7 @@
                     <!---------------------------------------------------------
                                         ROLE PEDAGOGIQUE
                     ----------------------------------------------------------->
-                    {% if app.user.roles|join(', ') == 'ROLE_PEDAGO' %}
+                    {% if app.user.roles|join(', ') == 'ROLE_PEDAGO' or app.user.roles|join(', ') == 'ROLE_ADMIN' %}
 
                         <!--
                             Côté académique - Les informations de l'étudiant par rapport à son parcours scolaire

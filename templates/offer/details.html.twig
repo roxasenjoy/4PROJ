@@ -23,7 +23,13 @@
     </nav>
 {% endblock %}
 
-{% block sectionTitle %} {{ offer.title }} {% endblock %}
+{% block sectionTitle %}
+
+    {% if date(offer.datePublication) > date('-1days', 'Europe/Paris') %}
+        {{ offer.title }}
+        <span class="newOffer"> NEW </span>
+    {% endif %}
+ {% endblock %}
 
 {% block content %}
 

@@ -29,7 +29,7 @@
         <main class="container-two-rows">
             <section class="left-section listLesson-container shadow transition">
 
-                <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> {{ cours.fullName }}   </h3>
+                <h3 class="titleSection"><i class="fa-solid fa-book-open"></i> {{ cours.fullName }} - {{ cours.points }} ECTS   </h3>
                 <hr>
 
                 <p class="no-information">Les détails de ce cours ne sont pas disponibles.</p>
@@ -39,19 +39,31 @@
             <div class="right-section">
                 <div class="fixed">
                     <section class="shadow">
-                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Intervenants </h3>
+                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Détails du cours </h3>
                         <hr>
 
                         <!-- Afficher le nom de l'intervenant qui propose le cours (en fonction du campus sélectionné -->
                         {% if intervenant %}
                             <div class="intervenantContainer ">
                                 <div class="fullNameContainer intervenantSubject">
-                                    {{ intervenant.firstName }} {{ intervenant.lastName}}
+                                    <i class="fa-solid fa-user"></i> {{ intervenant.firstName }} {{ intervenant.lastName}}
                                 </div>
                                 <div class="fullNameContainer intervenantSubject">
-                                    {{ intervenant.email }}
+                                    <i class="fa-solid fa-envelope"></i>  {{ intervenant.email }}
                                 </div>
 
+                                <br>
+
+                                <div class="fullNameContainer intervenantSubject">
+
+                                    {% if isValidated >= 10 %}
+                                        <p class="boxIsValidated validated"><i class="fa-solid fa-check" style="margin-right: 10px"></i> {{ isValidated }} / 20 </p>
+                                    {% elseif isValidated < 10  %}
+                                        <p class="boxIsValidated failed"><i class="fa-solid fa-xmark" style="margin-right: 10px"></i> {{ isValidated }} / 20 </p>
+                                    {% else %}
+                                        <p class="boxIsValidated"> -- / 20 </p>
+                                    {% endif %}
+                                </div>
                             </div>
                         {% else  %}
 

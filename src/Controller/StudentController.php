@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Entity\UserExtended;
 use App\Form\AddStudentFormType;
 use App\Form\EditStudentFormType;
+use App\Form\FilterCampusForm;
 use App\Form\RegistrationFormType;
 use App\Service\EmailService;
 use App\Service\GlobalService;
@@ -41,13 +42,21 @@ class StudentController extends AbstractController
     }
 
     #[Route('/student', name: 'app_student')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
 
-        $allStudents = $this->studentService->getAllStudentsPerCampus();
+
+
+        $campus = new Campus();
+        $form = $this->createForm(FilterCampusForm::class, $campus);
+        $form->handleRequest($request);
+        $formFilter = $form->get("campus")->getViewData();
+
+        $allStudents = $this->studentService->getAllStudentsPerCampus(0, $formFilter);
 
         return $this->render('student/student.html.twig', [
-            'allStudents' => $allStudents
+            'allStudents' => $allStudents,
+            'form' => $form->createView()
         ]);
     }
 
@@ -60,12 +69,18 @@ class StudentController extends AbstractController
             return $this->redirectToRoute('app_student');
         }
 
-        $allStudents = $this->studentService->getAllStudentsPerCampus($promotion);
+        $campus = new Campus();
+        $form = $this->createForm(FilterCampusForm::class, $campus);
+        $form->handleRequest($request);
+        $formFilter = $form->get("campus")->getViewData();
+
+        $allStudents = $this->studentService->getAllStudentsPerCampus($promotion, $formFilter);
 
        
         return $this->render('student/filter.html.twig', [
             'promotion' => $promotion,
-            'allStudents' => $allStudents
+            'allStudents' => $allStudents,
+            'form' => $form->createView()
         ]);
     }
 

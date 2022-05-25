@@ -38,7 +38,10 @@
                         <a href="{{ path('details_offer', {id: offer.id }) }}" class="linkOffer">
                             <div class="offerContainer shadow transition">
                                 <h2>
-                                    <span class="newOffer"> NEW </span>
+
+                                    {% if date(offer.datePublication) > date('-1days', 'Europe/Paris') %}
+                                        <span class="newOffer"> NEW </span>
+                                    {% endif %}
                                     {{ offer.title }}
                                 </h2>
                                 <p class="nameCompany">{{ offer.company }}</p>

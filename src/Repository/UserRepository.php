@@ -78,7 +78,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param $promotion
      * @return float|int|mixed|string
      */
-    public function getAllStudentsPerPromotion($promotion){
+    public function getAllStudentsPerPromotion($promotion, $filterCampus){
 
         $user = $this->authService->isAuthenticatedUser();
 
@@ -87,16 +87,33 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->join('u.userExtended', 'ux')
             ->join('ux.actualLevel' ,' al')
             ->join('u.campus', 'campus')
-            ->join('u.role', 'role')
+            ->join('u.role', 'role');
 
             /* On récupère tous les étudiants du campus */
-            ->where('campus.id = :campusId')
-            ->setParameter('campusId', $user->getCampus()->getId())
-            ->andWhere('role.id = :roleStudent')
+            // Si ADMIN on récupere tous les campus
+            if($user->getRoles()[0] != 'ROLE_ADMIN'){
+
+                $qb->andWhere('campus.id = :campusId')
+                    ->setParameter(':campusId', $user->getCampus()->getId())
+                ;
+
+
+            }
+
+        if($filterCampus){
+            $qb->andWhere('campus.id IN (:campusId)')
+                ->setParameter(':campusId', $filterCampus)
+            ;
+        }
+
+
+
+
+
+            $qb->andWhere('role.id = :roleStudent')
             ->setParameter(':roleStudent', self::ROLE_STUDENT)
             ->addOrderBy('al.year', 'ASC')
-            ->addOrderBy('u.firstName', 'ASC')
-           ;
+            ->addOrderBy('u.firstName', 'ASC');
 
             /* Si aucune promotion n'est sélectionné, on affiche tous les étudiants du campus */
             if($promotion > 0){

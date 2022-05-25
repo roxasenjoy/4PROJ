@@ -78,6 +78,21 @@
                         {% endblock %}
                     </section>
 
+                    {% if app.user.roles|join == 'ROLE_ADMIN' %}
+
+                        <section class="shadow">
+                            <h3 class="titleSection">
+                            <i class="fa-solid fa-map"></i>
+                            Liste des campus
+                        </h3>
+                            <hr>
+
+                            <div class="containerFilterCampus">
+                                {% include  'filter/_campusFilter.html.twig' with {form: form} only %}
+                            </div>
+                        </section>
+                    {% endif %}
+
 
 
                     <section class="shadow actionStudent">

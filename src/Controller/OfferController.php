@@ -173,7 +173,7 @@ class OfferController extends AbstractController
 
         $offer = $this->em->getRepository(Offer::class)->find($id);
 
-        if($offer){
+        if(!$offer){
             return $this->redirectToRoute('show_offer');
         }
 

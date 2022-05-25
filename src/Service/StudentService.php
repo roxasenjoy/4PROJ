@@ -25,10 +25,10 @@ class StudentService
      * @param int $promotion
      * @return void
      */
-    public function getAllStudentsPerCampus(int $promotion = 0){
+    public function getAllStudentsPerCampus(int $promotion = 0, $filterCampus = null){
 
         // Obtenir tous les étudiants en fonction du campus et de la classe sélectionnée
-        $allStudents = $this->em->getRepository(User::class)->getAllStudentsPerPromotion($promotion);
+        $allStudents = $this->em->getRepository(User::class)->getAllStudentsPerPromotion($promotion, $filterCampus);
 
         return $allStudents;
 

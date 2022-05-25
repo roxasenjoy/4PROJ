@@ -103,6 +103,7 @@ class IntervenantController extends AbstractController
         }
 
         if($form->isSubmitted() && $form->isValid()){
+
             /*
              * Ajout des cours en fonction de l'intervenant
              */
@@ -118,6 +119,9 @@ class IntervenantController extends AbstractController
                     $fullName   = $isIntervenantAlreadyExist[0]['firstName'] . ' ' . $isIntervenantAlreadyExist[0]['lastName'];
                     $error      = 'Le cours ' . $subject->getName() . ' est déjà donné par : ' . $fullName . ' à ' . $campus->getName();
 
+                    //Set les nouvelles valeurs
+
+
                 } else {
                     $newIntervenant     = new Intervenant();
                     $newIntervenant     ->setCampus($campus)
@@ -127,6 +131,10 @@ class IntervenantController extends AbstractController
                     $this->em->persist($newIntervenant);
                 }
             }
+
+            // Modification des informations de l'intervenant
+            $user->getUserExtended()->setRegion($form->get('region')->getData());
+            $user->getUserExtended()->setAddress($form->get('address')->getData());
 
             if(!$error && !$errorField){
                 $this->em->flush();
