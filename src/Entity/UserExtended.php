@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserExtendedRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    
+)]
 #[ORM\Entity(repositoryClass: UserExtendedRepository::class)]
 class UserExtended
 {

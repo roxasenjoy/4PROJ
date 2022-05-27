@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,5 +112,21 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+    }
+
+    /**
+     * On écrase la méthode START qui se trouve dans AbstractLoginFormAuthenticator afin de
+     * redirigier l'utilisateur vers la page de login.
+     */
+    public function start(Request $request, AuthenticationException $authException = null): Response
+    {
+
+        if(in_array('application/json', $request->getAcceptableContentTypes())){
+            return new JsonResponse(null, Response::HTTP_UNAUTHORIZED);
+        }
+
+        $url = $this->getLoginUrl($request);
+
+        return new RedirectResponse($url);
     }
 }

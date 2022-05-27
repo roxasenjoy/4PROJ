@@ -55,10 +55,9 @@
                                 <br>
 
                                 <div class="fullNameContainer intervenantSubject">
-
                                     {% if isValidated >= 10 %}
                                         <p class="boxIsValidated validated"><i class="fa-solid fa-check" style="margin-right: 10px"></i> {{ isValidated }} / 20 </p>
-                                    {% elseif isValidated < 10  %}
+                                    {% elseif isValidated < 10 and isValidated  %}
                                         <p class="boxIsValidated failed"><i class="fa-solid fa-xmark" style="margin-right: 10px"></i> {{ isValidated }} / 20 </p>
                                     {% else %}
                                         <p class="boxIsValidated"> -- / 20 </p>

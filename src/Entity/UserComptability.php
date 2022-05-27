@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserComptabilityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    
+)]
 #[ORM\Entity(repositoryClass: UserComptabilityRepository::class)]
 class UserComptability
 {

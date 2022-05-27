@@ -18,8 +18,5 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
 
         return new Response('<html><head></head><body>Page not found</body></html>', 402);
 
-
-
-
     }
 }

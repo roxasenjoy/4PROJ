@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\MeController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,13 +12,38 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    collectionOperations: [],
+    itemOperations: [
+        'get' => [
+            'controller' => NotFoundAction::class,
+            'openapi_context' => ['summary' => 'hidden'],
+            'read' => false,
+            'output' => false
+        ],
+
+        'me' => [
+            'pagination_enabled' => false,
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+            'read' => false,
+//            'openapi_context' => [
+//                'security' => ['cookieAuth' => []]
+//            ]
+        ]
+    ],
+    normalizationContext: ['groups' => ['read:User']]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Votre email est déjà utilisée.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['read:User'])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
@@ -25,18 +53,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private $lastName;
 
+    #[Groups(['read:User'])]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
+    #[Groups(['read:User'])]
     #[ORM\Column(type: 'json')]
     private $roles = array();
 
     #[ORM\Column(type: 'string')]
     private $password;
 
+    #[Groups(['read:User'])]
     #[ORM\ManyToOne(targetEntity: Campus::class, fetch:'EAGER', inversedBy: 'users')]
     private $campus;
 
+    #[Groups(['read:User'])]
     #[ORM\ManyToOne(targetEntity: Role::class, fetch:'EAGER',  inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private $role;
