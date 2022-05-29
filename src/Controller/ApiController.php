@@ -5,9 +5,23 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class ApiController extends AbstractController
 {
+
+
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    public function __invoke()
+    {
+        $user = $this->security->getUser();
+        return $user;
+    }
 
     /**
      * Gestion de l'auth à l'API
@@ -41,7 +55,25 @@ class ApiController extends AbstractController
      * Récupération des données
      */
     #[Route('/api/v1/user', name: 'api_get_user', methods: ['POST'])]
-    public function apiGetUser(){
+    public function apiUserConnected(){
+
+        $user = $this->security->getUser();
+
+        return $user;
+
+    }
+
+    /**
+     * Récupération des données
+     */
+    #[Route('/api/v1/campus', name: 'api_get_campus', methods: ['POST'])]
+    public function apiTest(){
+
+        dd($this);
+
+
+
+        return $user;
 
     }
 }

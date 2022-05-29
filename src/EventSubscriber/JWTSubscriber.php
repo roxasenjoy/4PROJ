@@ -3,12 +3,13 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use JetBrains\PhpStorm\NoReturn;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class JWTSubscriber implements EventSubscriberInterface
 {
-    public function onLexikJwtAuthenticationOnJwtCreated(JWTCreatedEvent $event)
+    #[NoReturn] public function onLexikJwtAuthenticationOnJwtCreated(JWTCreatedEvent $event)
     {
 
         $data = $event->getData();

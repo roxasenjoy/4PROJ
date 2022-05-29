@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ApiController;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,19 +26,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'output' => false
         ],
 
-        'me' => [
+        'user' => [
             'pagination_enabled' => false,
-            'path' => '/me',
+            'path' => 'v1/user',
             'method' => 'get',
-            'controller' => MeController::class,
+            'controller' => ApiController::class,
             'read' => false,
             'openapi_context' => [
                 'security' => [['bearerAuth' => []]]
             ]
-        ]
+        ],
     ],
     normalizationContext: ['groups' => ['read:User']]
 )]
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Votre email est déjà utilisée.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
@@ -48,9 +50,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[Groups(['read:User'])]
     #[ORM\Column(type: 'string', length: 255)]
     private $firstName;
 
+    #[Groups(['read:User'])]
     #[ORM\Column(type: 'string', length: 255)]
     private $lastName;
 
