@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
@@ -15,11 +17,13 @@ class AuthService
     public function __construct(
         EntityManagerInterface $em,
         Security $security,
-        RouterInterface $router)
+        RouterInterface $router,
+        JWTEncoderInterface $jwtEncoder)
     {
         $this->em = $em;
         $this->security = $security;
         $this->router = $router;
+        $this->jwtEncoder = $jwtEncoder;
 
     }
 
@@ -37,6 +41,24 @@ class AuthService
         }
 
         return false;
+    }
+
+    /**
+     * Génération du Token JWT pour l'utilisateur
+     * @param User $user
+     * @return mixed
+     */
+    public function generateToken(User $user){
+        $token = $this->jwtEncoder->encode(
+            [
+                'username' => $user->getUsername(),
+                'password' => $user->getPassword(),
+                // token expire after a month
+                'exp' => time() + 2592000,
+            ]
+        );
+
+        return $token;
     }
 
 

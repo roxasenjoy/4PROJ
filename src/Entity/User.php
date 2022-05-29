@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,16 +31,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'method' => 'get',
             'controller' => MeController::class,
             'read' => false,
-//            'openapi_context' => [
-//                'security' => ['cookieAuth' => []]
-//            ]
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ]
         ]
     ],
     normalizationContext: ['groups' => ['read:User']]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Votre email est déjà utilisée.')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -92,6 +93,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getFirstName(): ?string
@@ -302,6 +310,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $subjectDate->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public static function createFromPayload($username, array $payload)
+    {
+        // TODO: Implement createFromPayload() method.
+
+        $user = new User();
+
+        $user->setId($username)->setEmail($payload['username'] ?? '');
+
+        return $user;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

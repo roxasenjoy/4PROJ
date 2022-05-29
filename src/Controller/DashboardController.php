@@ -39,6 +39,7 @@ class DashboardController extends AbstractController
     #[Route('/', name: 'app_dashboard')]
     public function index(): Response
     {
+
         $user = $this->authService->isAuthenticatedUser();
 
         return $this->render('dashboard/dashboard.html.twig', [

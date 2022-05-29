@@ -6,9 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\StudyLevelRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource(
-    
-)]
 #[ORM\Entity(repositoryClass: StudyLevelRepository::class)]
 class StudyLevel
 {

@@ -9,23 +9,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
 
+    /**
+     * Gestion de l'auth à l'API
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function api_login()
     {
 
         $user = $this->getUser();
 
-//        if($user === null){
-//            return $this->json([
-//                'message' => 'Missing Credentials'
-//            ], Response::HTTP_UNAUTHORIZED);
-//        }
-//
-//        $token = $this->get('lexik_jwt_authentication.encoder')
-//            ->encode([
-//                'username' => $user->getUsername(),
-//                'exp' => time() + 3600 // 1 hour expiration
-//            ]);
+        if($user === null){
+            return $this->json([
+                'message' => 'Missing Credentials'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
 
         return $this->json([
             'username' => $user->getUsername(),
@@ -35,6 +34,14 @@ class ApiController extends AbstractController
 
     #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
     public function logout(){
+
+    }
+
+    /**
+     * Récupération des données
+     */
+    #[Route('/api/v1/user', name: 'api_get_user', methods: ['POST'])]
+    public function apiGetUser(){
 
     }
 }

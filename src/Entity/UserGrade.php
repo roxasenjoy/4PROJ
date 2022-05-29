@@ -6,10 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserGradeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource(
-
-)]
-
 #[ORM\Entity(repositoryClass: UserGradeRepository::class)]
 class UserGrade
 {

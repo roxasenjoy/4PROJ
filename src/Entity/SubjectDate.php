@@ -6,9 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubjectDateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource(
-    
-)]
 #[ORM\Entity(repositoryClass: SubjectDateRepository::class)]
 class SubjectDate
 {

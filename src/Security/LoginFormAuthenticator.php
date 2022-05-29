@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,10 +32,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private UrlGeneratorInterface $urlGenerator;
     private EntityManagerInterface $em;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, AuthService $authService)
     {
         $this->urlGenerator = $urlGenerator;
         $this->em = $em;
+        $this->authService = $authService;
     }
 
     /**
@@ -66,6 +68,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
                 if (!$user) {
                     throw new UserNotFoundException();
                 }
+
+                $test = $this->authService->generateToken($user);
+                $user->setToken($test);
+
                 return $user;
             }),
             new PasswordCredentials($credentials['password']) /** Vérification du password de l'utilisateur **/
@@ -89,6 +95,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+
+
+
         $request->getSession()->getFlashBag()->add('success', "You are now signed in. Greetings, commander.");
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {

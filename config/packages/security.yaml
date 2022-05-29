@@ -8,26 +8,51 @@ security:
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
+
+        jwt:
+            lexik_jwt:
+                class: App\Entity\User
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
-            lazy: true
+        refresh:
+            pattern:  ^/api/token/refresh
+            stateless: true
+
+        login:
+            pattern: ^/api/login
+            stateless: true
             provider: app_user_provider
             json_login:
-                check_path: api_login
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                check_path: api_login #Valider les authentifications
+                success_handler: lexik_jwt_authentication.handler.authentication_success #Class à utiliser quand on arrive à se connecter
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure #Class à utiliser quand on n'arrive pas à se connecter
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            provider: jwt
+            jwt: ~
+
+
+        main:
+            json_login:
+                provider: app_user_provider
+                check_path: login
+                username_path: security.credentials.login
+                password_path: security.credentials.password
+
             logout:
-                path: app_logout
+                path: /logout
+                target: /login
+                invalidate_session: true
             custom_authenticator: App\Security\LoginFormAuthenticator
             access_denied_handler: App\Security\AccessDeniedHandler
 
@@ -39,8 +64,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
 
-        - { path: ^/api/login, roles: PUBLIC_ACCESS  }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY  }
+        - { path: ^/api/(login|token/refresh), roles: PUBLIC_ACCESS }
+        - { path: ^/api,       roles: PUBLIC_ACCESS   }
 
         #L'utilisateur n'a pas de compte
         - { path: ^/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY }

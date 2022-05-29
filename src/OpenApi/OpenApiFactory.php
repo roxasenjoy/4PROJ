@@ -28,18 +28,19 @@ final class OpenApiFactory implements OpenApiFactoryInterface
      */
     public function __invoke(array $context = []): OpenApi
     {
+
         $openApi = ($this->decorated)($context);
 
         $schemas = $openApi->getComponents()->getSecuritySchemes();
 
-        $schemas['cookieAuth'] = new \ArrayObject([
-            'type' => 'apiKey',
-            'in' => 'cookie',
-            'name' => 'PHPSESSID'
+        $schemas['bearerAuth'] = new \ArrayObject([
+            'type' => 'http',
+            'scheme' => 'bearer',
+            'bearerFormat' => 'JWT'
         ]);
 
         #Sécurité
-     //   $openApi = $openApi->withSecurity(['cookieAuth']);
+        $openApi = $openApi->withSecurity(['cookieAuth']);
 
         $schemas = $openApi->getComponents()->getSchemas();
         $schemas['Credentials'] = new \ArrayObject([
@@ -52,6 +53,15 @@ final class OpenApiFactory implements OpenApiFactoryInterface
                 'password' => [
                     'type' => 'string',
                     'example' => '123456',
+                ]
+            ]
+        ]);
+
+        $schemas['Token'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'username' => [
+                    'type' => 'string'
                 ]
             ]
         ]);
@@ -75,11 +85,11 @@ final class OpenApiFactory implements OpenApiFactoryInterface
 
                 responses: [
                     '200' => [
-                        'description' => 'Utilisateur connecté',
+                        'description' => 'Token JWT',
                         'content' => [
                             'application/json' => [
                                 'schema' => [
-                                    '$ref' => '#/components/schemas/User-read.User'
+                                    '$ref' => '#/components/schemas/Token'
                                 ]
                             ]
                         ]
