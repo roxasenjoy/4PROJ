@@ -68,15 +68,18 @@ class CoursController extends AbstractController
         $intervenant = $this->em->getRepository(Intervenant::class)->getIntervenantBySubject($cours);
         $isValidated = $this->em->getRepository(UserGrade::class)->hasUserGrade($user, $cours);
 
-        if(!$isValidated){
-            $isValidated = null;
-        } else {
-            $isValidated = $isValidated[0]['grade'];
-        }
+//        if(!$isValidated){
+//            $isValidated = null;
+//        } else {
+//            $isValidated = $isValidated[0]['grade'];
+//        }
+
+        $intervenant = $intervenant ? $intervenant[0] : null;
+        $isValidated = $isValidated ? $isValidated[0]['grade'] : null;
 
         return $this->render('cours/details.html.twig', [
             'cours' => $cours,
-            'intervenant' => $intervenant[0],
+            'intervenant' => $intervenant,
             'isValidated' => $isValidated
         ]);
     }

@@ -43,16 +43,22 @@
                         <hr>
 
                         <!-- Afficher le nom de l'intervenant qui propose le cours (en fonction du campus sélectionné -->
-                        {% if intervenant %}
-                            <div class="intervenantContainer ">
-                                <div class="fullNameContainer intervenantSubject">
-                                    <i class="fa-solid fa-user"></i> {{ intervenant.firstName }} {{ intervenant.lastName}}
-                                </div>
-                                <div class="fullNameContainer intervenantSubject">
-                                    <i class="fa-solid fa-envelope"></i>  {{ intervenant.email }}
-                                </div>
 
-                                <br>
+                            <div class="intervenantContainer ">
+                                {% if intervenant %}
+                                    <div class="fullNameContainer intervenantSubject">
+                                        <i class="fa-solid fa-user"></i> {{ intervenant.firstName }} {{ intervenant.lastName}}
+                                    </div>
+                                    <div class="fullNameContainer intervenantSubject">
+                                        <i class="fa-solid fa-envelope"></i>  {{ intervenant.email }}
+                                    </div>
+
+                                    <br>
+                                {% else  %}
+                                    <!-- Afficher tous les étudiants sans les notes  -->
+                                    <p class="no-information"> Aucun intervenant n'est assigné à ce cours pour le moment. </p>
+                                    <br>
+                                {% endif %}
 
                                 <div class="fullNameContainer intervenantSubject">
                                     {% if isValidated >= 10 %}
@@ -64,12 +70,9 @@
                                     {% endif %}
                                 </div>
                             </div>
-                        {% else  %}
 
-                            <!-- Afficher tous les étudiants sans les notes  -->
-                            <p class="no-information"> Aucun intervenant n'est assigné à ce cours pour le moment. </p>
 
-                        {% endif %}
+
 
                     </section>
                 </div>
