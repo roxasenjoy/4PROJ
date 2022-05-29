@@ -63,17 +63,4 @@ class ApiController extends AbstractController
 
     }
 
-    /**
-     * Récupération des données
-     */
-    #[Route('/api/v1/campus', name: 'api_get_campus', methods: ['POST'])]
-    public function apiTest(){
-
-        dd($this);
-
-
-
-        return $user;
-
-    }
 }
