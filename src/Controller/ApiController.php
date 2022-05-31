@@ -9,9 +9,6 @@ use Symfony\Component\Security\Core\Security;
 
 class ApiController extends AbstractController
 {
-
-
-
     public function __construct(Security $security)
     {
         $this->security = $security;
@@ -54,7 +51,7 @@ class ApiController extends AbstractController
     /**
      * Récupération des données
      */
-    #[Route('/api/v1/user', name: 'api_get_user', methods: ['POST'])]
+    #[Route('v1/user', name: 'api_get_user', methods: ['POST'])]
     public function apiUserConnected(){
 
         $user = $this->security->getUser();

@@ -70,6 +70,8 @@ final class OpenApiFactory implements OpenApiFactoryInterface
         /**
          * Enlever le paramètre ID du /api/me
          */
+
+
         $meOperation = $openApi->getPaths()->getPath('/api/v1/user')->getGet()->withParameters([]);
         $mePathItem = $openApi->getPaths()->getPath('/api/v1/user')->withGet($meOperation);
         $openApi->getPaths()->addPath('/api/v1/user', $mePathItem);
