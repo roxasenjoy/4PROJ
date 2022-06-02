@@ -10,11 +10,14 @@
         {% block filAriana %}
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumbs ">
-                    <li class="element ">
-                        <a href="{{ path('app_dashboard') }}" class="transition">
-                            <span class="animationClickableText">Tableau de bord</span>
-                        </a>
-                    </li>
+
+                    {% if app.user.role.id != 14 %}
+                        <li class="element ">
+                            <a href="{{ path('app_dashboard') }}" class="transition">
+                                <span class="animationClickableText">Tableau de bord</span>
+                            </a>
+                        </li>
+                    {% endif %}
 
                     <li class="current">Gestion des cours</li>
                 </ol>
@@ -64,8 +67,11 @@
                                             <p id="fullName">{{ cours.name }}</p>
                                         </div>
                                     </a>
+                                    </a>
                                 {% endfor %}
                             </div>
+
+                            {{ knp_pagination_render(allCours) }}
                         {% else %}
                             <p class="no-information">Aucun cours n'est disponible pour le moment.</
                         {% endif %}

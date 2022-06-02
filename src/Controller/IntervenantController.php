@@ -76,7 +76,7 @@ class IntervenantController extends AbstractController
         $intervenants = $this->em->getRepository(User::class)->getAllTeacherRoleByCampus($formFilter);
 
         return $this->render('intervenant/admin/intervenants.html.twig', [
-            'intervenants' => $intervenants,
+            'intervenants' => $this->globalService->generatePagination($intervenants, 9, $request),
             'form' => $form->createView(),
         ]);
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Madjid Booster - Dashboard {% endblock %}
+{% block title %} Madjid Booster - Tableau de bord {% endblock %}
 
 {% block body %}
 
@@ -8,29 +8,29 @@
 
         <div class="left-section">
             <!--
-                Dashboard - Affichage du nombre de crédits TOTAUX, du nombres de stages et des finances
+                Tableau de bord - Affichage du nombre de crédits TOTAUX, du nombres de stages et des finances
             -->
 
             <section class="elementGlobal-container shadow transition">
 
-                <h3 class="title-dashboard"><i class="fa-solid fa-house"></i> Dashboard </h3>
+                <h3 class="title-dashboard"><i class="fa-solid fa-house"></i> Tableau de bord </h3>
                 <hr>
 
                 <!-- PEDAGOGIQUE && ADMIN-->
                 {% if app.user.role.id == 15 or app.user.role.id == 16 %}
                     <div class="elementGlobal-content">
-                        <a href="{{ path('app_student') }}" class="element zoom" id="globalECTS">
+                        <a href="{{ path('app_student') }}" class="element zoom shadow" id="globalECTS">
                             <span> {{ totalStudent }} </span>
                             <p>Étudiants</p>
                         </a>
-                        <a href="{{ path('show_offer') }}" class="element zoom" id="globalOpportunities">
+                        <a href="{{ path('show_offer') }}" class="element zoom shadow" id="globalOpportunities">
                             <div >
                                 <span> {{ offersTotal }} </span>
                                 <p>Offres entreprises </p>
                             </div>
                         </a>
 
-                        <a href="{{ path('app_user_comptability') }}" class="element zoom" id="globalFinance">
+                        <a href="{{ path('app_cours_campus') }}" class="element zoom shadow" id="globalFinance">
                             <div >
                                 <span> {{ totalLesson }} </span>
                                 <p>Cours en ligne</p>
@@ -45,18 +45,18 @@
                 -->
                 {% if app.user.role.id == 12 %}
                     <div class="elementGlobal-content">
-                        <a href="{{ path('app_notes') }}" class="element zoom" id="globalECTS">
+                        <a href="{{ path('app_notes') }}" class="element zoom shadow" id="globalECTS">
                                 <span> {{ ectsTotal }} </span>
                                 <p>ECTS </p>
                         </a>
-                        <a href="{{ path('show_offer') }}" class="element zoom" id="globalOpportunities">
+                        <a href="{{ path('show_offer') }}" class="element zoom shadow" id="globalOpportunities">
                             <div >
                                 <span> {{ offersTotal }} </span>
                                 <p>Offres entreprises </p>
                             </div>
                         </a>
 
-                        <a href="{{ path('app_user_comptability') }}" class="element zoom" id="globalFinance">
+                        <a href="{{ path('app_user_comptability') }}" class="element zoom shadow" id="globalFinance">
                             <div >
                                 <span> {{ comptability }} </span>
                                 <p>Comptabilité </p>
@@ -97,6 +97,9 @@
                                 </div>
                             </div>
                         {% endfor %}
+
+                        {{ knp_pagination_render(notifications) }}
+
                     {% else  %}
 
                         <p class="no-information">Aucune activité disponible pour le moment</p>
@@ -182,7 +185,7 @@
 
                     {% endif %}
 
-                    {% if app.user.role.id == 14 %}
+                    {% if app.user.role.id == 12 %}
                         <h3 class="title-dashboard"><i class="fa-solid fa-clock"></i> Agenda </h3>
                         <hr>
 
@@ -244,7 +247,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if app.user.role.id == 14 %}
+                    {% if app.user.role.id == 12 %}
                         <h3 class="title-dashboard"><i class="fa-solid fa-medal"></i> Dernières évaluations </h3>
                         <hr>
                         <!-- Boucle for sur toutes les notes de l'utilisateur (ou les 5 dernières) -->

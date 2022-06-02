@@ -32,7 +32,7 @@ class ComptabilityController extends AbstractController
         $this->globalService = $globalService;
     }
 
-    #[Route('/user/comptability', name: 'app_user_comptability')]
+    #[Route('/comptabilite', name: 'app_user_comptability')]
     public function index(): Response
     {
         $user = $this->authService->isAuthenticatedUser();

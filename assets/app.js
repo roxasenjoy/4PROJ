@@ -17,6 +17,7 @@ import './styles/login.scss';
 import './styles/shared/layout/footer.scss';
 import './styles/shared/layout/header.scss';
 import './styles/shared/_filterCampus.scss';
+import './styles/shared/_pagination.scss';
 
 // Liste des pages
 import './styles/dashboard.scss';

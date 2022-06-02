@@ -7,18 +7,25 @@ use App\Entity\Subject;
 use App\Entity\SubjectDate;
 use App\Entity\UserComptability;
 use App\Entity\UserGrade;
+use App\Repository\NotificationRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use phpDocumentor\Reflection\Types\Integer;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class GlobalService
 {
 
     private $em;
+    private NotificationRepository $notification;
 
-    public function __construct(EntityManagerInterface $em)
+
+    public function __construct(EntityManagerInterface $em, PaginatorInterface $paginator)
     {
         $this->em = $em;
+        $this->paginator = $paginator;
     }
 
     /**
@@ -150,6 +157,23 @@ class GlobalService
         }
 
         return implode($pass); //turn the array into a string
+    }
+
+
+    /**
+     * Création d'une pagination en fonction de la query et tu nombre d'éléments par page
+     * @param $query
+     * @param $maxPerPage
+     * @param $request Request
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function generatePagination($query, $maxPerPage, Request $request){
+
+        return $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $maxPerPage /* limit */
+        );
     }
 
 

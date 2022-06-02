@@ -56,8 +56,10 @@ class StudentController extends AbstractController
 
         $allStudents = $this->studentService->getAllStudentsPerCampus(0, $formFilter);
 
+
+
         return $this->render('student/student.html.twig', [
-            'allStudents' => $allStudents,
+            'allStudents' => $this->globalService->generatePagination($allStudents, 9, $request),
             'form' => $form->createView()
         ]);
     }

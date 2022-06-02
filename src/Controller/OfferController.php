@@ -231,13 +231,14 @@ class OfferController extends AbstractController
 
 
     #[Route('/offres', name: 'show_offer')]
-    public function showOffer(): Response
+    public function showOffer(Request $request): Response
     {
 
         $offers = $this->em->getRepository(Offer::class)->getAllOffer();
 
         return $this->render('offer/show.html.twig', [
-            'offers' => $offers
+            'offers' => $this->globalService->generatePagination($offers, 4, $request),
+
         ]);
     }
 }

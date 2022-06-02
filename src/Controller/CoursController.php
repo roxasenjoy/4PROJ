@@ -94,7 +94,7 @@ class CoursController extends AbstractController
      */
     #[Route('/teacher/cours', name: 'app_cours_campus_teacher')]
     #[Route('/admin/cours', name: 'app_cours_campus')]
-    public function getAllCours(): Response
+    public function getAllCours(Request $request): Response
     {
         $user = $this->authService->isAuthenticatedUser();
 
@@ -108,7 +108,7 @@ class CoursController extends AbstractController
 
         return $this->render('cours/admin/cours.html.twig', [
             'promotion' => 0,
-            'allCours' => $allCours
+            'allCours' => $this->globalService->generatePagination($allCours, 9, $request)
         ]);
     }
 
