@@ -87,4 +87,15 @@ class SubjectRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Compte le nombre de cours disponibles
+     * @param $user
+     * @return float|int|mixed|string
+     */
+    public function countLesson(){
+        $qb =   $this->createQueryBuilder('subject')
+                ->select('count(subject) as totalLesson');
+        return $qb->getQuery()->getResult();
+    }
+
 }

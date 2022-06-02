@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Entity\Notification;
 use App\Entity\Offer;
 use App\Entity\Role;
 use App\Entity\StudyLevel;
@@ -12,6 +13,7 @@ use App\Form\AddStudentFormType;
 use App\Form\EditStudentFormType;
 use App\Form\FilterCampusForm;
 use App\Form\RegistrationFormType;
+use App\Service\AuthService;
 use App\Service\EmailService;
 use App\Service\GlobalService;
 use App\Service\StudentService;
@@ -32,21 +34,21 @@ class StudentController extends AbstractController
         StudentService $studentService,
         EntityManagerInterface $em,
         GlobalService $globalService,
-        EmailService $emailService){
+        EmailService $emailService,
+        AuthService $authService,
+    ){
 
         $this->em = $em;
         $this->studentService = $studentService;
         $this->globalService = $globalService;
         $this->emailService = $emailService;
+        $this->authService = $authService;
 
     }
 
     #[Route('/student', name: 'app_student')]
     public function index(Request $request): Response
     {
-
-
-
         $campus = new Campus();
         $form = $this->createForm(FilterCampusForm::class, $campus);
         $form->handleRequest($request);
@@ -120,6 +122,15 @@ class StudentController extends AbstractController
                         ->setHasProContract($form->get("hasProContract")->getData())
                         ->setIsHired($form->get("isHired")->getData());
 
+            // Nouvelle notification
+            $userConnected  = $this->authService->isAuthenticatedUser();
+            $notification   = new Notification();
+            $notification   ->setDate($this->globalService->getTodayDate())
+                ->setMessage("L'étudiant " . $userDetails->getFirstName() . ' ' . $userDetails->getLastName() . ' vient d\'être modifié')
+                ->setCampus($userConnected->getCampus())
+                ->setType('modifie');
+
+            $this->em->persist($notification);
             $this->em->persist($userDetails);
             $this->em->persist($userExtendedDetails);
             $this->em->flush();
@@ -204,6 +215,16 @@ class StudentController extends AbstractController
                     ->setUser($user)
                 ;
 
+                // Nouvelle notification
+                $userConnected = $this->authService->isAuthenticatedUser();
+                $notification = new Notification();
+                $notification   ->setDate($this->globalService->getTodayDate())
+                                ->setMessage("L'étudiant " . $user->getFirstName() . ' ' . $user->getLastName() . ' vient d\'être ajouté')
+                                ->setCampus($userConnected->getCampus())
+                                ->setType('ajoute');
+
+
+                $this->em->persist($notification);
                 $this->em->persist($user);
                 $this->em->persist($userExtended);
                 $this->em->flush();
@@ -230,6 +251,16 @@ class StudentController extends AbstractController
 
         $student = $this->em->getRepository(User::class)->find($studentId);
 
+        // Nouvelle notification
+        $userConnected  = $this->authService->isAuthenticatedUser();
+        $notification   = new Notification();
+        $notification   ->setDate($this->globalService->getTodayDate())
+                        ->setMessage("L'étudiant " . $student->getFirstName() . ' ' . $student->getLastName() . ' vient d\'être supprimé')
+                        ->setCampus($userConnected->getCampus())
+                        ->setType('supprime');
+
+
+        $this->em->persist($notification);
         $this->em->remove($student);
         $this->em->flush();
 

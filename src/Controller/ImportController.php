@@ -4,12 +4,14 @@ namespace App\Controller;
 
 
 use App\Entity\Import;
+use App\Entity\Notification;
 use App\Entity\User;
 use App\Entity\UserExtended;
 use App\Form\ImportType;
 use App\Message\ImportData;
 use App\Message\ImportNotification;
 use App\MessageHandler\ImportDataHandler;
+use App\Service\AuthService;
 use App\Service\EmailService;
 use App\Service\FileUploader;
 use App\Service\GlobalService;
@@ -33,6 +35,7 @@ class ImportController extends AbstractController
         ImportService $importService,
         GlobalService $globalService,
         EmailService $emailService,
+        AuthService $authService,
     )
 
     {
@@ -40,6 +43,7 @@ class ImportController extends AbstractController
         $this->importService = $importService;
         $this->globalService = $globalService;
         $this->emailService = $emailService;
+        $this->authService = $authService;
     }
 
     #[Route('/import', name: 'import')]
@@ -63,6 +67,16 @@ class ImportController extends AbstractController
                 $import = new ImportData($importFileName);
                 $bus->dispatch($import);
 
+                // Nouvelle notification
+                $userConnected  = $this->authService->isAuthenticatedUser();
+                $notification   = new Notification();
+                $notification   ->setDate($this->globalService->getTodayDate())
+                    ->setMessage($userConnected->getFirstName() . ' ' . $userConnected->getLastName() . " vient d'importer un fichier")
+                    ->setCampus($userConnected->getCampus())
+                    ->setType('ajoute');
+
+                $this->em->persist($notification);
+                $this->em->flush();
 //                $import->setFileName($importFileName);
 //                $this->em->persist($import);
 //                $this->em->flush();

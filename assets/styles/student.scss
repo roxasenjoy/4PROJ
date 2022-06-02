@@ -38,8 +38,7 @@
             position: sticky;
             TOP: 25px;
             section {
-                margin: 25px;
-                margin-left: 0px;
+                margin: 25px 0;
                 .containerClass {
                     display: flex;
                     flex-wrap: wrap;
@@ -85,7 +84,6 @@
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
-                a {}
                 .card {
                     flex: 1 1 25%;
                     margin: 10px;
@@ -301,10 +299,10 @@
 // La taille maximal du design est de 1024px et la taille minimum est celle du téléphone : 700px
 @media (max-width: $laptop) {
     .container-two-rows {
-        flex-direction: column-reverse;
+        flex-direction: column;
         .right-section,
         section {
-            margin: initial !important;
+            margin: 0 0 25px 0 !important;
         }
         .right-section {
             margin-bottom: 25px !important;

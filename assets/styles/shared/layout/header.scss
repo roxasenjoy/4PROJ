@@ -14,7 +14,6 @@ input[type="checkbox"][name^="menu"] {
     position: fixed;
     height: 100%;
     left: 0;
-    z-index: 999;
     border-right: #e6e7eb 1.5px solid;
     font-family: $msNormal;
     flex-direction: column;

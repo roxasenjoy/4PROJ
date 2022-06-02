@@ -71,6 +71,40 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+
+    /**
+     * Compte le nombre d'étudiant qui se trouve dans le campus de l'utilisateur connecté
+     * @param $user
+     * @return float|int|mixed|string
+     */
+    public function countStudent($user){
+        $qb = $this->createQueryBuilder('u')
+
+            ->select('count(role.id) as totalStudent')
+
+            /** Jointure de tous les éléments  **/
+            ->join('u.role', 'role')
+            ->join('u.campus', 'campus')
+            ->join('u.userExtended', 'ux')
+
+            /** Conditions **/
+            ->where('role.id = :roleStudent') // Condition : Le rôle de l'étudiant est 12
+            ->setParameter(':roleStudent', self::ROLE_STUDENT)
+
+            /** On regroupe les étudiants par rôle */
+            ->groupBy('role.id');
+
+        if($user->getRoles()[0] != 'ROLE_ADMIN')
+        {
+            $qb ->andWhere('campus.id = :campusId')
+                ->setParameter(':campusId', $user->getCampus()->getId());
+        }
+
+
+
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * Utilisé à l'endroit suivant : /admin/cours
      * Permet d'afficher les élèves en fonction du filtre sélectionné
@@ -82,42 +116,35 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $user = $this->authService->isAuthenticatedUser();
 
-        $qb = $this->createQueryBuilder('u')
-            ->select('u.id', 'campus.name as campusName ', 'u.firstName', 'u.lastName', 'al.name as actualYear', 'al.year')
-            ->join('u.userExtended', 'ux')
-            ->join('ux.actualLevel' ,' al')
-            ->join('u.campus', 'campus')
-            ->join('u.role', 'role');
+        $qb = $this ->createQueryBuilder('u')
+                    ->select('u.id', 'campus.name as campusName ', 'u.firstName', 'u.lastName', 'al.name as actualYear', 'al.year')
+                    ->join('u.userExtended', 'ux')
+                    ->join('ux.actualLevel' ,' al')
+                    ->join('u.campus', 'campus')
+                    ->join('u.role', 'role');
 
             /* On récupère tous les étudiants du campus */
             // Si ADMIN on récupere tous les campus
-            if($user->getRoles()[0] != 'ROLE_ADMIN'){
-
-                $qb->andWhere('campus.id = :campusId')
-                    ->setParameter(':campusId', $user->getCampus()->getId())
-                ;
-
-
+            if($user->getRoles()[0] != 'ROLE_ADMIN')
+            {
+                $qb ->andWhere('campus.id = :campusId')
+                    ->setParameter(':campusId', $user->getCampus()->getId());
             }
 
-        if($filterCampus){
-            $qb->andWhere('campus.id IN (:campusId)')
-                ->setParameter(':campusId', $filterCampus)
-            ;
+        if($filterCampus)
+        {
+            $qb     ->andWhere('campus.id IN (:campusId)')
+                    ->setParameter(':campusId', $filterCampus);
         }
 
-
-
-
-
-            $qb->andWhere('role.id = :roleStudent')
-            ->setParameter(':roleStudent', self::ROLE_STUDENT)
-            ->addOrderBy('al.year', 'ASC')
-            ->addOrderBy('u.firstName', 'ASC');
+            $qb     ->andWhere('role.id = :roleStudent')
+                    ->setParameter(':roleStudent', self::ROLE_STUDENT)
+                    ->addOrderBy('al.year', 'ASC')
+                    ->addOrderBy('u.firstName', 'ASC');
 
             /* Si aucune promotion n'est sélectionné, on affiche tous les étudiants du campus */
             if($promotion > 0){
-                $qb->andWhere('al.year = :promotionSelected')
+                $qb ->andWhere('al.year = :promotionSelected')
                     ->setParameter(':promotionSelected', $promotion);
             }
 

@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Notification;
 use App\Entity\Role;
 use App\Entity\StudyLevel;
+use App\Entity\Subject;
+use App\Entity\SubjectDate;
 use App\Entity\User;
 use App\Entity\UserExtended;
 use App\Service\AuthService;
@@ -48,7 +51,12 @@ class DashboardController extends AbstractController
             'cours'         => $this->globalService->getCours($user), // Cours
             'comptability'  => $this->globalService->getUserTotalComptability($user->getId()), // La comptabilité de l'étudiant
             'ectsTotal'     => $this->globalService->getAllEcts($user), // Total des crédits ECTS de l'étudiants
-            'offersTotal'   => $this->globalService->getAllOffer()
+            'offersTotal'   => $this->globalService->getAllOffer(),
+            'allStudents'   => $this->em->getRepository(User::class)->getAllStudentsPerPromotion(0, null),
+            'allLessons'    => $this->em->getRepository(Subject::class)->getAllLessons(0),
+            'totalStudent'  => $this->em->getRepository(User::class)->countStudent($user)[0]['totalStudent'],
+            'totalLesson'   => $this->em->getRepository(Subject::class)->countLesson()[0]['totalLesson'],
+            'notifications' => $this->em->getRepository(Notification::class)->getNotifications($user)
         ]);
     }
 }

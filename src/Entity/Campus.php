@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CampusRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,6 +20,14 @@ class Campus
 
     #[ORM\OneToMany(mappedBy: 'campus', targetEntity: User::class)]
     private $users;
+
+    #[ORM\OneToMany(mappedBy: 'campus', targetEntity: Notification::class, orphanRemoval: true)]
+    private $notifications;
+
+    public function __construct()
+    {
+        $this->notifications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,6 +70,36 @@ class Campus
             // set the owning side to null (unless already changed)
             if ($user->getCampus() === $this) {
                 $user->setCampus(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setCampus($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getCampus() === $this) {
+                $notification->setCampus(null);
             }
         }
 

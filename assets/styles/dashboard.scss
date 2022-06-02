@@ -37,10 +37,67 @@
 
 
     .left-section{
-
         flex: 3;
-
         .listLesson-container{
+
+            /**
+                Design des notifications
+             **/
+            .notifications-container{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                font-size: 1em;
+                padding: 15px 0;
+                border-bottom: 0.5px solid #c9ccd3;
+
+                .type{
+
+                    color: $white;
+                    padding: 10px 15px;
+                    border-radius: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+
+                    &.update{
+                        background: $yellow;
+                    }
+
+                    &.delete{
+                        background: $red;
+                    }
+
+                    &.add{
+                        background: $green;
+                }
+
+                }
+
+                .containerDescription{
+                    display: flex;
+                    width: 100%;
+                    margin-left: 20px;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .description{
+                        margin: 0 20px;
+                        text-align: left;
+                        font-size: 1.5em;
+                    }
+
+                    .date{
+                        color: #9dafc1;
+                        font-size: 1em;
+                    }
+
+
+                }
+
+            }
+
             .listLesson-parent{
                 text-align: center;
 
@@ -182,7 +239,8 @@
     .right-section{
         flex: 1;
 
-        .fixed{position: fixed}
+
+        .fixed{position: sticky;  width: 100%;}
 
         /**
             Prochain cours de l'élève
@@ -208,11 +266,7 @@
                 }
 
             }
-
-
         }
-
-
 
         /**
             Dernières évaluations
@@ -238,6 +292,119 @@
                 }
             }
         }
+
+        /**
+            Liste des étudiants
+        **/
+        .y-mandatory {
+            scroll-snap-type: y mandatory;
+        }
+
+        .y-scroll .element {
+            margin-bottom: 10px;
+        }
+
+        .scrollContainer{
+            height: 290px ;
+            flex-flow: row nowrap;
+            overflow-x: hidden;
+            border-radius: 8px;
+
+            /* width */
+            &::-webkit-scrollbar {
+                width: 5px;
+                border-radius: 8px;
+            }
+
+            .student-container{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: auto;
+                width: 95%;
+                scroll-snap-type: y mandatory;
+                .card {
+                    flex: 1 1 25%;
+                    margin: 10px;
+                    border-radius: 8px;
+                    background-color: white;
+                    text-align: center;
+                    text-decoration: none;
+                    color: #053869;
+                    font-family: $msBold;
+                    display: flex;
+
+                    flex-direction: column;
+                    .logo-nav {
+                        font-family: $msNormal !important;
+                        text-align: center;
+                        color: $blue;
+                        margin-bottom: 10px;
+                        scroll-margin: 10px;
+                        scroll-snap-align: start;
+                        scroll-snap-stop: normal;
+
+                        .actualYear {
+                            background-image: linear-gradient(to bottom, #04284a, #03305a, #02396b, #04417c, #094a8e);
+                            border-top-left-radius: 8px;
+                            border-top-right-radius: 8px;
+                            color: $white;
+                            padding: 10px;
+                            font-family: $msBold;
+                            margin-bottom: 10px;
+                            &.one {
+                                background: #E1E8ED;
+                            }
+                            &.two {
+                                background: #AAB8C2;
+                            }
+                            &.three {
+                                background: #657786;
+                            }
+                            &.four {
+                                background: $blue;
+                            }
+                            &.five {
+                                background: #14171A;
+                            }
+                        }
+
+
+                        i.one {
+                            color: #E1E8ED;
+                        }
+                        i.two {
+                            color: #AAB8C2;
+                        }
+                        i.three {
+                            color: #657786;
+                        }
+                        i.four {
+                            color: $blue;
+                        }
+                        i.five {
+                            color: #14171A;
+                        }
+                        i {
+                            font-size: 3em;
+                            margin-bottom: 15px;
+                        }
+                        #fullName {
+                            font-size: 1.5em;
+                            font-weight: 500;
+                            letter-spacing: -1px;
+                            text-transform: capitalize;
+                            margin-bottom: 20px;
+                        }
+                        #role-student {
+                            font-size: 0.8em;
+                            font-style: italic;
+                            font-weight: 5900;
+                        }
+                    }
+                }
+            }
+        } /* Fin scrollContainer */
     }
 }
 
@@ -275,11 +442,11 @@
     }
 
     .section-dashboard{
-        flex-direction: column-reverse;
+        flex-direction: column;
         padding: 0 !important;
     }
 
-    .right-section{
+    .left-section{
 
         margin-top: 85px;
 
@@ -301,7 +468,91 @@
 
 @media (max-width: $smartphone){
 
+
+    .section-dashboard{
+        .right-section{
+            .scrollContainer{
+                height: 218px ;
+
+                .student-container{
+                    .card {
+                        .logo-nav {
+                            #fullName {
+                                font-size: 1em !important;
+                                margin-bottom: 10px !important;
+                            }
+                        }
+                    }
+                }
+            } /* Fin scrollContainer */
+        }
+    }
+
+    /** Trois valeurs en haut de la page **/
+    .elementGlobal-container{
+        .elementGlobal-content{
+            .element{
+                margin: 5px 10px !important;
+                padding: 10px 0 !important;
+                font-size: 1em !important;
+
+
+                span{
+                    margin-bottom: 10px;
+                    font-family: $msBold;
+                    font-size: 1.7em;
+                }
+            }
+
+            #globalECTS{ background-color: #9a00c0}
+            #globalOpportunities{ background-color: #aa87e5}
+            #globalFinance{ background-color: #01b2c6}
+        }
+
+    }
+
+
     .listLesson-container{
+
+        /**
+                Design des notifications
+             **/
+        .notifications-container{
+            flex-direction: row;
+            align-items: center;
+            padding: 15px 0;
+
+            span{
+                display: none;
+
+            }
+
+            .type{
+                color: $white;
+                width: initial !important;
+
+                i{
+                    margin: initial !important;
+                }
+            }
+
+            .containerDescription{
+
+                margin-left: 5px !important;
+
+                .description{
+                    margin: 0 5px !important;
+                    font-size: 1em !important;
+                }
+
+                .date{
+                    font-size: 0.75em !important;
+                }
+            }
+
+        }
+
+
         .listLesson-parent{
             .listLesson-content{
                 width: 95% !important;

@@ -16,6 +16,33 @@
                 <h3 class="title-dashboard"><i class="fa-solid fa-house"></i> Dashboard </h3>
                 <hr>
 
+                <!-- PEDAGOGIQUE && ADMIN-->
+                {% if app.user.role.id == 15 or app.user.role.id == 16 %}
+                    <div class="elementGlobal-content">
+                        <a href="{{ path('app_student') }}" class="element zoom" id="globalECTS">
+                            <span> {{ totalStudent }} </span>
+                            <p>Étudiants</p>
+                        </a>
+                        <a href="{{ path('show_offer') }}" class="element zoom" id="globalOpportunities">
+                            <div >
+                                <span> {{ offersTotal }} </span>
+                                <p>Offres entreprises </p>
+                            </div>
+                        </a>
+
+                        <a href="{{ path('app_user_comptability') }}" class="element zoom" id="globalFinance">
+                            <div >
+                                <span> {{ totalLesson }} </span>
+                                <p>Cours en ligne</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+
+
+                <!--
+                    Role étudiant
+                -->
                 {% if app.user.role.id == 12 %}
                     <div class="elementGlobal-content">
                         <a href="{{ path('app_notes') }}" class="element zoom" id="globalECTS">
@@ -41,29 +68,71 @@
             </section>
 
             <section class="listLesson-container shadow transition" >
-                <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Master of Science </h3>
-                <hr>
 
-                <div class="listLesson-parent">
 
-                    {% if cours %}
-                        {% for cours in cours %}
-                            <a href="{{ path('app_cours_details', {id: cours.id}) }}">
-                                <div class="listLesson-content shadow transition">
-                                    <div class="imgBackground"></div>
-                                    <p class="title"> {{ cours.name }} </p>
-                                    <p>{{ cours.points }} ECTS</p>
+                {% if app.user.role.id == 15 or app.user.role.id == 16 %}
+                    <h3 class="title-dashboard"><i class="fa-solid fa-bell"></i> Activités récentes </h3>
+                    <hr>
+
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notifications-container">
+                                    {% if notification.type == 'ajoute' %}
+                                        <div class="type add">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </div>
+                                    {% elseif notification.type == 'supprime' %}
+                                        <div class="type delete">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </div>
+                                    {% elseif notification.type == 'modifie' %}
+                                        <div class="type update">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </div>
+                                    {% endif %}
+
+                                <div class="containerDescription">
+                                    <p class="description"> {{ notification.message }}</p>
+                                    <p class="date"> {{ notification.date|date("d/m/Y H:i") }}</p>
                                 </div>
-                            </a>
-
+                            </div>
                         {% endfor %}
-
                     {% else  %}
 
-                        <p class="no-information">Aucun cours n'est disponible pour le moment.</p>
+                        <p class="no-information">Aucune activité disponible pour le moment</p>
 
                     {% endif %}
-                </div>
+
+
+
+                {% endif %}
+
+                {% if app.user.role.id == 12 %}
+                    <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Master of Science </h3>
+                    <hr>
+
+                    <div class="listLesson-parent">
+
+                        {% if cours %}
+                            {% for cours in cours %}
+                                <a href="{{ path('app_cours_details', {id: cours.id}) }}">
+                                    <div class="listLesson-content shadow transition">
+                                        <div class="imgBackground"></div>
+                                        <p class="title"> {{ cours.name }} </p>
+                                        <p>{{ cours.points }} ECTS</p>
+                                    </div>
+                                </a>
+
+                            {% endfor %}
+
+                        {% else  %}
+
+                            <p class="no-information">Aucun cours n'est disponible pour le moment.</p>
+
+                        {% endif %}
+                    </div>
+                {% endif %}
+
             </section>
         </div>
 
@@ -73,22 +142,62 @@
                Affiche les dernières notes de l'étudiant
             -->
                 <section class="lessons-container shadow transition">
-                    <h3 class="title-dashboard"><i class="fa-solid fa-clock"></i> Agenda </h3>
-                    <hr>
 
-                    {% if agenda %}
+                    {% if app.user.role.id == 15 or app.user.role.id == 16 %}
+                        <h3 class="title-dashboard"><i class="fa-solid fa-graduation-cap"></i> Étudiants </h3>
+                        <hr>
 
-                        {% for date in agenda %}
-                            <div class="lesson-content">
-                                <p class="date"> <span> {{ date.date|date('d/m') }}</span> {{ date.name }}</p>
-                                <p class="time"> {{ date.date_begin }} - {{ date.date_end }}</p>
+                        <!-- Liste scrollable avec tous les étudiants -->
+                        {% if allStudents %}
+
+                            <div class="scrollContainer y-scroll y-mandatory" dir="ltr">
+                                {% for student in allStudents %}
+                                    <div class="student-container ">
+                                        <a class="card shadow zoom" href="{{ path('app_student_details', {id: student.id}) }}">
+                                            <div class="logo-nav">
+                                                {% if student.year == 1 %}
+                                                    <p class="actualYear one"> {{ student.actualYear }}</p>
+                                                {% elseif student.year == 2 %}
+                                                    <p class="actualYear two"> {{ student.actualYear }}</p>
+                                                {% elseif student.year == 3 %}
+                                                    <p class="actualYear three"> {{ student.actualYear }}</p>
+                                                {% elseif student.year == 4 %}
+                                                    <p class="actualYear four"> {{ student.actualYear }}</p>
+                                                {% elseif student.year == 5 %}
+                                                    <p class="actualYear five"> {{ student.actualYear }}</p>
+                                                {% endif %}
+
+                                                <p id="fullName">{{ student.firstName }} {{ student.lastName }}</p>
+                                                <p id="role-student">- {{ student.campusName }} - </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
 
-                    {% else %}
 
-                        <p class="no-information">Aucun cours n'est programmé pour le moment</p>
+                        {% else %}
+                            <p class="no-information">Aucun étudiant n'est présent sur votre campus.</p>
+                        {% endif %}
 
+                    {% endif %}
+
+                    {% if app.user.role.id == 14 %}
+                        <h3 class="title-dashboard"><i class="fa-solid fa-clock"></i> Agenda </h3>
+                        <hr>
+
+                        {% if agenda %}
+
+                            {% for date in agenda %}
+                                <div class="lesson-content">
+                                    <p class="date"> <span> {{ date.date|date('d/m') }}</span> {{ date.name }}</p>
+                                    <p class="time"> {{ date.date_begin }} - {{ date.date_end }}</p>
+                                </div>
+                            {% endfor %}
+
+                        {% else %}
+                            <p class="no-information">Aucun cours n'est programmé pour le moment</p>
+                        {% endif %}
                     {% endif %}
 
                 </section>
@@ -96,24 +205,63 @@
                 <!--
                     Affiche les dernières notes de l'étudiant
                 -->
-
                 <section class="notes-container shadow transition">
-                    <h3 class="title-dashboard"><i class="fa-solid fa-medal"></i> Dernières évaluations </h3>
-                    <hr>
-                    <!-- Boucle for sur toutes les notes de l'utilisateur (ou les 5 dernières) -->
 
-                    {% if userGrades %}
-                        {% for grade in userGrades %}
-                            <div class="note-content">
-                                <i class=" {{ grade.status == true ? 'fa-solid fa-circle-check check' : 'fa-solid fa-circle-xmark failed' }}"></i>
-                                <p class="nameLesson check {{ grade.status == true ? 'nameLesson check' : 'nameLesson failed' }}"> {{ grade.name }} </p>
-                                <p class="noteStudent check {{ grade.status == true ? 'noteStudent check' :'noteStudent failed' }}"> {{ grade.grade }} / 20</p>
+                    {% if app.user.role.id == 15 or app.user.role.id == 16 %}
+                        <h3 class="title-dashboard"><i class="fa-solid fa-book-open"></i> Cours  </h3>
+                        <hr>
+                        <!-- Liste scrollable avec tous les étudiants -->
+                        {% if allStudents %}
+
+                            <div class="scrollContainer y-scroll y-mandatory" dir="ltr">
+                                {% for cours in allLessons %}
+                                    <div class="student-container ">
+                                        <a class="card shadow zoom" href="{{ path('pedago_cours_details', {id: cours.id}) }}">
+                                            <div class="logo-nav ">
+
+                                                {% if cours.levelYear == 1 %}
+                                                    <p class="actualYear one"> {{ cours.levelName }}</p>
+                                                {% elseif cours.levelYear == 2 %}
+                                                    <p class="actualYear two"> {{ cours.levelName }}</p>
+                                                {% elseif cours.levelYear == 3 %}
+                                                    <p class="actualYear three"> {{ cours.levelName }}</p>
+                                                {% elseif cours.levelYear == 4 %}
+                                                    <p class="actualYear four"> {{ cours.levelName }}</p>
+                                                {% elseif cours.levelYear == 5 %}
+                                                    <p class="actualYear five"> {{ cours.levelName }}</p>
+                                                {% endif %}
+
+                                                <p id="fullName">{{ cours.name }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
-                    {% else %}
 
-                        <p class="no-information">Aucune note n'est disponible pour le moment</p>
 
+                        {% else %}
+                            <p class="no-information">Aucun étudiant n'est présent sur votre campus.</p>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if app.user.role.id == 14 %}
+                        <h3 class="title-dashboard"><i class="fa-solid fa-medal"></i> Dernières évaluations </h3>
+                        <hr>
+                        <!-- Boucle for sur toutes les notes de l'utilisateur (ou les 5 dernières) -->
+
+                        {% if userGrades %}
+                            {% for grade in userGrades %}
+                                <div class="note-content">
+                                    <i class=" {{ grade.status == true ? 'fa-solid fa-circle-check check' : 'fa-solid fa-circle-xmark failed' }}"></i>
+                                    <p class="nameLesson check {{ grade.status == true ? 'nameLesson check' : 'nameLesson failed' }}"> {{ grade.name }} </p>
+                                    <p class="noteStudent check {{ grade.status == true ? 'noteStudent check' :'noteStudent failed' }}"> {{ grade.grade }} / 20</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+
+                            <p class="no-information">Aucune note n'est disponible pour le moment</p>
+
+                        {% endif %}
                     {% endif %}
 
                 </section>

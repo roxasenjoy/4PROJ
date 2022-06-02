@@ -82,11 +82,11 @@ class UserGradeRepository extends ServiceEntityRepository
                     ->join('ug.user', 'user')
                     ->join('ug.subject', 'subject')
 
-                    ->where('subject.id = :cours')
+                    ->andWhere('subject.id = :cours')
                     ->setParameter(':cours', $cours->getId())
 
                     ->andWhere('user.id = :user')
-                    ->setParameter('user', $user->getId());
+                    ->setParameter(':user', $user->getId());
 
         return $qb->getQuery()->getResult();
 

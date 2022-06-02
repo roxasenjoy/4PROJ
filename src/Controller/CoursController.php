@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Campus;
 use App\Entity\Intervenant;
+use App\Entity\Notification;
 use App\Entity\Role;
 use App\Entity\Subject;
 use App\Entity\SubjectDate;
@@ -67,12 +68,6 @@ class CoursController extends AbstractController
         $cours = $this->em->getRepository(Subject::class)->find($request->get('id'));
         $intervenant = $this->em->getRepository(Intervenant::class)->getIntervenantBySubject($cours);
         $isValidated = $this->em->getRepository(UserGrade::class)->hasUserGrade($user, $cours);
-
-//        if(!$isValidated){
-//            $isValidated = null;
-//        } else {
-//            $isValidated = $isValidated[0]['grade'];
-//        }
 
         $intervenant = $intervenant ? $intervenant[0] : null;
         $isValidated = $isValidated ? $isValidated[0]['grade'] : null;
@@ -172,12 +167,33 @@ class CoursController extends AbstractController
                     ->setPoints($form->get('points')->getData())
                     ->setLevel($form->get('year')->getData());
 
+                // Nouvelle notification
+                $userConnected  = $this->authService->isAuthenticatedUser();
+                $notification   = new Notification();
+                $notification   ->setDate($this->globalService->getTodayDate())
+                    ->setMessage($subject->getName() . ' vient d\'être créé')
+                    ->setCampus($userConnected->getCampus())
+                    ->setType('ajoute');
+
+                $this->em->persist($notification);
+
                 foreach ($intervenants as $key => $value) {
 
                     $intervenant = new Intervenant();
                     $intervenant->setSubject($subject)
                         ->setUser($value['email'])
                         ->setCampus($value['name']);
+
+                    // Nouvelle notification
+                    $userConnected  = $this->authService->isAuthenticatedUser();
+                    $notificationIntervenant   = new Notification();
+                    $notificationIntervenant   ->setDate($this->globalService->getTodayDate())
+                        ->setMessage($value['email']->getFirstName() . ' ' . $value['email']->getLastName() . ' vient d\'être assigné à ' . $subject->getName())
+                        ->setCampus($userConnected->getCampus())
+                        ->setType('ajoute');
+
+
+                    $this->em->persist($notificationIntervenant);
 
                     $this->em->persist($subject);
                     $this->em->persist($intervenant);
@@ -188,6 +204,8 @@ class CoursController extends AbstractController
                     $this->em->persist($subject);
                     $this->em->flush();
                 }
+
+
 
                 return $this->redirectToRoute('app_cours_campus');
             } else {
@@ -358,6 +376,7 @@ class CoursController extends AbstractController
                         if ($idUserGrade != []) {
                             $hasUserGrade = $this->em->getRepository(UserGrade::class)->find($idUserGrade[0]['id']);
 
+
                             if ($hasUserGrade) {
 
                                 $value >= 10 ? $isValid = true : $isValid = false;
@@ -367,6 +386,24 @@ class CoursController extends AbstractController
                                     $hasUserGrade->setStatus($isValid);
                                     $hasUserGrade->setGrade($value);
 
+                                    $userConnected  = $this->authService->isAuthenticatedUser();
+                                    $notification   = new Notification();
+                                    if($value){
+                                        // Nouvelle notification
+                                        $notification   ->setDate($this->globalService->getTodayDate())
+                                            ->setMessage('Les notes de ' . $getCours->getName() . ' viennent d\'être modifiées')
+                                            ->setCampus($userConnected->getCampus())
+                                            ->setType('modifie');
+
+                                    } else {
+                                        // Nouvelle notification
+                                        $notification   ->setDate($this->globalService->getTodayDate())
+                                            ->setMessage($getCours->getName() . ' vient d\'être modifié')
+                                            ->setCampus($userConnected->getCampus())
+                                            ->setType('modifie');
+                                    }
+
+                                    $this->em->persist($notification);
                                     $this->em->persist($hasUserGrade);
                                     $this->em->flush();
                                 }
@@ -378,6 +415,7 @@ class CoursController extends AbstractController
                             }
                         } else {
 
+
                             // Il ne possède pas de note, il faut donc lui en créer une.
                             $newNote = new UserGrade();
 
@@ -386,6 +424,13 @@ class CoursController extends AbstractController
                                 ->setGrade($value)
                                 ->setStatus($value >= 10)
                                 ->setDate($this->globalService->getTodayDate());
+
+                            $userConnected  = $this->authService->isAuthenticatedUser();
+                            $notification   = new Notification();
+                            $notification   ->setDate($this->globalService->getTodayDate())
+                                ->setMessage('Les notes de ' . $getCours->getName() . ' viennent d\'être modifiées')
+                                ->setCampus($userConnected->getCampus())
+                                ->setType('modifie');
 
                             $this->em->persist($newNote);
                             $this->em->flush();
@@ -455,6 +500,16 @@ class CoursController extends AbstractController
 
         $cours = $this->em->getRepository(Subject::class)->find($coursId);
 
+        // Nouvelle notification
+        $userConnected  = $this->authService->isAuthenticatedUser();
+        $notification   = new Notification();
+        $notification   ->setDate($this->globalService->getTodayDate())
+            ->setMessage($cours->getName() . " vient d'être supprimé")
+            ->setCampus($userConnected->getCampus())
+            ->setType('supprime');
+
+
+        $this->em->persist($notification);
         $this->em->remove($cours);
         $this->em->flush();
 
@@ -499,7 +554,7 @@ class CoursController extends AbstractController
     public function emailFailedCours($objectSubject, $user, $note){
 
         $email = (new TemplatedEmail())
-            ->from(new Address('madjid@supinfo.com', 'Reset Email'))
+            ->from(new Address('madjid@supinfo.com', 'Évaluation raté'))
             ->to($this->authService->isAuthenticatedUser()->getEmail())
             ->subject($user->getFirstName() . ' ' . $user->getLastName() . ' n\'a pas validé la matière : ' . $objectSubject->getName())
             ->htmlTemplate('cours/admin/_failed.html.twig')

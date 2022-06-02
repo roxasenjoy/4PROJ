@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Campus;
 use App\Entity\Intervenant;
+use App\Entity\Notification;
 use App\Entity\Role;
 use App\Entity\Subject;
 use App\Entity\User;
@@ -50,7 +51,7 @@ class IntervenantController extends AbstractController
         $user           = $this->authService->isAuthenticatedUser();
 
 
-        $intervenants = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
+        $intervenants   = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
 
 
 
@@ -119,15 +120,21 @@ class IntervenantController extends AbstractController
                     $fullName   = $isIntervenantAlreadyExist[0]['firstName'] . ' ' . $isIntervenantAlreadyExist[0]['lastName'];
                     $error      = 'Le cours ' . $subject->getName() . ' est déjà donné par : ' . $fullName . ' à ' . $campus->getName();
 
-                    //Set les nouvelles valeurs
-
-
                 } else {
                     $newIntervenant     = new Intervenant();
                     $newIntervenant     ->setCampus($campus)
                                         ->setSubject($subject)
                                         ->setUser($user);
 
+                    // Nouvelle notification
+                    $userConnected  = $this->authService->isAuthenticatedUser();
+                    $notification   = new Notification();
+                    $notification   ->setDate($this->globalService->getTodayDate())
+                        ->setMessage($user->getFirstName() . ' ' . $user->getLastName() . ' vient d\'être assigné à ' . $subject->getName())
+                        ->setCampus($userConnected->getCampus())
+                        ->setType('ajoute');
+
+                    $this->em->persist($notification);
                     $this->em->persist($newIntervenant);
                 }
             }
@@ -201,6 +208,16 @@ class IntervenantController extends AbstractController
                     ->setUser($user)
                 ;
 
+                // Nouvelle notification
+                $userConnected  = $this->authService->isAuthenticatedUser();
+                $notification   = new Notification();
+                $notification   ->setDate($this->globalService->getTodayDate())
+                    ->setMessage("L'intervenant " . $user->getFirstName() . ' ' . $user->getLastName() . " vient d'être ajouté")
+                    ->setCampus($userConnected->getCampus())
+                    ->setType('ajoute');
+
+                $this->em->persist($notification);
+
                 $this->em->persist($user);
                 $this->em->persist($userExtended);
                 $this->em->flush();
@@ -227,9 +244,19 @@ class IntervenantController extends AbstractController
         $idIntervenant      = intval($request->get('intervenantId'));
         $idCampus           = intval($request->get('campusId'));
         $idSubject          = intval($request->get('subjectId'));
+        $subject            = $this->em->getRepository(Subject::class)->find($idSubject);
         $deleteId           = $this->em->getRepository(Intervenant::class)->selectIntervenant($idIntervenant, $idCampus, $idSubject);
         $objectIntervenant  = $this->em->getRepository(Intervenant::class)->find($deleteId[0]['id']);
 
+        // Nouvelle notification
+        $userConnected  = $this->authService->isAuthenticatedUser();
+        $notification   = new Notification();
+        $notification   ->setDate($this->globalService->getTodayDate())
+            ->setMessage("Le cours " . $subject->getName() . " n'est plus attribué à " . $objectIntervenant->getUser()->getFirstName() . ' ' . $objectIntervenant->getUser()->getLastName())
+            ->setCampus($userConnected->getCampus())
+            ->setType('supprime');
+
+        $this->em->persist($notification);
         $this->em->remove($objectIntervenant);
         $this->em->flush();
 
@@ -244,10 +271,19 @@ class IntervenantController extends AbstractController
 
         $intervenant        = $this->em->getRepository(User::class)->find($idIntervenant);
 
+        // Nouvelle notification
+        $userConnected  = $this->authService->isAuthenticatedUser();
+        $notification   = new Notification();
+        $notification   ->setDate($this->globalService->getTodayDate())
+            ->setMessage("L'intervenant " . $intervenant->getFirstName() . ' ' . $intervenant->getLastName() . " vient d'être supprimé")
+            ->setCampus($userConnected->getCampus())
+            ->setType('supprime');
+
+        $this->em->persist($notification);
         $this->em->remove($intervenant);
         $this->em->flush();
 
-        return $this->redirectToRoute('app_intervenant');
+        return $this->redirectToRoute('admin_intervenant');
 
     }
 

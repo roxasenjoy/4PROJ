@@ -25,8 +25,9 @@
 
 {% block sectionTitle %}
 
+
+    {{ offer.title }}
     {% if date(offer.datePublication) > date('-1days', 'Europe/Paris') %}
-        {{ offer.title }}
         <span class="newOffer"> NEW </span>
     {% endif %}
  {% endblock %}

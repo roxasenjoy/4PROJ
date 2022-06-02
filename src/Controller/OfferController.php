@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Notification;
 use App\Entity\Offer;
 use App\Form\AddOfferForm;
 use App\Form\EditOfferForm;
+use App\Service\AuthService;
 use App\Service\GlobalService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +18,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class OfferController extends AbstractController
 {
 
-    public function __construct(GlobalService $globalService, EntityManagerInterface $em){
+    public function __construct(GlobalService $globalService, EntityManagerInterface $em, AuthService $authService){
         $this->globalService = $globalService;
         $this->em = $em;
+        $this->authService = $authService;
     }
 
     #[Route('/offres/add', name: 'add_offer')]
@@ -71,6 +74,16 @@ class OfferController extends AbstractController
                     $offer->setWebsite($website);
                 }
 
+                // Nouvelle notification
+                $userConnected  = $this->authService->isAuthenticatedUser();
+                $notification   = new Notification();
+                $notification   ->setDate($this->globalService->getTodayDate())
+                    ->setMessage("Nouvelle offre de stage postée")
+                    ->setCampus($userConnected->getCampus())
+                    ->setType('ajoute');
+
+                $this->em->persist($notification);
+
                 $this->em->persist($offer);
                 $this->em->flush();
 
@@ -92,6 +105,16 @@ class OfferController extends AbstractController
         $offer = $this->em->getRepository(Offer::class)->find($id);
 
         if($offer){
+
+            // Nouvelle notification
+            $userConnected  = $this->authService->isAuthenticatedUser();
+            $notification   = new Notification();
+            $notification   ->setDate($this->globalService->getTodayDate())
+                ->setMessage("L'offre " . $offer->getTitle() . " vient d'être supprimée")
+                ->setCampus($userConnected->getCampus())
+                ->setType('supprime');
+
+            $this->em->persist($notification);
             $this->em->remove($offer);
             $this->em->flush();
         }
@@ -136,7 +159,7 @@ class OfferController extends AbstractController
                 // Le formulaire n'est pas valide
                 $errorMessage = 'Les informations saisies ne sont pas valides.';
             } else {
-                // Le formulaire est valide, on peut le rajouter dans notre base de données
+                // Le formulaire est valide, on peut modifier la valeur dans notre DB
 
                 $offer->setTitle($title)
                     ->setCompany($company)
@@ -152,6 +175,15 @@ class OfferController extends AbstractController
                     $offer->setWebsite($website);
                 }
 
+                // Nouvelle notification
+                $userConnected  = $this->authService->isAuthenticatedUser();
+                $notification   = new Notification();
+                $notification   ->setDate($this->globalService->getTodayDate())
+                    ->setMessage("L'offre " . $offer->getTitle() . " vient d'être modifiée")
+                    ->setCampus($userConnected->getCampus())
+                    ->setType('modifie');
+
+                $this->em->persist($notification);
                 $this->em->persist($offer);
                 $this->em->flush();
 

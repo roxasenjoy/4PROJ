@@ -1,9 +1,14 @@
 @import "variables";
 
+.settingsContainer{
+    font-family: $msNormal;
+}
+
 .newPassword{
     form{
         color: $blue;
         font-size: 1.25em;
+        font-family: $msNormal;
 
         input{
             box-sizing: border-box;
@@ -33,6 +38,7 @@
                 margin-bottom: 15px;
                 width: 100%;
                 border-radius: 4px;
+                font-family: $msNormal;
 
                 &:hover{
                     background-color: $darkBlue;
