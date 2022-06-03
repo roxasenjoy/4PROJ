@@ -71,8 +71,6 @@ security:
         - { path: ^/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-
-
         # Accès TEACHER
         - { path: ^/teacher/cours, role: [ ROLE_TEACHER ] }
         - { path: ^/settings, role: [ ROLE_TEACHER ] }

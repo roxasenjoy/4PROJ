@@ -10,10 +10,9 @@ use App\Entity\UserGrade;
 use App\Repository\NotificationRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class GlobalService
 {
@@ -165,10 +164,10 @@ class GlobalService
      * @param $query
      * @param $maxPerPage
      * @param $request Request
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     * @return PaginationInterface
      */
-    public function generatePagination($query, $maxPerPage, Request $request){
-
+    public function generatePagination($query, $maxPerPage, Request $request): PaginationInterface
+    {
         return $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),

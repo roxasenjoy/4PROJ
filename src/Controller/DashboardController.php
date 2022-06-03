@@ -2,27 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Notification;
-use App\Entity\Role;
-use App\Entity\StudyLevel;
 use App\Entity\Subject;
-use App\Entity\SubjectDate;
 use App\Entity\User;
-use App\Entity\UserExtended;
 use App\Repository\NotificationRepository;
-use App\Repository\UserRepository;
 use App\Service\AuthService;
 use App\Service\GlobalService;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Mailer\Transport\TransportInterface;
 
 class DashboardController extends AbstractController
 {
