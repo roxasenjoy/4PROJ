@@ -69,8 +69,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
                     throw new UserNotFoundException();
                 }
 
-                $test = $this->authService->generateToken($user);
-                $user->setToken($test);
+                $token = $this->authService->generateToken($user);
+                $_SESSION['token'] = $token;
 
                 return $user;
             }),
@@ -95,8 +95,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-
-
 
         $request->getSession()->getFlashBag()->add('success', "You are now signed in. Greetings, commander.");
 

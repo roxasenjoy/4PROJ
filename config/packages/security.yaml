@@ -65,7 +65,7 @@ security:
     access_control:
 
         - { path: ^/api/(login|token/refresh), roles: PUBLIC_ACCESS }
-        - { path: ^/api,       roles: PUBLIC_ACCESS   }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY  }
 
         #L'utilisateur n'a pas de compte
         - { path: ^/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -87,6 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SubjectDate::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private $subjectDates;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $idExtended;
+
 
     public function __construct()
     {
@@ -332,6 +335,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     public function setToken(string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getIdExtended(): ?string
+    {
+        return $this->idExtended;
+    }
+
+    public function setIdExtended(?string $idExtended): self
+    {
+        $this->idExtended = $idExtended;
 
         return $this;
     }

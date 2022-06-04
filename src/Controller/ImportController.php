@@ -54,8 +54,6 @@ class ImportController extends AbstractController
         $form = $this->createForm(ImportType::class, $import);
         $form->handleRequest($request);
 
-
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $importFile = $form->get('import')->getData();

@@ -28,9 +28,10 @@ class ImportService
 
         // S'il n'y a pas de campus, on met le nom None pour déterminer que cet utilisateur n'a pas de campus
         if(!$campusString){
-            $campusString = 'A ATTRIBUER';
+            $campusString = 'AUCUN';
         }
 
+        // Si le campus existe, on récupère toutes les informations
         $isCampusExist = $this->em->getRepository(Campus::class)->findBy(array('name' => strtoupper($campusString)));
 
         // Le campus est présent, on récupère son id en fonction du nom en MAJUSCULE
@@ -66,57 +67,63 @@ class ImportService
     }
 
     /**
-     * Détermine l'année de sortie si l'utilisateur est encore étudiant
+     * Détermine l'année de sortie en fonction de l'année qui passe actuellement
      * @param $data
-     * @return int|null
+     * @return int (Return l'année)
      */
-    public function getExitLevel($data): ?int
+    public function getYearExit($data): ?int
     {
-        // Année d'entrée + le temps restant = Année de sortie
-        $yearExit = intval($data['year_of_entry']);
+        // On récupère l'année en cours (id)
+        $yearRemaining = match ($data['cursus']) {
+            'B.Eng1' => 5,
+            'B.Eng2' => 4,
+            'B.Eng3' => 3,
+            'M.Eng1' => 2,
+            'M.Eng2' => 1,
+            default => 5
+        };
 
-        if(filter_var($data['still_student'], FILTER_VALIDATE_BOOLEAN)){ // L'utilisateur est toujours étudiant
-            $yearExit += match ($data['level']) {
-                'B.ENG 1' => 5,
-                'B.ENG 2' => 4,
-                'B.ENG 3' => 3,
-                'M.ENG 1' => 2,
-                'M.ENG 2' => 1,
-                default => 0,
-            };
-            return $yearExit;
-        }
+        //On récupère l'année actuelle
+        $now = intval(date("Y"));
 
-        return $yearExit;
+        // On ajoute le temps restant à l'année actuelle
+        return $now + $yearRemaining;
     }
 
-    /**
-     * Modifie les termes utilisés dans l'excel par les thèmes de la base de données
-     * @param $levelName
-     */
-    public function getLevelId($data)
-    {
-        $year = match ($data['level']) {
-            'B.ENG 1' => 1,
-            'B.ENG 2' => 2,
-            'B.ENG 3' => 3,
-            'M.ENG 1' => 4,
-            'M.ENG 2' => 5,
+    public function getYearEntry($data){
+        // On récupère l'année en cours (id)
+        $yearRemaining = match ($data['cursus']) {
+            'B.Eng1' => 1,
+            'B.Eng2' => 2,
+            'B.Eng3' => 3,
+            'M.Eng1' => 4,
+            'M.Eng2' => 5,
             default => 1
         };
 
-        if(!$data['level']){
-            $year = match ($data['level_of_exit']) {
-                'B.ENG 1' => 1,
-                'B.ENG 2' => 2,
-                'B.ENG 3' => 3,
-                'M.ENG 1' => 4,
-                'M.ENG 2' => 5,
-                default => 1
-            };
-        }
+        //On récupère l'année actuelle
+        $now = intval(date("Y"));
 
+        // On ajoute le temps restant à l'année actuelle
+        return $now + $yearRemaining;
+    }
 
+    /**
+     * Modifie les termes utilisés dans l'excel par les level de la base de données
+     * @param $levelName
+     */
+    public function getActualLevel($data)
+    {
+        $year = match ($data['cursus']) {
+            'B.Eng1' => 1,
+            'B.Eng2' => 2,
+            'B.Eng3' => 3,
+            'M.Eng1' => 4,
+            'M.Eng2' => 5,
+            default => 1
+        };
+
+        // Récupération de l'id dans la table des niveaux scolaires
         return $this->em->getRepository(StudyLevel::class)->findBy(array('year' => $year))[0]->getId();
 
     }
@@ -126,32 +133,9 @@ class ImportService
      * @param string $previousLevel
      * @return int
      */
-    public function getPreviousLevel(string $previousLevel): int
+    public function getPreviousLevel($data): int
     {
-        // S'il n'y a pas de campus, on met le nom None pour déterminer que cet utilisateur n'a pas de campus
-        if(!$previousLevel){
-            $previousLevel = 'Inconnu';
-        }
-
-        $previousLevel = strtoupper($previousLevel);
-
-        $isLevelExist = $this->em->getRepository(StudyLevel::class)->findBy(array('name' => $previousLevel));
-
-        // Le campus est présent, on récupère son id en fonction du nom en MAJUSCULE
-        if($isLevelExist) {
-            return $isLevelExist[0]->getId();
-        }
-
-        // Le campus n'existe pas, on le créer et on récupère son ID
-        $getYear    = $this->defineYear($previousLevel);
-        $newLevel   = new StudyLevel();
-        $newLevel   ->setName($previousLevel)
-                    ->setYear($getYear);
-
-        $this->em->persist($newLevel);
-        $this->em->flush();
-
-        return $newLevel->getId();
+        return 'BAC';
     }
 
     public function defineYear($level): int
