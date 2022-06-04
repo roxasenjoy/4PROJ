@@ -73,6 +73,10 @@ class ImportDataHandler implements MessageHandlerInterface
 
                 $i++;
 
+                /**
+                 * COMPTER LE NOMBRE DE LIGNES DANS LE TABLEAU ET LE FERMER UNE FOIS QUE TOUTES LES LIGNES SONT EFFECTUEES
+                 */
+
                 $keyWithData = $this->setCleanData($keyWithData);
 
                 // Le prénom et le nom sont corrects et l'adresse email est valide (Aucun caractère à la con)
@@ -82,6 +86,8 @@ class ImportDataHandler implements MessageHandlerInterface
 
 
             }
+
+            dump($i);
             fclose($handle);
         }
 
@@ -184,8 +190,6 @@ class ImportDataHandler implements MessageHandlerInterface
                 // On rajoute les données supplémentaires à l'utilisateur (UserExtended)
                 // Envoyer un email pour que l'utilisateur puisse effectuer sa première connexion
                 // $this->emailService->createAccount($newUser, $password);
-
-
                 break;
 
             case self::campusStaff:
