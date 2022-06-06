@@ -58,6 +58,23 @@
             <div class="right-section ">
                 <div class="fixed">
 
+                    <section class="shadow researchResult">
+                        <p>{{ intervenants.getTotalItemCount }} intervenants trouvés </p>
+                    </section>
+
+                    <section class="shadow">
+                        <h3 class="titleSection">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Recherche
+                        </h3>
+                        <div class="researchContainer">
+                            {{ knp_pagination_filter(intervenants, {
+                                'research': 'research'})
+                            }}
+                        </div>
+                    </section>
+
+
                     {% if app.user.roles|join == 'ROLE_ADMIN' %}
 
                         <section class="shadow">

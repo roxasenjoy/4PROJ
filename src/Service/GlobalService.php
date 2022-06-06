@@ -89,7 +89,7 @@ class GlobalService
         $total = $this->em->getRepository(UserComptability::class)->getTotalComptabilityPerUser($userId);
 
         // On calcule avec les deux éléments
-        $total = $total[0][1] + $total[0][2];
+        $total = $total[0][2] - $total[0][1] ;
 
         return $total;
     }

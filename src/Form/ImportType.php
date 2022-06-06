@@ -15,7 +15,7 @@ class ImportType extends AbstractType
     {
         $builder
             ->add('import', FileType::class, [
-                'label' => 'Importer les données étudiantes ',
+                'label' => false,
 
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,

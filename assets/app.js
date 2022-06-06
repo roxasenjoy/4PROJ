@@ -18,6 +18,7 @@ import './styles/shared/layout/footer.scss';
 import './styles/shared/layout/header.scss';
 import './styles/shared/_filterCampus.scss';
 import './styles/shared/_pagination.scss';
+import './styles/shared/_ResearchBar.scss';
 
 // Liste des pages
 import './styles/dashboard.scss';
@@ -28,6 +29,7 @@ import './styles/cours.scss';
 import './styles/comptability.scss';
 import './styles/student.scss';
 import './styles/offer.scss';
+import './styles/import.scss';
 
 // Toutes les librairies
 import './styles/libraries/hint.css'

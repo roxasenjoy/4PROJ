@@ -73,15 +73,9 @@ security:
 
         # Accès TEACHER
         - { path: ^/teacher/cours, role: [ ROLE_TEACHER ] }
-        - { path: ^/settings, role: [ ROLE_TEACHER ] }
 
         # Accès Admin
         - { path: ^/admin, role: [ ROLE_PEDAGO, ROLE_ADMIN ] }
-
-
-
-
-
 
         #Page: Offres entreprises
         - { path: ^/admin/offer/details/\d+$, role: [ROLE_PEDAGO, ROLE_ADMIN] }
@@ -92,7 +86,7 @@ security:
         - { path: ^/offres/remove/\d+$, role: [ROLE_PEDAGO, ROLE_ADMIN] }
 
         #L'utilisateur est connecté est possede un rôle
-        - { path: ^/, role: [ ROLE_USER, ROLE_PEDAGO, ROLE_ADMIN, ROLE_TEACHER ] }
+        - { path: ^/, role: [ ROLE_USER, ROLE_PEDAGO, ROLE_ADMIN, ROLE_TEACHER] }
 
 when@test:
     security:

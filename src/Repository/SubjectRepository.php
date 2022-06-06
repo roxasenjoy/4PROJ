@@ -69,7 +69,7 @@ class SubjectRepository extends ServiceEntityRepository
      * @param $user
      * @return float|int|mixed|string
      */
-    public function getAllLessons(int $promotion = 0){
+    public function getAllLessons($research){
 
         $qb = $this->createQueryBuilder('subject')
             ->select('subject.id','subject.name',  'subject.fullName','level.name as levelName', 'level.year as levelYear')
@@ -77,13 +77,11 @@ class SubjectRepository extends ServiceEntityRepository
             ->orderBy('subject.name', 'ASC')
             ->orderBy('level.year', 'ASC');
 
-        if($promotion){
-            $qb->where('level.year = :promotion')
-                ->setParameter('promotion', $promotion);
+        if($research){
+            $qb ->andWhere('subject.name LIKE :research')
+                ->setParameter('research', '%' . $research . '%');
         }
 
-
-        ;
         return $qb->getQuery()->getResult();
     }
 

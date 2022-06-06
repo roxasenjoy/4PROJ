@@ -38,6 +38,9 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Intervenant::class)]
     private $intervenant;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $description;
+
     public function __construct()
     {
         $this->subjectDates = new ArrayCollection();
@@ -191,5 +194,17 @@ class Subject
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

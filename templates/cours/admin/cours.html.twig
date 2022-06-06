@@ -85,34 +85,22 @@
             {% if app.user.roles|join == 'ROLE_PEDAGO' or app.user.roles|join == 'ROLE_ADMIN' %}
                 <div class="right-section ">
                     <div class="fixed">
-                        <section class="shadow">
-                            <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
-                            <hr>
 
-                            {% block promotion %}
-                                <div class="containerClass">
-                                        <a href="{{ path('app_cours_promotion', {promotion: 1}) }}"
-                                           class="{{ promotion == 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.1 </a>
-
-                                        <a href="{{ path('app_cours_promotion', {promotion: 2}) }}"
-                                           class="{{ promotion == 2 ? 'transition shadow selected zoom' :'transition shadow' }}"> A.Sc.2 </a>
-
-                                        <a href="{{ path('app_cours_promotion', {promotion: 3}) }}"
-                                           class="{{ promotion == 3 ? 'transition shadow selected zoom' :'transition shadow' }}"> B.Sc </a>
-
-                                        <a href="{{ path('app_cours_promotion', {promotion: 4}) }}"
-                                           class="{{ promotion == 4 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.1 </a>
-
-                                        <a href="{{ path('app_cours_promotion', {promotion: 5}) }}"
-                                           class="{{ promotion == 5 ? 'transition shadow selected zoom' :'transition shadow' }}"> M.Sc.2 </a>
-
-                                        <a href="{{ path('app_cours_campus')}}"
-                                           class="{{ promotion > 5 or promotion < 1 ? 'transition shadow selected zoom' :'transition shadow' }}"> Toutes les promotions </a>
-                                </div>
-                            {% endblock %}
+                        <section class="shadow researchResult">
+                            <p>{{ allCours.getTotalItemCount }} cours trouvés </p>
                         </section>
 
-
+                        <section class="shadow">
+                            <h3 class="titleSection">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Recherche
+                            </h3>
+                            <div class="researchContainer">
+                                {{ knp_pagination_filter(allCours, {
+                                    'research': 'research'})
+                                }}
+                            </div>
+                        </section>
 
                         <section class="shadow actionStudent">
                             <h3 class="titleSection"><i class="fa-solid fa-hammer"></i> Actions </h3>

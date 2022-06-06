@@ -155,3 +155,10 @@ if(newIntervenant){
 }
 
 
+const filter = document.getElementsByClassName('researchContainer')[0];
+if(filter){
+    filter.querySelector("button").innerHTML = "Rechercher";
+}
+
+
+

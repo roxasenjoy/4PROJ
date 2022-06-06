@@ -18,10 +18,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class ImportDataHandler implements MessageHandlerInterface
 {
 
-    CONST alternance = "enght_month_hired;speciality;company_hired;entreprise_alternance;entreprise_alternance_address;poste_occupe;secteur_activite_entreprise_alternance;date_debut_alternance";
+    CONST alternance = "fsdfsd";
     CONST campusStaff = "id;first_name;last_name;email;Campus;Roles";
-    CONST administratif = 5;
-    CONST comptability = "first_name;last_name;date_of_birth;year_of_birth;street_address;email;gender;region;campus;entry_level;year_of_entry;year_of_exit;study_lenght;level_of_exit;still_student;level;contratPro;speciality;compta_paymentType;compta_paid;compta_paymentDue;compta_relance";
+    CONST administratif = "id,first_name,last_name,campus,cursus"; // Terminé
+    CONST comptability = "id,student_id,amount_due,percent_paid,amount_paid";
     CONST notes = "id;first_name;last_name;email;campus;level;speciality;1WORK;1WDEV;1ITWO;1TEAM;1PYTH;1O365;2JAVA;2PHPD;2GRAP;2DTTL;2DVST;2AWSP;3ANDM;3CCNA;3ASPC;3LPIC;3AGIL;4AZUR;4BOSS;4GDPR;4DOCKR;4CHGM;4BINT;4SECU;5CCNA;5DATA;5DOOP;5ITIL;5RBIG;5BLOC;5MDD";
     CONST intervenants = "";
 
@@ -59,12 +59,21 @@ class ImportDataHandler implements MessageHandlerInterface
         $baseUrl = getcwd();
 
         $path = $baseUrl . "\public\uploads\import\\" . $import;
+
         $i = 0;
 
         // On ouvre le fichier qu'on vient de récupérer
         if (($handle = fopen($path, "r")) !== false) {
 
             $headerArray = fgetcsv($handle, 2000, ',');
+            $stringHeaderArray = '';
+
+            // On ajoute tous les éléments pour créer une string
+            foreach ($headerArray as $key => $value) {
+                $stringHeaderArray .= $value . ',';
+            }
+            //On enleve le dernier caractère qui n'a rien à faire là
+            $stringHeaderArray = rtrim($stringHeaderArray, ", ");
 
             // On boucle sur tous les éléments de l'excel afin d'obtenir les informations qui s'y trouvent
             while (($data = fgetcsv($handle)) !== false) {
@@ -73,21 +82,9 @@ class ImportDataHandler implements MessageHandlerInterface
 
                 $i++;
 
-                /**
-                 * COMPTER LE NOMBRE DE LIGNES DANS LE TABLEAU ET LE FERMER UNE FOIS QUE TOUTES LES LIGNES SONT EFFECTUEES
-                 */
-
-                $keyWithData = $this->setCleanData($keyWithData);
-
-                // Le prénom et le nom sont corrects et l'adresse email est valide (Aucun caractère à la con)
-                if($keyWithData['first_name'] && $keyWithData['last_name']){
-                    $this->setDataInDatabase(count($headerArray), $keyWithData, $i);
-                }
-
+                $this->setDataInDatabase($stringHeaderArray,$keyWithData, $i);
 
             }
-
-            dump($i);
             fclose($handle);
         }
 
@@ -95,60 +92,36 @@ class ImportDataHandler implements MessageHandlerInterface
     }
 
     /**
-     * Retourne les valeurs nettoyées
-     * @param $data
-     * @return mixed
-     */
-    public function setCleanData($data){
-
-        $data['first_name']         = $this->cleanData($data['first_name']);
-        $data['last_name']          = $this->cleanData($data['last_name']);
-
-        return $data;
-    }
-
-
-    /**
-     * @param $nbElementInHeader
+     * @param $elementsInHeader
      * @param $data
      * @return void
      */
-    public function setDataInDatabase($nbElementInHeader, $data, $i){
+    public function setDataInDatabase($elementsInHeader, $data, $i){
 
-        $newUser            = new User();
+        $birthday = $today  = date("Y-m-d H:i:s"); // Validé
 
-        $first_name         = strtolower($data['first_name']);
-        $last_name          = strtolower($data['last_name']);
-        $email              = $first_name . $last_name . '@supinfo.com';
-        $idExtended         = $data['id'];
-
-//        $address            = $data['street_address'];
-        $region             = 'À définir';
-        $yearEntry          = $this->importService->getYearEntry($data);
-
-        // Traitement des données pour les ajouter à ma DB
-        $campusId           = $this->importService->getCampusEntity($data['campus']); // Validé
-        $birthday           = date("Y-m-d H:i:s"); // Validé
-//        $isStudent          = filter_var($data['still_student'], FILTER_VALIDATE_BOOLEAN);
-//        $nbMissing          = intval($data['nbre_absence']);
-//        $hasProContract     = filter_var($data['contratPro'], FILTER_VALIDATE_BOOLEAN);
-//        $isHired            = filter_var($data['is_hired'], FILTER_VALIDATE_BOOLEAN);
-        $yearExit           = $this->importService->getYearExit($data);
-        $getActualLevel     = $this->importService->getActualLevel($data);
-        $getPreviousLevel = 6;
-
-        // Set password
-        $password           = $this->globalService->generatePassword();
-        $password           = $this->userPasswordHasher->hashPassword($newUser,$password);
-
-
-
-        switch($nbElementInHeader){
+        switch($elementsInHeader){
             case self::alternance:
-
+                    dump('alternance');
                 break;
 
             case self::comptability:
+
+                $credit             = intval($data['amount_due']);
+                $debit              = intval($data['amount_paid']);
+                $studentId          = $data['student_id'];
+
+                /**
+                 * La comptabilié est déjà présente, on ne le rajoute pas
+                 **/
+                $sqlCompta = " INSERT IGNORE INTO user_comptability
+                                    (user_id, date, description, debit, credit)
+                              VALUES
+                                    ((SELECT id FROM user WHERE id_extended='$studentId'), '$today', 'Aucune description', '$credit', '$debit')";
+
+                //Lancement de la requête
+                $comptaStatement = $this->em->getConnection()->prepare($sqlCompta);
+                $comptaStatement->execute();
                 break;
 
 
@@ -158,6 +131,30 @@ class ImportDataHandler implements MessageHandlerInterface
              *  - L'utilisateur est déjà présent ? On update les informations
              */
             case self::administratif:
+
+                dump('ADMINISTRATIF');
+
+                $data = $this->cleanString($data);
+
+                $first_name         = strtolower($data['first_name']);
+                $last_name          = strtolower($data['last_name']);
+                $email              = $first_name . $last_name . '@supinfo.com';
+                $idExtended         = $data['id'];
+
+                $region             = 'À définir';
+
+                // Traitement du fichier ACCOUNTING
+
+
+                // Traitement du fichier : STUDENT
+                $yearEntry          = $this->importService->getYearEntry($data);
+                $campusId           = $this->importService->getCampusEntity($data['campus']); // Validé
+
+                $yearExit           = $this->importService->getYearExit($data);
+                $getActualLevel     = $this->importService->getActualLevel($data);
+                $getPreviousLevel   = 6; //BAC
+
+
 
                 /**
                  * L'utilisateur n'est pas présent dans la base de données, il faut le rajouter
@@ -193,12 +190,15 @@ class ImportDataHandler implements MessageHandlerInterface
                 break;
 
             case self::campusStaff:
+                dump('campusStaff');
                 break;
 
             case self::notes:
+                dump('notes');
                 break;
 
             default:
+                dump('default');
                 break;
 
         }
@@ -212,6 +212,19 @@ class ImportDataHandler implements MessageHandlerInterface
      */
     public function cleanData($data){
         return preg_replace('/[^A-Za-z]/', '', $data);
+    }
+
+    /**
+     * Retourne les valeurs nettoyées
+     * @param $data
+     * @return mixed
+     */
+    public function cleanString($data){
+
+        $data['first_name']         = $this->cleanData($data['first_name']);
+        $data['last_name']          = $this->cleanData($data['last_name']);
+
+        return $data;
     }
 
 

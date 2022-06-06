@@ -54,36 +54,13 @@ class StudentController extends AbstractController
         $form->handleRequest($request);
         $formFilter = $form->get("campus")->getViewData();
 
-        $allStudents = $this->studentService->getAllStudentsPerCampus(0, $formFilter);
+        $researchBar = $request->query->get('filterValue');
 
-
+        $allStudents = $this->studentService->getAllStudentsPerCampus(0, $formFilter, $researchBar);
+        $pagination = $this->globalService->generatePagination($allStudents, 9, $request);
 
         return $this->render('student/student.html.twig', [
-            'allStudents' => $this->globalService->generatePagination($allStudents, 9, $request),
-            'form' => $form->createView()
-        ]);
-    }
-
-    #[Route('/student/{promotion}', name: 'app_student_promotion', requirements: ['promotion' => '(\d+)'] )]
-    public function getStudentsPerPromotion(Request $request): Response
-    {
-        $promotion = intval($request->get('promotion'));
-
-        if($promotion < 1 || $promotion > 5){
-            return $this->redirectToRoute('app_student');
-        }
-
-        $campus = new Campus();
-        $form = $this->createForm(FilterCampusForm::class, $campus);
-        $form->handleRequest($request);
-        $formFilter = $form->get("campus")->getViewData();
-
-        $allStudents = $this->studentService->getAllStudentsPerCampus($promotion, $formFilter);
-
-       
-        return $this->render('student/filter.html.twig', [
-            'promotion' => $promotion,
-            'allStudents' => $allStudents,
+            'allStudents' => $pagination,
             'form' => $form->createView()
         ]);
     }

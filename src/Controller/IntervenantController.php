@@ -49,11 +49,7 @@ class IntervenantController extends AbstractController
     public function getIntervenants(): Response
     {
         $user           = $this->authService->isAuthenticatedUser();
-
-
         $intervenants   = $this->em->getRepository(Intervenant::class)->getIntervenants($user);
-
-
 
         return $this->render('intervenant/intervenant.html.twig', [
             'intervenants' => $intervenants
@@ -71,9 +67,10 @@ class IntervenantController extends AbstractController
         $form = $this->createForm(FilterCampusForm::class, $campus);
         $form->handleRequest($request);
         $formFilter = $form->get("campus")->getViewData();
+        $research = $request->query->get('filterValue');
 
         // Récupérer tous les intervenants
-        $intervenants = $this->em->getRepository(User::class)->getAllTeacherRoleByCampus($formFilter);
+        $intervenants = $this->em->getRepository(User::class)->getAllTeacher($formFilter, $research);
 
         return $this->render('intervenant/admin/intervenants.html.twig', [
             'intervenants' => $this->globalService->generatePagination($intervenants, 9, $request),
@@ -142,6 +139,7 @@ class IntervenantController extends AbstractController
             // Modification des informations de l'intervenant
             $user->getUserExtended()->setRegion($form->get('region')->getData());
             $user->getUserExtended()->setAddress($form->get('address')->getData());
+            $user->setCampus($form->get('campus')->getData());
 
             if(!$error && !$errorField){
                 $this->em->flush();
@@ -291,7 +289,7 @@ class IntervenantController extends AbstractController
     public function getSubjectByIntervenant($intervenantId){
 
         $intervenants       = $this->em->getRepository(Intervenant::class)->getSubjectByIntervenant($intervenantId);
-        $subjects           = $this->em->getRepository(Subject::class)->getAllLessons();
+        $subjects           = $this->em->getRepository(Subject::class)->getAllLessons(null);
         $combined           = [];
 
         // Lier les intervenants au cours associé

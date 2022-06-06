@@ -86,8 +86,6 @@ class EditCoursForm extends AbstractType
                 'data' => $subject->getLevel(),
             ])
 
-
-
         ;
     }
 

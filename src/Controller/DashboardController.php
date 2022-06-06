@@ -49,11 +49,11 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/dashboard.html.twig', [
             'userGrades'    => $this->globalService->getNotes($user), // Dernières évaluations
             'agenda'        => $this->globalService->getAgenda($user), // Agenda
-            'cours'         => $this->globalService->getCours($user), // Cours
+            'cours'         => $this->globalService->generatePagination($this->globalService->getCours($user), 8, $request), // Cours
             'comptability'  => $this->globalService->getUserTotalComptability($user->getId()), // La comptabilité de l'étudiant
             'ectsTotal'     => $this->globalService->getAllEcts($user), // Total des crédits ECTS de l'étudiants
             'offersTotal'   => $this->globalService->getAllOffer(),
-            'allStudents'   => $this->em->getRepository(User::class)->getAllStudentsPerPromotion(0, null),
+            'allStudents'   => $this->em->getRepository(User::class)->getAllStudentsPerPromotion(0, null, null),
             'allLessons'    => $this->em->getRepository(Subject::class)->getAllLessons(0),
             'totalStudent'  => $this->em->getRepository(User::class)->countStudent($user)[0]['totalStudent'],
             'totalLesson'   => $this->em->getRepository(Subject::class)->countLesson()[0]['totalLesson'],

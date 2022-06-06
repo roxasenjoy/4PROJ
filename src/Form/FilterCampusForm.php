@@ -49,7 +49,7 @@ class FilterCampusForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Campus::class,
-            'method' => 'POST',
+            'method' => 'GET',
             'csrf_protection' => false
         ]);
     }

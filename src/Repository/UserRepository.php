@@ -112,7 +112,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param $promotion
      * @return float|int|mixed|string
      */
-    public function getAllStudentsPerPromotion($promotion, $filterCampus){
+    public function getAllStudentsPerPromotion($promotion, $filterCampus, $researchBar){
 
         $user = $this->authService->isAuthenticatedUser();
 
@@ -123,13 +123,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                     ->join('u.campus', 'campus')
                     ->join('u.role', 'role');
 
-            /* On récupère tous les étudiants du campus */
-            // Si ADMIN on récupere tous les campus
-            if($user->getRoles()[0] != 'ROLE_ADMIN')
-            {
-                $qb ->andWhere('campus.id = :campusId')
-                    ->setParameter(':campusId', $user->getCampus()->getId());
-            }
+
 
         if($filterCampus)
         {
@@ -147,6 +141,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 $qb ->andWhere('al.year = :promotionSelected')
                     ->setParameter(':promotionSelected', $promotion);
             }
+
+
+        /* Recherche via la barre de recherche */
+        if($researchBar){
+            $qb ->andWhere('u.lastName LIKE :research OR u.firstName LIKE :research')
+                ->setParameter('research', '%' . $researchBar . '%');
+        }
+
+        /* On récupère tous les étudiants du campus */
+        // Si ADMIN on récupere tous les campus
+        if($user->getRoles()[0] != 'ROLE_ADMIN')
+        {
+            $qb ->andWhere('campus.id = :campusId')
+                ->setParameter(':campusId', $user->getCampus()->getId());
+        }
 
         return $qb->getQuery()->getResult();
 
@@ -209,12 +218,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter(':roleStudent', self::ROLE_STUDENT)
 
             ->andWhere('al.year = :coursYear')
-            ->setParameter(':coursYear', $cours->getLevel()->getYear())
+            ->setParameter(':coursYear', $cours->getLevel()->getYear());
 
-            ->andWhere('campus.id = :campusId')
-            ->setParameter(':campusId', $user->getCampus()->getId())
+            if($user->getRoles()[0] != "ROLE_ADMIN"){
+                $qb->andWhere('campus.id = :campusId')
+                    ->setParameter(':campusId', $user->getCampus()->getId());
+            }
 
-            ->orderBy('campus.name', 'ASC');
+
+
+            $qb->addOrderBy('campus.name', 'ASC')
+                ->addOrderBy('u.firstName', 'ASC');
 
         if($filter){
             $qb->andWhere('campus.id IN (:filter)')
@@ -246,12 +260,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @return float|int|mixed|string
      */
-    public function getAllTeacherRoleByCampus($filterCampus = []){
+    public function getAllTeacher($filterCampus = [], $research = null){
+
+        $user = $this->authService->isAuthenticatedUser();
+
+
         $qb = $this->createQueryBuilder('u')
                     ->select('u.id', 'u.firstName', 'u.lastName', 'campus.name as campusName')
                     ->join('u.campus', 'campus')
                     ->join('u.role', 'role')
-                    ->where('role.id = :teacherRole')
+                    ->andWhere('role.id = :teacherRole')
                     ->setParameter(':teacherRole', self::ROLE_PROFESSEUR)
                     ->orderBy('campus.name', 'ASC');
 
@@ -259,6 +277,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere('campus.id IN (:filterCampus)')
                 ->setParameter(':filterCampus', $filterCampus);
         }
+
+        if($user->getRoles()[0] != "ROLE_ADMIN"){
+            $qb->andWhere('campus.id = :campusId')
+                ->setParameter(':campusId', $user->getCampus()->getId());
+        }
+
+        if($research){
+            $qb ->andWhere('u.lastName LIKE :research OR u.firstName LIKE :research')
+                ->setParameter('research', '%' . $research . '%');
+        }
+
+
+
 
         return $qb->getQuery()->getResult();
 

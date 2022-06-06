@@ -34,7 +34,7 @@
 
 
     <!-- Affichage des erreurs -->
-    {% if error or errorNote or errorDate %}
+    {% if error or errorDate %}
         <section class="shadow errorBackground">
             <ul style="margin-left: 25px">
 
@@ -42,9 +42,9 @@
                     <li>Le diminutif doit avoir 5 caractères.</li>
                 {% endif %}
 
-                {% if errorNote %}
-                    <li>Être généreux c'est bien mais les valeurs doivent rester entre 0 et 20.</li>
-                {% endif %}
+{#                {% if errorNote %}#}
+{#                    <li>Être généreux c'est bien mais les valeurs doivent rester entre 0 et 20.</li>#}
+{#                {% endif %}#}
 
                 {% if errorDate %}
                     <li> {{ errorDate }}</li>
@@ -62,42 +62,17 @@
                 <i class="fa-solid fa-book-open"></i>
                 {{ actualCours.name }} -
                 {{ actualCours.fullName }} - {{ actualCours.points }} ECTS
-
-                {% if error %}
-                    <span class="errorBackground errorTitle shadow"> ERREUR </span>
-                {% endif %}
             </h3>
+
+            <hr>
 
 
 
             <!-- Formulaire pour éditer le titre -->
 
-            {{ form_start(editForm) }}
-
-            <h3 class="titleSection hidden" id="editFormCours">
-
-                <i class="fa-solid fa-book-open"></i>
-                    {{ form_widget(editForm.name) }}
-                    {{ form_widget(editForm.fullName) }}
-                    {{ form_widget(editForm.year) }}
-                    {{ form_widget(editForm.points) }}
-
-                {% if error %}
-                    <span class="errorBackground errorTitle shadow"> ERREUR </span>
-                {% endif %}
-            </h3>
-            <!---------------------------------------->
-            <hr>
-
             {% if students %}
                 {% for student in students %}
                     <div class="notesContent">
-
-                        {% if student.errorNote %}
-                            <section class="shadow errorBackground"  style="margin-top: 15px;">
-                                <p> {{ errorNote }} </p>
-                            </section>
-                        {% endif %}
 
                         <div class="note-child left ">
                             <p class="campusName">{{ student.campusName}}</p>
@@ -116,14 +91,13 @@
                                 {% else %}
                                     <p class="iconStatus"> - </p>
                                 {% endif %} </p>
-
-                                <input type="number" step="0.01" name="{{ student.id }}" style="width: 50px" class="hidden noteStudent">
-
                             </div>
                         </div>
 
                     </div>
                 {% endfor %}
+
+                {{ knp_pagination_render(students) }}
 
             {% else  %}
                 <!-- Afficher tous les étudiants sans les notes  -->
@@ -139,7 +113,6 @@
                     <hr>
 
                     <!-- Afficher le nom de l'intervenant qui propose le cours (en fonction du campus sélectionné -->
-
                     {% if intervenants %}
                         {% for intervenant in intervenants %}
 
@@ -194,35 +167,22 @@
                             Ajouter une heure de cours
                         </p>
 
-                        <p class="editCours zoom" id="editCours">
+                        <a href="{{ path('pedago_cours_details_edit', {id: coursId}) }}" class="editCours zoom">
                             <i class="fa-solid fa-pen-to-square"></i>
                             Éditer le cours
-                        </p>
+                        </a>
 
                         <p class="cancelInformation zoom" id="deleteCours">
                             <i class="fa-solid fa-trash-can"></i>
                             Supprimer le cours
                         </p>
                     {% elseif app.user.roles|join == 'ROLE_TEACHER' %}
-                        <p class="editCours zoom" id="editCours">
+                        <a href="{{ path('pedago_cours_details_edit_teacher', {id: coursId}) }}" class="editCours zoom" id="editCours">
                             <i class="fa-solid fa-pen-to-square"></i>
                             Modifier les notes
-                        </p>
+                        </a>
                     {% endif %}
-
-
-                    <div id="editTitleCours" class="hidden">
-                        <button class="submitNewInformation zoom" type="submit">
-                            <i class="fa-solid fa-circle-check" style="margin-right: 5px"></i> Valider les modifications
-                        </button>
-                        <p class="cancelInformation zoom" id="cancelCours"> Annuler</p>
-                    </div>
-
-                    {{ form_end(editForm) }}
-
                 </section>
-
-                
             </div>
         </div>
     </main>

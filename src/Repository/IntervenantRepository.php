@@ -124,7 +124,7 @@ class IntervenantRepository extends ServiceEntityRepository
      * @param $coursId
      * @return float|int|mixed|string
      */
-    public function getAllowedSubjectPerIntervenant($intervenantId, $coursId = null){
+    public function getAllowedSubjectPerIntervenant($intervenantId, $research, $coursId = null){
         $qb = $this->createQueryBuilder('intervenant')
             ->select('subject.id','subject.name',  'subject.fullName','level.name as levelName','level.year as levelYear')
 
@@ -134,6 +134,11 @@ class IntervenantRepository extends ServiceEntityRepository
             ->join('user.userExtended', 'ux')
             ->join('intervenant.campus', 'campus')
         ;
+
+        if($research){
+            $qb ->andWhere('subject.name LIKE :research')
+                ->setParameter('research', '%' . $research . '%');
+        }
 
         if($intervenantId){
             $qb ->where('user.id = :userId')

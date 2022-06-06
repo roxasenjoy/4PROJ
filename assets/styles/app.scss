@@ -139,6 +139,18 @@ body{
     }
 }
 
+/**
+    Affichage du nombre de résultats trouvés
+**/
+
+.researchResult{
+    background: $blue !important;
+    color: white;
+    font-size: 1.25em;
+    font-family: $msBold;
+    text-align: center;
+}
+
 
 
 @media (max-width: $laptop){

@@ -64,29 +64,30 @@
 
             <div class="right-section ">
                 <div class="fixed">
-                    <section class="shadow">
-                        <h3 class="titleSection"><i class="fa-solid fa-chalkboard-user"></i> Promotions </h3>
-                        <hr>
 
-                        {% block promotions %}
-                            <div class="containerClass">
-                                <a href="{{ path('app_student_promotion', {promotion: 1}) }}" class="shadow transition"> A.Sc.1 </a>
-                                <a href="{{ path('app_student_promotion', {promotion: 2}) }}" class="shadow transition"> A.Sc.2 </a>
-                                <a href="{{ path('app_student_promotion', {promotion: 3}) }}" class="shadow transition"> B.Sc </a>
-                                <a href="{{ path('app_student_promotion', {promotion: 4}) }}" class="shadow transition"> M.Sc.1 </a>
-                                <a href="{{ path('app_student_promotion', {promotion: 5}) }}" class="shadow transition"> M.Sc.2 </a>
-                                <a href="{{ path('app_student')}}" class="transition shadow selected zoom"> Toutes les promotions </a>
-                            </div>
-                        {% endblock %}
+                    <section class="shadow researchResult">
+                        <p>{{ allStudents.getTotalItemCount }} étudiants trouvés </p>
+                    </section>
+
+                    <section class="shadow">
+                        <h3 class="titleSection">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Recherche
+                        </h3>
+                        <div class="researchContainer">
+                            {{ knp_pagination_filter(allStudents, {
+                                'research': 'research'})
+                            }}
+                        </div>
                     </section>
 
                     {% if app.user.roles|join == 'ROLE_ADMIN' %}
 
                         <section class="shadow">
                             <h3 class="titleSection">
-                            <i class="fa-solid fa-map"></i>
-                            Liste des campus
-                        </h3>
+                                <i class="fa-solid fa-map"></i>
+                                Liste des campus
+                            </h3>
                             <hr>
 
                             <div class="containerFilterCampus">
